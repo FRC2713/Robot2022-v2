@@ -9,7 +9,7 @@ This heavily utilizes [AdvantageKit](https://github.com/Mechanical-Advantage/Adv
 
 ### Terminology
 
-The important terminology to understand is the concept of "inputs" and "outputs." We look at these from the perspective of the robot code. 
+The important terminology to understand is the concept of "inputs" and "outputs." We look at these from the perspective of the robot code.
 
 An *input* is something that is fed into the robot code - typically, a reading from a sensor, like an encoder value, encoder velocity, or limit switch status.
 
@@ -72,7 +72,7 @@ public class DriveIOSim implements DriveIO {
 
     public DriveIOSim() {}
 
-    
+
     @Override
     public void setVoltages(double leftVolts, double rightVolts) {
         // This is an implementation of a DriveIO method.
