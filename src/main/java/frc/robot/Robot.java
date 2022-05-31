@@ -4,13 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.inputs.LoggedNetworkTables;
-import org.littletonrobotics.junction.io.ByteLogReceiver;
-import org.littletonrobotics.junction.io.LogSocketServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,8 +14,9 @@ import org.littletonrobotics.junction.io.LogSocketServer;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends LoggedRobot {
-  private Command m_autonomousCommand;
+public class Robot extends TimedRobot {
+
+  private RobotContainer m_robotContainer = new RobotContainer(); // DO NOT DELETE THIS
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -27,20 +24,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
-    // Run as fast as possible during log replay
-    setUseTiming(isReal());
-
-    // Log everything on /SmartDashboard NT table
-    LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
-    Logger.getInstance().recordMetadata("ProjectName", "Robot2022-v2");
-    if (isReal()) {
-      // Log to usb drive
-      Logger.getInstance().addDataReceiver(new ByteLogReceiver("/media/sda1/"));
-      // Provide log data over network for AdvantageScope
-      Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
-    }
-
-    Logger.getInstance().start();
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -52,19 +36,22 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
+    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // commands, running already-scheduled commands, removing finished or interrupted commands,
+    // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // if (DriverStation.isFMSAttached()) {
+    // RobotContainer.limelight.setLedMode(LedMode.FORCE_ON);
+    // } else {
+    // RobotContainer.limelight.setLedMode(LedMode.FORCE_OFF);
+    // }
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -72,10 +59,7 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -88,14 +72,21 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    // hello!
+    // if (RobotContainer.snekSystem.getUpperLimit()) {
+    //   RobotContainer.driver.setRumble(RumbleType.kLeftRumble, 0.5);
+    //   RobotContainer.driver.setRumble(RumbleType.kRightRumble, 0.5);
+    // } else {
+
+    // RobotContainer.driver.setRumble(RumbleType.kLeftRumble, 0);
+    // RobotContainer.driver.setRumble(RumbleType.kRightRumble, 0);
+    // }
+  }
 
   @Override
   public void testInit() {
@@ -107,11 +98,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void testPeriodic() {}
 
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
-
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
+  public String goFast() {
+    return "nyyooooom";
+  }
 }
