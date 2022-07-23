@@ -1,6 +1,7 @@
 package frc.robot.subsystems.DriveIO;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -15,6 +16,11 @@ public class DriveIOSparkMax implements DriveIO {
   private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
   public DriveIOSparkMax() {
+    left1 = new CANSparkMax(1, MotorType.kBrushless);
+    right1 = new CANSparkMax(2, MotorType.kBrushless);
+    left2 = new CANSparkMax(3, MotorType.kBrushless);
+    right2 = new CANSparkMax(4, MotorType.kBrushless);
+
     left1.restoreFactoryDefaults();
     right1.restoreFactoryDefaults();
     left2.restoreFactoryDefaults();
