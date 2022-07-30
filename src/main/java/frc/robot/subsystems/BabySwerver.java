@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -36,6 +37,10 @@ public class BabySwerver extends SubsystemBase {
 
   public BabySwerver() {
     gyro.reset();
+  }
+
+  public Pose2d getPose() {
+      return odometry.getPoseMeters();
   }
 
   public void drive(double xSpeed, double ySpeed, double angle) {
