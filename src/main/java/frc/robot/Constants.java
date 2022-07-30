@@ -23,10 +23,14 @@ public final class Constants {
   public static final class RobotMap {
     // MOTORS
 
-    public static final int frontLeftMotorPort = 1;
-    public static final int backLeftMotorPort = 2;
-    public static final int frontRightMotorPort = 3;
-    public static final int backRightMotorPort = 4;
+    public static final int frontLeftDrive = 1;
+    public static final int frontLeftAzi = 2;
+    public static final int backLeftDrive = 3;
+    public static final int backLeftAzi = 4;
+    public static final int frontRightDrive = 5;
+    public static final int frontRightAzi = 6;
+    public static final int backRightDrive = 7;
+    public static final int backRightAzi = 8;
 
     public static final int flywheelLeftPort = 5;
     public static final int flywheelRightPort = 10;
@@ -59,6 +63,9 @@ public final class Constants {
     public static final double gearRatio = 60.0 / 11.0 * 28.0 / 20; // 60.0 / 10.0;
     public static final double distPerPulse =
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
+
+    public static final double maxSwerveVel = 3;
+    public static final double maxSwerveAzi = Math.PI;
 
     public static final int currentLimit = 65;
 
@@ -100,7 +107,7 @@ public final class Constants {
     public static final double swerveMacAccel = Units.feetToMeters(0.5);
 
     public static final double aziMaxVel = Units.feetToMeters(0.5);
-    public static final double aziMacAccel = Units.feetToMeters(0.1);
+    public static final double aziMaxAccel = Units.feetToMeters(0.1);
 
     // five ball
     public static final double waitForHumanPlayerDuration = 0.3;

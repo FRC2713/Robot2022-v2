@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.subsystems.DriveIO.BabyDriver;
+import frc.robot.subsystems.BabySwerver;
 import frc.robot.subsystems.DriveIO.DriveIO;
 import frc.robot.subsystems.DriveIO.DriveIOSparkMax;
 
@@ -20,7 +20,8 @@ import frc.robot.subsystems.DriveIO.DriveIOSparkMax;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final DriveIO io = new DriveIOSparkMax();
-  public static final BabyDriver driveSubsystem = new BabyDriver(io);
+  // public static final BabyDriver driveSubsystem = new BabyDriver(io);
+  public static final BabySwerver swerveDrive = new BabySwerver();
 
   public static final XboxController driver = new XboxController(Constants.zero);
   public static final XboxController operator = new XboxController(1);
@@ -29,13 +30,23 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    driveSubsystem.setDefaultCommand(
+    // driveSubsystem.setDefaultCommand(
+    //     new RunCommand(
+    //         () -> {
+    //           driveSubsystem.GTADrive(
+    //               driver.getLeftTriggerAxis(), driver.getRightTriggerAxis(), driver.getLeftX());
+    //         },
+    //         driveSubsystem));
+
+    swerveDrive.setDefaultCommand(
         new RunCommand(
             () -> {
-              driveSubsystem.GTADrive(
-                  driver.getLeftTriggerAxis(), driver.getRightTriggerAxis(), driver.getLeftX());
+              swerveDrive.drive(
+                  driver.getLeftX() * Constants.DriveConstants.maxSwerveVel,
+                  driver.getLeftY() * Constants.DriveConstants.maxSwerveVel,
+                  driver.getRightX() * Constants.DriveConstants.maxSwerveAzi);
             },
-            driveSubsystem));
+            swerveDrive));
   }
 
   /**

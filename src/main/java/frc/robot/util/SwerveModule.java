@@ -5,11 +5,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder.Type;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -19,16 +17,10 @@ public class SwerveModule {
 
   private final PIDController drivePID = new PIDController(1, 0, 0);
 
-  private final ProfiledPIDController aziPID =
-      new ProfiledPIDController(
-          1,
-          0,
-          0,
-          new TrapezoidProfile.Constraints(
-              Constants.AutoConstants.aziMaxVel, Constants.AutoConstants.aziMacAccel));
+  private final PIDController aziPID = new PIDController(1, 0, 0);
 
   private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(1, 3);
-  private final SimpleMotorFeedforward aziFF = new SimpleMotorFeedforward(1, 0.5);
+  private final SimpleMotorFeedforward aziFF = new SimpleMotorFeedforward(0, 0);
 
   public SwerveModule(int drivePort, int azimPort) {
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
@@ -69,7 +61,7 @@ public class SwerveModule {
     final double turnOutput =
         aziPID.calculate(getAziEncoder().getPosition(), state.angle.getRadians());
 
-    final double turnFeedforward = aziFF.calculate(aziPID.getSetpoint().velocity);
+    final double turnFeedforward = aziFF.calculate(aziPID.getSetpoint());
 
     driver.setVoltage(driveOutput + driveFeedforward);
     azimuth.setVoltage(turnOutput + turnFeedforward);
