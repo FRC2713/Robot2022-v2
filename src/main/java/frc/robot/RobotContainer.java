@@ -42,8 +42,8 @@ public class RobotContainer {
         new RunCommand(
             () -> {
               swerveDrive.drive(
-                  driver.getLeftX() * Constants.DriveConstants.maxSwerveVel,
                   driver.getLeftY() * Constants.DriveConstants.maxSwerveVel,
+                  driver.getLeftX() * Constants.DriveConstants.maxSwerveVel,
                   driver.getRightX() * Constants.DriveConstants.maxSwerveAzi);
             },
             swerveDrive));
