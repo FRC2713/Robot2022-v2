@@ -30,13 +30,11 @@ public class BabySwerving extends CommandBase {
         babySwerver.updateOdometry();
         xChange = xTarget - babySwerver.getPose().getX();
         yChange = yTarget - babySwerver.getPose().getY();
-        xSpeed = xChange*(xChange/yChange);
-        ySpeed = yChange*(yChange/xChange);
     }
 
     @Override
     public void execute() {
-        babySwerver.drive(xSpeed, ySpeed, 0);
+        babySwerver.drive(xChange, yChange, 0);
     }
     
     @Override
