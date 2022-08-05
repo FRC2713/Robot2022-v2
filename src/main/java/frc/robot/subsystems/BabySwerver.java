@@ -40,7 +40,7 @@ public class BabySwerver extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-      return odometry.getPoseMeters();
+    return odometry.getPoseMeters();
   }
 
   public void drive(double xSpeed, double ySpeed, double angle) {
