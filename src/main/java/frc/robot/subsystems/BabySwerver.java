@@ -18,13 +18,25 @@ public class BabySwerver extends SubsystemBase {
   private final Translation2d backRightLocation = new Translation2d(-0.5, -0.5);
 
   private final SwerveModule frontLeft =
-      new SwerveModule(Constants.RobotMap.frontLeftDrive, Constants.RobotMap.frontLeftAzi);
+      new SwerveModule(
+          Constants.RobotMap.frontLeftDrive,
+          Constants.RobotMap.frontLeftAzi,
+          Constants.RobotMap.frontLeftOffset);
   private final SwerveModule frontRight =
-      new SwerveModule(Constants.RobotMap.frontRightDrive, Constants.RobotMap.frontRightAzi);
+      new SwerveModule(
+          Constants.RobotMap.frontRightDrive,
+          Constants.RobotMap.frontRightAzi,
+          Constants.RobotMap.frontRightOffset);
   private final SwerveModule backLeft =
-      new SwerveModule(Constants.RobotMap.backLeftDrive, Constants.RobotMap.backLeftAzi);
+      new SwerveModule(
+          Constants.RobotMap.backLeftDrive,
+          Constants.RobotMap.backLeftAzi,
+          Constants.RobotMap.backLeftOffset);
   private final SwerveModule backRight =
-      new SwerveModule(Constants.RobotMap.backRightDrive, Constants.RobotMap.backRightAzi);
+      new SwerveModule(
+          Constants.RobotMap.backRightDrive,
+          Constants.RobotMap.backRightAzi,
+          Constants.RobotMap.backRightOffset);
 
   private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
