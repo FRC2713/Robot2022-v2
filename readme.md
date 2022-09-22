@@ -2,10 +2,39 @@
 
 This is a rewrite of our 2022 robot code, this time exploring a new architecture modeled after team [6328's robot code](https://github.com/Mechanical-Advantage/RobotCode2022), which more easily supports simulation options.
 
-
 This heavily utilizes [AdvantageKit](https://github.com/Mechanical-Advantage/AdvantageKit) for logging, and [AdvantageScope](https://github.com/Mechanical-Advantage/AdvantageScope) for log visualization.
 
 ---
+
+### Installation & setup steps
+
+#### Non-driver station laptops
+
+1.  You should install VSCode with WPILib using this guide: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html
+   - You are free to switch to another IDE (e.g. IntelliJ), but you will be expected to setup/troubleshoot on your own.
+2. Download Github Desktop: https://desktop.github.com/
+   - Create an account if you do not have one. Tell Justin your username to be added to the 2713 Github organization.
+3. Clone (download) this repository using Github Desktop and open in VSCode.
+4. Install the Lombok VSCode extension. Click "Extensions" on the left side menu and search "lombok." Install the `Lombok Annotations Support` extension with the pepper icon.
+   - Lombok is a Java library used to generate code. It's fairly common within industry.
+5. Run a build while connected to the internet.
+   - `Ctrl` + `Shift` + `P` -> type `build` -> select `WPILib: Build Robot Code`.
+   - Gradle will cache all the third party libraries we use to your computer for a month. If you eventually see an error about not being able to find a class/jar/library, try connecting to the internet and building again.
+6. Install AdvantageScope: https://github.com/Mechanical-Advantage/AdvantageScope/releases/latest
+   - This is used to view past logs and real-time simulation logs.
+7. If you are working with autonomous routines, install PathPlanner: https://github.com/mjansen4857/pathplanner/releases/latest
+   - This is used to generate and modify trajectories for the robot to follow.
+
+#### Driver station laptops
+
+Do all of the above, plus:
+
+1. Install the FRC Game Tools from NI: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/frc-game-tools.html
+   - You do NOT need a key and you do NOT need to install LabView.
+2. Install the REV Hardware Client: https://docs.revrobotics.com/rev-hardware-client/getting-started/installation-instructions
+   - This is used to set CAN IDs and update firmware for REV devices (Spark MAXs).
+3. Install the Phoenix Framework: https://store.ctr-electronics.com/software/
+   - This is used to set CAN IDs and update firmware for CTRE devices (Pigeon 2).
 
 ### Terminology
 
