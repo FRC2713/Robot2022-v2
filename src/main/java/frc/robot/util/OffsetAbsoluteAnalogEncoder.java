@@ -27,7 +27,7 @@ public class OffsetAbsoluteAnalogEncoder {
         return getUnadjustedVoltage() - voltageOffset;
     }
 
-    public Rotation2d getRotation2d() {
+    public Rotation2d getAdjustedRotation2d() {
         return Rotation2d.fromDegrees((getAdjustedVoltage() - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE) * 360.0);
     }
 }
