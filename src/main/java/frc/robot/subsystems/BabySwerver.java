@@ -17,35 +17,33 @@ public class BabySwerver extends SubsystemBase {
   private final Translation2d backLeftLocation = new Translation2d(-0.5, 0.5);
   private final Translation2d backRightLocation = new Translation2d(-0.5, -0.5);
 
-  private final SwerveModule frontLeft =
-      new SwerveModule(
-          Constants.RobotMap.frontLeftDrive,
-          Constants.RobotMap.frontLeftAzi,
-          Constants.RobotMap.frontLeftOffset);
-  private final SwerveModule frontRight =
-      new SwerveModule(
-          Constants.RobotMap.frontRightDrive,
-          Constants.RobotMap.frontRightAzi,
-          Constants.RobotMap.frontRightOffset);
-  private final SwerveModule backLeft =
-      new SwerveModule(
-          Constants.RobotMap.backLeftDrive,
-          Constants.RobotMap.backLeftAzi,
-          Constants.RobotMap.backLeftOffset);
-  private final SwerveModule backRight =
-      new SwerveModule(
-          Constants.RobotMap.backRightDrive,
-          Constants.RobotMap.backRightAzi,
-          Constants.RobotMap.backRightOffset);
+  private final SwerveModule frontLeft = new SwerveModule(
+      Constants.RobotMap.frontLeftDrive,
+      Constants.RobotMap.frontLeftAzi,
+      Constants.RobotMap.frontLeftAzimuthEncoder,
+      Constants.RobotMap.frontLeftOffset);
+  private final SwerveModule frontRight = new SwerveModule(
+      Constants.RobotMap.frontRightDrive,
+      Constants.RobotMap.frontRightAzi,
+      Constants.RobotMap.frontRightAzimuthEncoder,
+      Constants.RobotMap.frontRightOffset);
+  private final SwerveModule backLeft = new SwerveModule(
+      Constants.RobotMap.backLeftDrive,
+      Constants.RobotMap.backLeftAzi,
+      Constants.RobotMap.backLeftAzimuthEncoder,
+      Constants.RobotMap.backLeftOffset);
+  private final SwerveModule backRight = new SwerveModule(
+      Constants.RobotMap.backRightDrive,
+      Constants.RobotMap.backRightAzi,
+      Constants.RobotMap.backRightAzimuthEncoder,
+      Constants.RobotMap.backRightOffset);
 
   private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
-  private final SwerveDriveKinematics kinematics =
-      new SwerveDriveKinematics(
-          frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
+  private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+      frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-  private final SwerveDriveOdometry odometry =
-      new SwerveDriveOdometry(kinematics, gyro.getRotation2d());
+  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d());
 
   public BabySwerver() {
     gyro.reset();
@@ -56,9 +54,8 @@ public class BabySwerver extends SubsystemBase {
   }
 
   public void drive(double xSpeed, double ySpeed, double angle) {
-    SwerveModuleState[] swerveModuleStates =
-        kinematics.toSwerveModuleStates(
-            ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angle, gyro.getRotation2d()));
+    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
+        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angle, gyro.getRotation2d()));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.maxSwerveVel);
     frontLeft.setDesiredState(swerveModuleStates[0]);
