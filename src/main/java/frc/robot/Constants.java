@@ -91,8 +91,6 @@ public final class Constants {
 
     public static final double fullRobotWidth = bumperlessRobotWidth + bumperThickness * 2;
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
-
-    public static final double azimuthRatio = 7.0 / 150.0;
   }
 
   public static final class AutoConstants {
