@@ -1,15 +1,18 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.SwerveHeadingController;
+import frc.robot.Constants.RobotMap;
 import frc.robot.util.SwerveModule;
 
 public class BabySwerver extends SubsystemBase {
@@ -39,15 +42,16 @@ public class BabySwerver extends SubsystemBase {
       Constants.RobotMap.backRightAzimuthEncoder,
       Constants.RobotMap.backRightOffset);
 
-  private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+  private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d());
+  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics,
+      Rotation2d.fromDegrees(gyro.getYaw()));
 
   public BabySwerver() {
-    gyro.reset();
+    gyro.zeroGyroBiasNow();
   }
 
   public Pose2d getPose() {
@@ -70,7 +74,7 @@ public class BabySwerver extends SubsystemBase {
 
   public void updateOdometry() {
     odometry.update(
-        gyro.getRotation2d(),
+        Rotation2d.fromDegrees(gyro.getYaw()),
         frontLeft.getState(),
         frontRight.getState(),
         backLeft.getState(),

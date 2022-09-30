@@ -26,6 +26,8 @@ public final class Constants {
   public static final int zero = 0; // in case you need a zero :)
 
   public static final class RobotMap {
+    public static final int pigeonCANId = 20;
+
     // MOTORS
 
     public static final int frontLeftDrive = 1;
