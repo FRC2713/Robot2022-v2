@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.SwerveHeadingController;
 import frc.robot.util.SwerveModule;
 
 public class BabySwerver extends SubsystemBase {
@@ -53,11 +54,14 @@ public class BabySwerver extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
-  public void drive(double xSpeed, double ySpeed, double angle) {
+  public void drive(double xSpeed, double ySpeed) {
     SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
-        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angle, gyro.getRotation2d()));
+        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, SwerveHeadingController.getInstance().update(),
+            gyro.getRotation2d()));
+
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.maxSwerveVel);
+
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);

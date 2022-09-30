@@ -31,6 +31,10 @@ public class SwerveHeadingController {
         this.setpoint = setpoint;
     }
 
+    public Rotation2d getSetpoint() {
+        return setpoint;
+    }
+
     public double update() {
         Rotation2d currentHeading = Robot.swerveDrive.getPose().getRotation();
         double output = controller.calculate(currentHeading.getDegrees(), setpoint.getDegrees());
