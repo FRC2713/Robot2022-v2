@@ -6,39 +6,65 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.subsystems.BabySwerver;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
+  public static final BabySwerver swerveDrive = new BabySwerver();
 
-  private RobotContainer m_robotContainer = new RobotContainer(); // DO NOT DELETE THIS
+  public static final XboxController driver = new XboxController(Constants.zero);
+  public static final XboxController operator = new XboxController(1);
 
   /**
-   * This function is run when the robot is first started up and should be used for any
+   * This function is run when the robot is first started up and should be used
+   * for any
    * initialization code.
    */
   @Override
   public void robotInit() {
     CameraServer.startAutomaticCapture();
+
+    swerveDrive.setDefaultCommand(
+        new RunCommand(
+            () -> {
+              swerveDrive.drive(
+                  driver.getLeftY() * Constants.DriveConstants.maxSwerveVel,
+                  driver.getLeftX() * Constants.DriveConstants.maxSwerveVel,
+                  driver.getRightX() * Constants.DriveConstants.maxSwerveAzi);
+            },
+            swerveDrive));
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like
+   * diagnostics that you want ran during disabled, autonomous, teleoperated and
+   * test.
    *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and
    * SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // Runs the Scheduler. This is responsible for polling buttons, adding
+    // newly-scheduled
+    // commands, running already-scheduled commands, removing finished or
+    // interrupted commands,
+    // and running subsystem periodic() methods. This must be called from the
+    // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
   }
@@ -54,15 +80,21 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+  }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
@@ -77,8 +109,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // hello!
     // if (RobotContainer.snekSystem.getUpperLimit()) {
-    //   RobotContainer.driver.setRumble(RumbleType.kLeftRumble, 0.5);
-    //   RobotContainer.driver.setRumble(RumbleType.kRightRumble, 0.5);
+    // RobotContainer.driver.setRumble(RumbleType.kLeftRumble, 0.5);
+    // RobotContainer.driver.setRumble(RumbleType.kRightRumble, 0.5);
     // } else {
 
     // RobotContainer.driver.setRumble(RumbleType.kLeftRumble, 0);
@@ -94,7 +126,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   public String goFast() {
     return "nyyooooom";
