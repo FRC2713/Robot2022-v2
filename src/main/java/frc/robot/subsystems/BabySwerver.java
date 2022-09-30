@@ -61,7 +61,7 @@ public class BabySwerver extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed) {
     SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
         ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, SwerveHeadingController.getInstance().update(),
-            gyro.getRotation2d()));
+            getPose().getRotation()));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.maxSwerveVel);
