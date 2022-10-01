@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.DefaultDrive;
 import frc.robot.subsystems.BabySwerver;
 
 /**
@@ -35,15 +36,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.startAutomaticCapture();
 
-    swerveDrive.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              swerveDrive.drive(
-                  driver.getLeftY() * Constants.DriveConstants.maxSwerveVel,
-                  driver.getLeftX() * Constants.DriveConstants.maxSwerveVel,
-                  driver.getRightX() * Constants.DriveConstants.maxSwerveAzi);
-            },
-            swerveDrive));
+    swerveDrive.setDefaultCommand(new DefaultDrive());
   }
 
   /**

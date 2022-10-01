@@ -35,7 +35,7 @@ public class BabySwerving extends CommandBase {
 
   @Override
   public void execute() {
-    babySwerver.drive(xChange, yChange, 0);
+    babySwerver.drive(xChange, yChange);
   }
 
   @Override
@@ -47,6 +47,6 @@ public class BabySwerving extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    babySwerver.drive(0, 0, 0);
+    babySwerver.drive(0, 0);
   }
 }
