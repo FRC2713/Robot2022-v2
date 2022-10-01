@@ -6,8 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Robot;
 import frc.robot.util.SwerveHeadingController;
 
 public class DefaultDrive extends CommandBase {
@@ -18,8 +18,7 @@ public class DefaultDrive extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -28,9 +27,12 @@ public class DefaultDrive extends CommandBase {
     double leftRightInput = Robot.driver.getLeftX();
     double rotationalInput = Robot.driver.getRightX();
 
-    double headingControllerDegreesChange = rotationalInput * DriveConstants.headingControllerDriverChangeRate;
-    Rotation2d newHeadingSetpoint = SwerveHeadingController.getInstance().getSetpoint()
-        .plus(Rotation2d.fromDegrees(headingControllerDegreesChange));
+    double headingControllerDegreesChange =
+        rotationalInput * DriveConstants.headingControllerDriverChangeRate;
+    Rotation2d newHeadingSetpoint =
+        SwerveHeadingController.getInstance()
+            .getSetpoint()
+            .plus(Rotation2d.fromDegrees(headingControllerDegreesChange));
 
     SwerveHeadingController.getInstance().setSetpoint(newHeadingSetpoint);
 

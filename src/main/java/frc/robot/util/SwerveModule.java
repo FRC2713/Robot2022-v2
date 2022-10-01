@@ -3,16 +3,14 @@ package frc.robot.util;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAnalogSensor;
-import com.revrobotics.SparkMaxAnalogSensor.Mode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class SwerveModule {
+public class SwerveModule extends SubsystemBase {
 
   CANSparkMax driver;
   CANSparkMax azimuth;
@@ -66,5 +64,21 @@ public class SwerveModule {
 
     driver.setVoltage(driveOutput + driveFeedforward);
     azimuth.setVoltage(turnOutput + turnFeedforward);
+  }
+
+  @Override
+  public void periodic() {
+    String moduleId = "[" + driver.getDeviceId() + "/" + azimuth.getDeviceId() + "]";
+    String keyPrefix = "Modules/" + moduleId + "/";
+
+    SmartDashboard.putNumber(
+        keyPrefix + "azi encoder/raw volts", azimuthEncoder.getUnadjustedVoltage());
+    SmartDashboard.putNumber(
+        keyPrefix + "azi encoder/adj volts", azimuthEncoder.getAdjustedVoltage());
+    SmartDashboard.putNumber(
+        keyPrefix + "azi encoder/adj angle", azimuthEncoder.getAdjustedRotation2d().getDegrees());
+
+    SmartDashboard.putNumber(keyPrefix + "output/driver", driver.getAppliedOutput());
+    SmartDashboard.putNumber(keyPrefix + "output/azimuth", azimuth.getAppliedOutput());
   }
 }

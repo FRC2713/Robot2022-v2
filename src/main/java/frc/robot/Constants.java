@@ -9,15 +9,11 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
+ * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -84,7 +80,8 @@ public final class Constants {
     public static final double kJoystickTurnDeadzone = 0.04;
     public static final double wheelDiameter = 5;
     public static final double gearRatio = 60.0 / 11.0 * 28.0 / 20; // 60.0 / 10.0;
-    public static final double distPerPulse = (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
+    public static final double distPerPulse =
+        (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
     public static final double maxSwerveVel = 3;
     public static final double maxSwerveAzi = Math.PI;
@@ -116,7 +113,8 @@ public final class Constants {
 
     // more kinematics stuff
     public static final double trackWidth = Units.inchesToMeters(22);
-    public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(trackWidth);
+    public static final DifferentialDriveKinematics kinematics =
+        new DifferentialDriveKinematics(trackWidth);
 
     public static final double maxCentripetalAcceleration = 1.5;
 
