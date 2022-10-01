@@ -28,7 +28,7 @@ public class DefaultDrive extends CommandBase {
     double leftRightInput = Robot.driver.getLeftX();
     double rotationalInput = Robot.driver.getRightX();
 
-    double headingControllerDegreesChange = rotationalInput * DriveConstants.driverHeadingControllerRate;
+    double headingControllerDegreesChange = rotationalInput * DriveConstants.headingControllerDriverChangeRate;
     Rotation2d newHeadingSetpoint = SwerveHeadingController.getInstance().getSetpoint()
         .plus(Rotation2d.fromDegrees(headingControllerDegreesChange));
 

@@ -102,8 +102,7 @@ public final class Constants {
     public static final double headingControllerkI = 0.0;
     public static final double headingControllerkD = 0.0;
     public static final double headingControllerTolerance = 0.0;
-
-    public static final double driverHeadingControllerRate = 0.1;
+    public static final double headingControllerDriverChangeRate = 0.1;
   }
 
   public static final class AutoConstants {
