@@ -100,6 +100,18 @@ public final class Constants {
     public static final double headingControllerkD = 0.0;
     public static final double headingControllerTolerance = 0.0;
     public static final double headingControllerDriverChangeRate = 0.1;
+
+    public static final double kAzimuthkP = 0.0;
+    public static final double kAzimuthkI = 0.0;
+    public static final double kAzimuthkD = 0.0;
+    public static final double kAzimuthkS = 0.0;
+    public static final double kAzimuthkV = 0.0;
+
+    public static final double kDrivekP = 0.0;
+    public static final double kDrivekI = 0.0;
+    public static final double kDrivekD = 0.0;
+    public static final double kDrivekS = 0.0;
+    public static final double kDrivekV = 0.0;
   }
 
   public static final class AutoConstants {
