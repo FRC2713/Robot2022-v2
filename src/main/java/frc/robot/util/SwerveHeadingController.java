@@ -12,10 +12,11 @@ public class SwerveHeadingController {
   private PIDController controller;
 
   private SwerveHeadingController() {
-    controller = new PIDController(
-        DriveConstants.headingControllerkP,
-        DriveConstants.headingControllerkI,
-        DriveConstants.headingControllerkD);
+    controller =
+        new PIDController(
+            DriveConstants.headingControllerkP,
+            DriveConstants.headingControllerkI,
+            DriveConstants.headingControllerkD);
     controller.setTolerance(DriveConstants.headingControllerTolerance);
     controller.enableContinuousInput(-180, 180);
 
