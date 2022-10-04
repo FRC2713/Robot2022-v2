@@ -3,8 +3,6 @@ package frc.robot.util;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,14 +50,16 @@ public class SwerveModule extends SubsystemBase {
 
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
+    SwerveModuleState state =
+        SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
+    final double driveOutput =
+        driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = azimuthController.calculate(getAziEncoder().getAdjustedVoltage(),
-        state.angle.getRadians());
+    final double turnOutput =
+        azimuthController.calculate(getAziEncoder().getAdjustedVoltage(), state.angle.getRadians());
 
     driver.setVoltage(driveOutput);
     azimuth.setVoltage(turnOutput);
