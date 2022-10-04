@@ -7,6 +7,7 @@ package frc.robot;
 // liam sais hi :)
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.PIDFFGains;
 import frc.robot.util.TunableNumber;
 
 /**
@@ -105,17 +106,9 @@ public final class Constants {
     public static final double headingControllerTolerance = 0.0;
     public static final double headingControllerDriverChangeRate = 0.1;
 
-    public static final TunableNumber kAzimuthkP = new TunableNumber("kAzimuthkP", 0.0);
-    public static final TunableNumber kAzimuthkI = new TunableNumber("kAzimuthkI", 0.0);
-    public static final TunableNumber kAzimuthkD = new TunableNumber("kAzimuthkD", 0.0);
-    public static final TunableNumber kAzimuthkS = new TunableNumber("kAzimuthkS", 0.0);
-    public static final TunableNumber kAzimuthkV = new TunableNumber("kAzimuthkV", 0.0);
-
-    public static final TunableNumber kDrivekP = new TunableNumber("kDrivekP", 0.0);
-    public static final TunableNumber kDrivekI = new TunableNumber("kDrivekI", 0.0);
-    public static final TunableNumber kDrivekD = new TunableNumber("kDrivekD", 0.0);
-    public static final TunableNumber kDrivekS = new TunableNumber("kDrivekS", 0.0);
-    public static final TunableNumber kDrivekV = new TunableNumber("kDrivekV", 0.0);
+    public static final PIDFFGains kDefaultAzimuthGains = PIDFFGains.builder("Default Azimuth").kP(0.08).build();
+    public static final PIDFFGains kDefaultDrivingGains = PIDFFGains.builder("Default Driving").kP(12.0).kV(2.45)
+        .build();
   }
 
   public static final class AutoConstants {

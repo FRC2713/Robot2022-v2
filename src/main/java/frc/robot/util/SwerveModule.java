@@ -18,15 +18,8 @@ public class SwerveModule extends SubsystemBase {
 
   OffsetAbsoluteAnalogEncoder azimuthEncoder;
 
-  private PIDController aziPID = new PIDController(DriveConstants.kAzimuthkP.get(), DriveConstants.kAzimuthkI.get(),
-      DriveConstants.kAzimuthkD.get());
-  private PIDController drivePID = new PIDController(DriveConstants.kDrivekP.get(), DriveConstants.kDrivekI.get(),
-      DriveConstants.kDrivekD.get());
-
-  private SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(DriveConstants.kDrivekS.get(),
-      DriveConstants.kDrivekV.get());
-  private SimpleMotorFeedforward aziFF = new SimpleMotorFeedforward(DriveConstants.kAzimuthkS.get(),
-      DriveConstants.kAzimuthkV.get());
+  PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
+  PIDFFController azimuthController = new PIDFFController(DriveConstants.kDefaultAzimuthGains);
 
   public SwerveModule(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
@@ -35,7 +28,7 @@ public class SwerveModule extends SubsystemBase {
     getDriveEncoder()
         .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
 
-    aziPID.enableContinuousInput(-Math.PI, Math.PI);
+    azimuthController.enableContinuousInput(-Math.PI, Math.PI);
 
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
 
@@ -62,45 +55,18 @@ public class SwerveModule extends SubsystemBase {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = drivePID.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
-
-    final double driveFeedforward = driveFF.calculate(state.speedMetersPerSecond);
+    final double driveOutput = driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = aziPID.calculate(getAziEncoder().getAdjustedVoltage(), state.angle.getRadians());
+    final double turnOutput = azimuthController.calculate(getAziEncoder().getAdjustedVoltage(),
+        state.angle.getRadians());
 
-    final double turnFeedforward = aziFF.calculate(aziPID.getSetpoint());
-
-    driver.setVoltage(driveOutput + driveFeedforward);
-    azimuth.setVoltage(turnOutput + turnFeedforward);
+    driver.setVoltage(driveOutput);
+    azimuth.setVoltage(turnOutput);
   }
 
   @Override
   public void periodic() {
-    if (Constants.tuningMode) {
-      if (DriveConstants.kAzimuthkD.hasChanged() || DriveConstants.kAzimuthkD.hasChanged()
-          || DriveConstants.kAzimuthkD.hasChanged()) {
-        aziPID = new PIDController(DriveConstants.kAzimuthkP.get(), DriveConstants.kAzimuthkI.get(),
-            DriveConstants.kAzimuthkD.get());
-      }
-
-      if (DriveConstants.kDrivekP.hasChanged() || DriveConstants.kDrivekP.hasChanged()
-          || DriveConstants.kDrivekP.hasChanged()) {
-        drivePID = new PIDController(DriveConstants.kDrivekP.get(), DriveConstants.kDrivekI.get(),
-            DriveConstants.kDrivekD.get());
-      }
-
-      if (DriveConstants.kAzimuthkS.hasChanged() || DriveConstants.kAzimuthkV.hasChanged()) {
-        aziFF = new SimpleMotorFeedforward(DriveConstants.kAzimuthkS.get(),
-            DriveConstants.kAzimuthkV.get());
-      }
-
-      if (DriveConstants.kDrivekS.hasChanged() || DriveConstants.kDrivekV.hasChanged()) {
-        driveFF = new SimpleMotorFeedforward(DriveConstants.kDrivekS.get(),
-            DriveConstants.kDrivekV.get());
-      }
-    }
-
     String moduleId = "[" + driver.getDeviceId() + "/" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";
 
