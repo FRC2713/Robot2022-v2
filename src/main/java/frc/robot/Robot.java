@@ -10,11 +10,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.subsystems.BabySwerver;
+import frc.robot.util.characterization.CharacterizationCommand;
+import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
@@ -23,8 +28,19 @@ public class Robot extends TimedRobot {
   public static final XboxController driver = new XboxController(Constants.zero);
   public static final XboxController operator = new XboxController(1);
 
+  public static final FeedForwardCharacterizationData ffData = new FeedForwardCharacterizationData("Module Driving");
+  public static final CharacterizationCommand cmd = new CharacterizationCommand(
+      swerveDrive,
+      true,
+      ffData,
+      (voltage) -> {
+        swerveDrive.applyVoltageForCharacterization(voltage);
+      },
+      () -> swerveDrive.getAverageVoltageAppliedForCharacterization());
+
   /**
-   * This function is run when the robot is first started up and should be used for any
+   * This function is run when the robot is first started up and should be used
+   * for any
    * initialization code.
    */
   @Override
@@ -35,10 +51,14 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like
+   * diagnostics that you want ran during disabled, autonomous, teleoperated and
+   * test.
    *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and
    * SmartDashboard integrated updating.
    */
   @Override
@@ -64,15 +84,21 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+  }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
@@ -104,7 +130,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   public String goFast() {
     return "nyyooooom";
