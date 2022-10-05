@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.util.SwerveHeadingController;
-import frc.robot.util.SwerveModule;
 
 public class BabySwerver extends SubsystemBase {
   private final Translation2d frontLeftLocation = new Translation2d(0.5, 0.5);
