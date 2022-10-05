@@ -17,6 +17,8 @@ public class SwerveModule extends SubsystemBase {
   CANSparkMax driver;
   CANSparkMax azimuth;
 
+  SwerveModuleState state;
+
   OffsetAbsoluteAnalogEncoder azimuthEncoder;
 
   PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
@@ -61,14 +63,27 @@ public class SwerveModule extends SubsystemBase {
 
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
+    state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
+    final double driveOutput =
+        driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = azimuthController.calculate(getAziEncoder().getAdjustedVoltage(),
-        state.angle.getRadians());
+    final double turnOutput =
+        azimuthController.calculate(
+            getAziEncoder().getAdjustedRotation2d().getDegrees(), state.angle.getRadians());
+
+    driver.setVoltage(driveOutput);
+    azimuth.setVoltage(turnOutput);
+  }
+
+  public void update() {
+    final double driveOutput =
+        driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
+    final double turnOutput =
+        azimuthController.calculate(
+            getAziEncoder().getAdjustedRotation2d().getDegrees(), state.angle.getDegrees());
 
     driver.setVoltage(driveOutput);
     azimuth.setVoltage(turnOutput);
@@ -76,6 +91,8 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
+    update();
+
     String moduleId = "[" + driver.getDeviceId() + "/" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";
 
