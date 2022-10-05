@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -28,12 +29,17 @@ public class SwerveModule extends SubsystemBase {
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
 
+    driver.setIdleMode(IdleMode.kBrake);
+    azimuth.setIdleMode(IdleMode.kBrake);
+
     getDriveEncoder()
         .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
 
     azimuthController.enableContinuousInput(-Math.PI, Math.PI);
 
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
+
+    state = new SwerveModuleState(0, azimuthEncoder.getAdjustedRotation2d());
 
     azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0);
     azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0);
@@ -62,20 +68,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    // Optimize the reference state to avoid spinning further than 90 degrees
-    state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
-
-    // Calculate the drive output from the drive PID controller.
-    final double driveOutput =
-        driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
-
-    // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput =
-        azimuthController.calculate(
-            getAziEncoder().getAdjustedRotation2d().getDegrees(), state.angle.getRadians());
-
-    driver.setVoltage(driveOutput);
-    azimuth.setVoltage(turnOutput);
+    state = desiredState;
   }
 
   public void update() {
@@ -93,7 +86,7 @@ public class SwerveModule extends SubsystemBase {
   public void periodic() {
     update();
 
-    String moduleId = "[" + driver.getDeviceId() + "/" + azimuth.getDeviceId() + "]";
+    String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";
 
     SmartDashboard.putNumber(
@@ -105,5 +98,7 @@ public class SwerveModule extends SubsystemBase {
 
     SmartDashboard.putNumber(keyPrefix + "output/driver", driver.getAppliedOutput());
     SmartDashboard.putNumber(keyPrefix + "output/azimuth", azimuth.getAppliedOutput());
+
+    SmartDashboard.putNumber(keyPrefix + "target angle", state.angle.getDegrees());
   }
 }

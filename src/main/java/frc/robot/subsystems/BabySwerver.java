@@ -53,8 +53,11 @@ public class BabySwerver extends SubsystemBase {
   private final SwerveDriveOdometry odometry =
       new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
 
+  SwerveHeadingController controller;
+
   public BabySwerver() {
     gyro.zeroGyroBiasNow();
+    controller = new SwerveHeadingController(this);
   }
 
   public Pose2d getPose() {
@@ -101,5 +104,12 @@ public class BabySwerver extends SubsystemBase {
         frontRight.getState(),
         backLeft.getState(),
         backRight.getState());
+  }
+
+  public void setModuleStates(SwerveModuleState swerveModuleStates[]) {
+    frontLeft.setDesiredState(swerveModuleStates[0]);
+    frontRight.setDesiredState(swerveModuleStates[1]);
+    backLeft.setDesiredState(swerveModuleStates[2]);
+    backRight.setDesiredState(swerveModuleStates[3]);
   }
 }

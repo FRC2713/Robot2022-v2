@@ -4,14 +4,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Robot;
+import frc.robot.subsystems.BabySwerver;
 
 public class SwerveHeadingController {
   private static SwerveHeadingController instance;
   private Rotation2d setpoint;
   private PIDController controller;
+  BabySwerver swerver;
 
-  private SwerveHeadingController() {
+  public SwerveHeadingController(BabySwerver swerver) {
     controller =
         new PIDController(
             DriveConstants.headingControllerkP,
@@ -20,13 +21,14 @@ public class SwerveHeadingController {
     controller.setTolerance(DriveConstants.headingControllerTolerance);
     controller.enableContinuousInput(-180, 180);
 
-    setpoint = Robot.swerveDrive.getPose().getRotation();
+    this.swerver = swerver;
+    setpoint = swerver.getPose().getRotation();
   }
 
   public static SwerveHeadingController getInstance() {
-    if (instance == null) {
-      instance = new SwerveHeadingController();
-    }
+    // if (instance == null) {
+    //   instance = new SwerveHeadingController();
+    // }
 
     return instance;
   }
@@ -40,7 +42,7 @@ public class SwerveHeadingController {
   }
 
   public double update() {
-    Rotation2d currentHeading = Robot.swerveDrive.getPose().getRotation();
+    Rotation2d currentHeading = swerver.getPose().getRotation();
     double output = controller.calculate(currentHeading.getDegrees(), setpoint.getDegrees());
     SmartDashboard.putNumber("Heading Controller/update", output);
     return output;
