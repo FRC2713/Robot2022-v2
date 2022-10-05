@@ -20,7 +20,6 @@ import frc.robot.util.PIDFFGains;
 public final class Constants {
 
   public static final boolean tuningMode = false;
-  public static final boolean characterizationMode = false;
   public static final int zero = 0; // in case you need a zero :)
 
   public static final class RobotMap {
