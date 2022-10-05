@@ -7,18 +7,14 @@ package frc.robot;
 // liam sais hi :)
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import frc.robot.util.TunableNumber;
+import frc.robot.util.PIDFFGains;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
+ * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -85,7 +81,8 @@ public final class Constants {
     public static final double kJoystickTurnDeadzone = 0.04;
     public static final double wheelDiameter = 5;
     public static final double gearRatio = 60.0 / 11.0 * 28.0 / 20; // 60.0 / 10.0;
-    public static final double distPerPulse = (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
+    public static final double distPerPulse =
+        (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
     public static final double maxSwerveVel = 3;
     public static final double maxSwerveAzi = Math.PI;
@@ -105,17 +102,10 @@ public final class Constants {
     public static final double headingControllerTolerance = 0.0;
     public static final double headingControllerDriverChangeRate = 0.1;
 
-    public static final TunableNumber kAzimuthkP = new TunableNumber("kAzimuthkP", 0.0);
-    public static final TunableNumber kAzimuthkI = new TunableNumber("kAzimuthkI", 0.0);
-    public static final TunableNumber kAzimuthkD = new TunableNumber("kAzimuthkD", 0.0);
-    public static final TunableNumber kAzimuthkS = new TunableNumber("kAzimuthkS", 0.0);
-    public static final TunableNumber kAzimuthkV = new TunableNumber("kAzimuthkV", 0.0);
-
-    public static final TunableNumber kDrivekP = new TunableNumber("kDrivekP", 0.0);
-    public static final TunableNumber kDrivekI = new TunableNumber("kDrivekI", 0.0);
-    public static final TunableNumber kDrivekD = new TunableNumber("kDrivekD", 0.0);
-    public static final TunableNumber kDrivekS = new TunableNumber("kDrivekS", 0.0);
-    public static final TunableNumber kDrivekV = new TunableNumber("kDrivekV", 0.0);
+    public static final PIDFFGains kDefaultAzimuthGains =
+        PIDFFGains.builder("Default Azimuth").kP(0.08).build();
+    public static final PIDFFGains kDefaultDrivingGains =
+        PIDFFGains.builder("Default Driving").kP(12.0).kV(2.45).build();
   }
 
   public static final class AutoConstants {
@@ -129,7 +119,8 @@ public final class Constants {
 
     // more kinematics stuff
     public static final double trackWidth = Units.inchesToMeters(22);
-    public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(trackWidth);
+    public static final DifferentialDriveKinematics kinematics =
+        new DifferentialDriveKinematics(trackWidth);
 
     public static final double maxCentripetalAcceleration = 1.5;
 
