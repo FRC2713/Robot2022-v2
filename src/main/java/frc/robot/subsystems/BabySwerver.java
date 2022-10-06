@@ -102,4 +102,11 @@ public class BabySwerver extends SubsystemBase {
         backLeft.getState(),
         backRight.getState());
   }
+
+  public void setModuleStates(SwerveModuleState swerveModuleStates[]) {
+    frontLeft.setDesiredState(swerveModuleStates[0]);
+    frontRight.setDesiredState(swerveModuleStates[1]);
+    backLeft.setDesiredState(swerveModuleStates[2]);
+    backRight.setDesiredState(swerveModuleStates[3]);
+  }
 }
