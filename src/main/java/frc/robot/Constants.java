@@ -19,7 +19,7 @@ import frc.robot.util.PIDFFGains;
  */
 public final class Constants {
 
-  public static final boolean tuningMode = true;
+  public static final boolean tuningMode = false;
   public static final int zero = 0; // in case you need a zero :)
 
   public static final class RobotMap {
@@ -28,25 +28,25 @@ public final class Constants {
     // MOTORS
 
     public static final int frontLeftDrive = 1;
-    public static final int frontLeftAzi = 8;
+    public static final int frontLeftAzi = 2;
     public static final int frontLeftAzimuthEncoder = 0;
 
     public static final double frontLeftOffset = 0;
     // placeholder
-    public static final int backLeftDrive = 4;
-    public static final int backLeftAzi = 5;
-    public static final int backLeftAzimuthEncoder = 2;
+    public static final int backLeftDrive = 3;
+    public static final int backLeftAzi = 4;
+    public static final int backLeftAzimuthEncoder = 1;
 
     public static final double backLeftOffset = 0;
     // placeholder
-    public static final int frontRightDrive = 3;
-    public static final int frontRightAzi = 2;
-    public static final int frontRightAzimuthEncoder = 1;
+    public static final int frontRightDrive = 5;
+    public static final int frontRightAzi = 6;
+    public static final int frontRightAzimuthEncoder = 2;
 
     public static final double frontRightOffset = 0;
     // placeholder
-    public static final int backRightDrive = 6;
-    public static final int backRightAzi = 7;
+    public static final int backRightDrive = 7;
+    public static final int backRightAzi = 8;
     public static final int backRightAzimuthEncoder = 3;
 
     public static final double backRightOffset = 0;

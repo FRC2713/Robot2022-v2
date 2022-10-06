@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 public class OffsetAbsoluteAnalogEncoder {
   private static final double MIN_VOLTAGE = 0.0;
-  private static final double MAX_VOLTAGE = 4.77;
+  private static final double MAX_VOLTAGE = 5.0;
 
   private AnalogInput analogInput;
   private final double voltageOffset;

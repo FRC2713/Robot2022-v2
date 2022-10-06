@@ -6,7 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DefaultDrive;
+import frc.robot.subsystems.BabySwerver;
+import frc.robot.util.characterization.CharacterizationCommand;
+import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -15,21 +20,22 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static final BabySwerver swerveDrive = new BabySwerver();
 
-  RobotContainer robotContainer = new RobotContainer();
-  // public static final XboxController operator = new XboxController(1);
+  public static final XboxController driver = new XboxController(Constants.zero);
+  public static final XboxController operator = new XboxController(1);
 
-  // public static final FeedForwardCharacterizationData ffData =
-  //     new FeedForwardCharacterizationData("Module Driving");
-  // public static final CharacterizationCommand cmd =
-  //     new CharacterizationCommand(
-  //         swerveDrive,
-  //         true,
-  //         ffData,
-  //         (voltage) -> {
-  //           swerveDrive.applyVoltageForCharacterization(voltage);
-  //         },
-  //         () -> swerveDrive.getAverageVoltageAppliedForCharacterization());
+  public static final FeedForwardCharacterizationData ffData =
+      new FeedForwardCharacterizationData("Module Driving");
+  public static final CharacterizationCommand cmd =
+      new CharacterizationCommand(
+          swerveDrive,
+          true,
+          ffData,
+          (voltage) -> {
+            swerveDrive.applyVoltageForCharacterization(voltage);
+          },
+          () -> swerveDrive.getAverageVoltageAppliedForCharacterization());
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -39,36 +45,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.startAutomaticCapture();
 
-    // swerveDrive.setDefaultCommand(new DefaultDrive());
-
-    // new JoystickButton(driver, XboxController.Button.kA.value)
-    //     .whenPressed(
-    //         new InstantCommand(
-    //             () -> {
-    //               swerveDrive.setModuleStates(
-    //                   new SwerveModuleState[] {
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-    //                   });
-    //             },
-    //             swerveDrive));
-
-    // new JoystickButton(driver, XboxController.Button.kB.value)
-    //     .whenPressed(
-    //         new InstantCommand(
-    //             () -> {
-    //               System.out.println("We are rnning !!! ");
-    //               swerveDrive.setModuleStates(
-    //                   new SwerveModuleState[] {
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(130)),
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(130)),
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(130)),
-    //                     new SwerveModuleState(0, Rotation2d.fromDegrees(130)),
-    //                   });
-    //             },
-    //             swerveDrive));
+    swerveDrive.setDefaultCommand(new DefaultDrive());
   }
 
   /**
@@ -98,7 +75,6 @@ public class Robot extends TimedRobot {
     // } else {
     // RobotContainer.limelight.setLedMode(LedMode.FORCE_OFF);
     // }
-
   }
 
   @Override
