@@ -4,8 +4,9 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.LoggedRobot;
+
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DefaultDrive;
@@ -19,7 +20,7 @@ import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharac
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   public static final BabySwerver swerveDrive = new BabySwerver();
 
   public static final XboxController driver = new XboxController(Constants.zero);
