@@ -4,8 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 // liam sais hi :)
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.PIDFFGains;
 
@@ -79,8 +81,8 @@ public final class Constants {
 
   public static final class DriveConstants {
     public static final double kJoystickTurnDeadzone = 0.04;
-    public static final double wheelDiameter = 5;
-    public static final double gearRatio = 60.0 / 11.0 * 28.0 / 20; // 60.0 / 10.0;
+    public static final double wheelDiameter = 4;
+    public static final double gearRatio = 6.12;
     public static final double distPerPulse =
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
@@ -89,17 +91,34 @@ public final class Constants {
 
     public static final int currentLimit = 65;
 
-    private static final double bumperlessRobotLength = Units.inchesToMeters(26);
-    private static final double bumperlessRobotWidth = Units.inchesToMeters(24);
+    public static final double kModuleDistanceFromCenter = Units.inchesToMeters(12.375);
+
+    private static final Translation2d frontLeftLocation =
+        new Translation2d(
+            DriveConstants.kModuleDistanceFromCenter, DriveConstants.kModuleDistanceFromCenter);
+    private static final Translation2d frontRightLocation =
+        new Translation2d(
+            DriveConstants.kModuleDistanceFromCenter, -DriveConstants.kModuleDistanceFromCenter);
+    private static final Translation2d backLeftLocation =
+        new Translation2d(
+            -DriveConstants.kModuleDistanceFromCenter, DriveConstants.kModuleDistanceFromCenter);
+    private static final Translation2d backRightLocation =
+        new Translation2d(
+            -DriveConstants.kModuleDistanceFromCenter, -DriveConstants.kModuleDistanceFromCenter);
+
+    public static final SwerveDriveKinematics kinematics =
+        new SwerveDriveKinematics(
+            frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
+
+    private static final double bumperlessRobotLength = Units.inchesToMeters(30);
+    private static final double bumperlessRobotWidth = Units.inchesToMeters(30);
     private static final double bumperThickness = Units.inchesToMeters(3);
 
     public static final double fullRobotWidth = bumperlessRobotWidth + bumperThickness * 2;
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
 
-    public static final double headingControllerkP = 0.1;
-    public static final double headingControllerkI = 0.0;
-    public static final double headingControllerkD = 0.0;
-    public static final double headingControllerTolerance = 0.0;
+    public static final PIDFFGains kHeadingControllerGains =
+        PIDFFGains.builder("Heading Controller").kP(0.1).tolerance(0.5).build();
     public static final double headingControllerDriverChangeRate = 0.1;
 
     public static final PIDFFGains kDefaultAzimuthGains =

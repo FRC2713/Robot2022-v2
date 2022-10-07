@@ -13,6 +13,7 @@ public class PIDFFController extends PIDController {
 
     this.gains = gains;
     feedforward = gains.createWpilibFeedforward();
+    setTolerance(gains.tolerance.get());
   }
 
   @Override
@@ -28,6 +29,7 @@ public class PIDFFController extends PIDController {
         setP(gains.kP.get());
         setI(gains.kI.get());
         setD(gains.kD.get());
+        setTolerance(gains.tolerance.get());
         feedforward = gains.createWpilibFeedforward();
       }
     }

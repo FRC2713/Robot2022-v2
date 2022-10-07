@@ -4,7 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 public class PIDFFGains {
-  public TunableNumber kP, kI, kD, kS, kV;
+  public TunableNumber kP, kI, kD, kS, kV, tolerance;
 
   private PIDFFGains(PIDFFGainsBuilder builder) {
     String key = builder.name + "/";
@@ -13,6 +13,7 @@ public class PIDFFGains {
     kD = new TunableNumber(key + "kD", builder.kD);
     kS = new TunableNumber(key + "kS", builder.kS);
     kV = new TunableNumber(key + "kV", builder.kV);
+    tolerance = new TunableNumber(key + "tolerance", builder.tolerance);
   }
 
   public boolean hasChanged() {
@@ -20,13 +21,15 @@ public class PIDFFGains {
         || kI.hasChanged()
         || kD.hasChanged()
         || kS.hasChanged()
-        || kV.hasChanged();
+        || kV.hasChanged()
+        || tolerance.hasChanged();
   }
 
   public boolean hasChanged(PIDController controller) {
     return kP.get() != controller.getP()
         || kI.get() != controller.getI()
-        || kD.get() != controller.getD();
+        || kD.get() != controller.getD()
+        || tolerance.hasChanged();
   }
 
   public boolean hasChanged(SimpleMotorFeedforward feedforward) {
@@ -52,6 +55,10 @@ public class PIDFFGains {
   public static class PIDFFGainsBuilder {
     private String name;
     private double kP = 0, kI = 0, kD = 0, kS = 0, kV = 0;
+
+    // we wind up overwriting wpilib's default tolerance, which is 0.05, so set the same default
+    // here to keep the same functionality
+    private double tolerance = 0.05;
 
     public PIDFFGainsBuilder(String name) {
       this.name = name;
@@ -79,6 +86,11 @@ public class PIDFFGains {
 
     public PIDFFGainsBuilder kV(double kV) {
       this.kV = kV;
+      return this;
+    }
+
+    public PIDFFGainsBuilder tolerance(double tolerance) {
+      this.tolerance = tolerance;
       return this;
     }
 

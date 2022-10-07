@@ -3,22 +3,18 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.util.SwerveHeadingController;
 
 public class BabySwerver extends SubsystemBase {
-  private final Translation2d frontLeftLocation = new Translation2d(0.5, 0.5);
-  private final Translation2d frontRightLocation = new Translation2d(0.5, -0.5);
-  private final Translation2d backLeftLocation = new Translation2d(-0.5, 0.5);
-  private final Translation2d backRightLocation = new Translation2d(-0.5, -0.5);
-
   private final SwerveModule frontLeft =
       new SwerveModule(
           Constants.RobotMap.frontLeftDrive,
@@ -46,12 +42,8 @@ public class BabySwerver extends SubsystemBase {
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
-  private final SwerveDriveKinematics kinematics =
-      new SwerveDriveKinematics(
-          frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
-
   private final SwerveDriveOdometry odometry =
-      new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
+      new SwerveDriveOdometry(DriveConstants.kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
 
   public BabySwerver() {
     gyro.zeroGyroBiasNow();
@@ -63,7 +55,7 @@ public class BabySwerver extends SubsystemBase {
 
   public void drive(double xSpeed, double ySpeed) {
     SwerveModuleState[] swerveModuleStates =
-        kinematics.toSwerveModuleStates(
+        DriveConstants.kinematics.toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed,
                 ySpeed,
@@ -108,5 +100,13 @@ public class BabySwerver extends SubsystemBase {
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
     backRight.setDesiredState(swerveModuleStates[3]);
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Gyro/Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("Gyro/Pitch", gyro.getPitch());
+    SmartDashboard.putNumber("Gyro/Roll", gyro.getRoll());
+    SmartDashboard.putNumber("Gyro/Compass Heading", gyro.getAbsoluteCompassHeading());
   }
 }
