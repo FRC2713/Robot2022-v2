@@ -30,12 +30,15 @@ public class SwerveModule extends SubsystemBase {
   // PIDController(DriveConstants.kDefaultAzimuthGains.kP.get(),
   // DriveConstants.kDefaultAzimuthGains.kI.get(), DriveConstants.kDefaultAzimuthGains.kD.get());
 
-  double maxVoltageSeen = 0;
-
   public SwerveModule(
       int drivePort, int azimPort, int azimuthEncoderPort, double offset, PIDFFGains azimuthGains) {
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
+
+    azimuth.setInverted(false);
+
+    driver.restoreFactoryDefaults();
+    azimuth.restoreFactoryDefaults();
 
     azimuthController = new PIDFFController(azimuthGains);
 
@@ -79,6 +82,7 @@ public class SwerveModule extends SubsystemBase {
 
   public void setDesiredState(SwerveModuleState desiredState) {
     state = desiredState;
+    // state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
   }
 
   public void update() {
@@ -112,11 +116,7 @@ public class SwerveModule extends SubsystemBase {
     SmartDashboard.putNumber(
         keyPrefix + "azi encoder/adj angle", azimuthEncoder.getAdjustedRotation2d().getDegrees());
 
-    if (azimuthEncoder.getUnadjustedVoltage() > maxVoltageSeen) {
-      maxVoltageSeen = azimuthEncoder.getUnadjustedVoltage();
-    }
-
-    SmartDashboard.putNumber(keyPrefix + "azi encoder/max seen", maxVoltageSeen);
+    SmartDashboard.putNumber(keyPrefix + "azi encoder/offset", azimuthEncoder.getFilteredOffset());
 
     SmartDashboard.putNumber(
         keyPrefix + "output/driver",

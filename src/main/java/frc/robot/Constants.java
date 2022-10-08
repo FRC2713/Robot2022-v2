@@ -32,25 +32,25 @@ public final class Constants {
     public static final int frontLeftDrive = 1;
     public static final int frontLeftAzi = 8;
     public static final int frontLeftAzimuthEncoder = 0;
-    public static final double frontLeftOffset = 2.92;
+    public static final double frontLeftOffset = 0.6215;
 
     // placeholder
     public static final int frontRightDrive = 3;
     public static final int frontRightAzi = 2;
     public static final int frontRightAzimuthEncoder = 1;
-    public static final double frontRightOffset = 2.8605;
+    public static final double frontRightOffset = 0.5983;
 
     // placeholder
     public static final int backLeftDrive = 4;
     public static final int backLeftAzi = 5;
     public static final int backLeftAzimuthEncoder = 2;
-    public static final double backLeftOffset = 2.935;
+    public static final double backLeftOffset = 0.6223;
 
     // placeholder
     public static final int backRightDrive = 6;
     public static final int backRightAzi = 7;
     public static final int backRightAzimuthEncoder = 3;
-    public static final double backRightOffset = 3.7135;
+    public static final double backRightOffset = 0.78155;
     // placeholder
 
     public static final int flywheelLeftPort = 5;
