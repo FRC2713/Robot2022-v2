@@ -12,8 +12,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
+import frc.robot.subsystems.SwerveIO.SwerveModuleIO.SwerveModuleInputs;
 
 public class SwerveModule extends SubsystemBase {
+
+  SwerveModuleIO io;
+  SwerveModuleInputs inputs = new SwerveModuleInputs();
 
   CANSparkMax driver;
   CANSparkMax azimuth;
@@ -26,6 +30,7 @@ public class SwerveModule extends SubsystemBase {
   PIDFFController azimuthController = new PIDFFController(DriveConstants.kDefaultAzimuthGains);
 
   public SwerveModule(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
+    io.updateInputs(inputs);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
 
@@ -85,6 +90,8 @@ public class SwerveModule extends SubsystemBase {
   @Override
   public void periodic() {
     update();
+    
+    io.updateInputs(inputs);
 
     String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";

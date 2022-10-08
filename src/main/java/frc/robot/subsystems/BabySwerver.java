@@ -13,8 +13,13 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.util.SwerveHeadingController;
+import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
 
 public class BabySwerver extends SubsystemBase {
+
+  SwerveIO io;
+  SwerveInputs inputs = new SwerveInputs();
+
   private final SwerveModule frontLeft =
       new SwerveModule(
           Constants.RobotMap.frontLeftDrive,
@@ -45,7 +50,9 @@ public class BabySwerver extends SubsystemBase {
   private final SwerveDriveOdometry odometry =
       new SwerveDriveOdometry(DriveConstants.kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
 
-  public BabySwerver() {
+  public BabySwerver(SwerveIO swerveIO) {
+    io = swerveIO;
+    io.updateInputs(inputs)
     gyro.zeroGyroBiasNow();
   }
 
@@ -104,6 +111,7 @@ public class BabySwerver extends SubsystemBase {
 
   @Override
   public void periodic() {
+    io.updateInputs(inputs);
     SmartDashboard.putNumber("Gyro/Yaw", gyro.getYaw());
     SmartDashboard.putNumber("Gyro/Pitch", gyro.getPitch());
     SmartDashboard.putNumber("Gyro/Roll", gyro.getRoll());
