@@ -14,6 +14,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.util.SwerveHeadingController;
 import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
+import frc.robot.subsystems.SwerveIO.SwerveModuleIO.SwerveModuleInputs;
 
 public class BabySwerver extends SubsystemBase {
 
@@ -25,25 +26,29 @@ public class BabySwerver extends SubsystemBase {
           Constants.RobotMap.frontLeftDrive,
           Constants.RobotMap.frontLeftAzi,
           Constants.RobotMap.frontLeftAzimuthEncoder,
-          Constants.RobotMap.frontLeftOffset);
+          Constants.RobotMap.frontLeftOffset,
+          new SwerveModuleInputs());
   private final SwerveModule frontRight =
       new SwerveModule(
           Constants.RobotMap.frontRightDrive,
           Constants.RobotMap.frontRightAzi,
           Constants.RobotMap.frontRightAzimuthEncoder,
-          Constants.RobotMap.frontRightOffset);
+          Constants.RobotMap.frontRightOffset,
+          new SwerveModuleInputs());
   private final SwerveModule backLeft =
       new SwerveModule(
           Constants.RobotMap.backLeftDrive,
           Constants.RobotMap.backLeftAzi,
           Constants.RobotMap.backLeftAzimuthEncoder,
-          Constants.RobotMap.backLeftOffset);
+          Constants.RobotMap.backLeftOffset,
+          new SwerveModuleInputs());
   private final SwerveModule backRight =
       new SwerveModule(
           Constants.RobotMap.backRightDrive,
           Constants.RobotMap.backRightAzi,
           Constants.RobotMap.backRightAzimuthEncoder,
-          Constants.RobotMap.backRightOffset);
+          Constants.RobotMap.backRightOffset,
+          new SwerveModuleInputs());
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 

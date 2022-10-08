@@ -14,9 +14,10 @@ import frc.robot.subsystems.BabySwerver;
 import frc.robot.util.characterization.CharacterizationCommand;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import org.littletonrobotics.junction.LoggedRobot;
+import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
 
 public class Robot extends LoggedRobot {
-  public static final BabySwerver swerveDrive = new BabySwerver();
+  public static final BabySwerver swerveDrive = new BabySwerver(new SwerveInputs());
 
   public static final XboxController driver = new XboxController(Constants.zero);
 
