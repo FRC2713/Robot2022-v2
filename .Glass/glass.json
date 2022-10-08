@@ -4,10 +4,29 @@
       "Gyro": {
         "open": true
       },
+      "Modules": {
+        "[1|8]": {
+          "open": true
+        },
+        "open": true
+      },
+      "TunableNumbers": {
+        "Front Left": {
+          "open": true
+        },
+        "Front Right": {
+          "open": true
+        },
+        "Heading Controller": {
+          "open": true
+        },
+        "open": true
+      },
       "open": true
     },
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/SwerveModule": "Subsystem",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
@@ -15,7 +34,8 @@
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[8]": "PIDController"
+      "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
     }
   },
   "NetworkTables Settings": {

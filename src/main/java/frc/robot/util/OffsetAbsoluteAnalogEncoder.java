@@ -12,6 +12,8 @@ public class OffsetAbsoluteAnalogEncoder {
   private AnalogEncoder analogEncoder;
 
   private LinearFilter offsetStabilizer = LinearFilter.movingAverage(20);
+  // private LinearFilter valueFilter = LinearFilter.singlePoleIIR(0.04, 0.02);
+  // private double value;
 
   public OffsetAbsoluteAnalogEncoder(int port, double voltageOffset) {
     this.analogEncoder = new AnalogEncoder(port);
@@ -35,7 +37,7 @@ public class OffsetAbsoluteAnalogEncoder {
   }
 
   public Rotation2d getUnadjustedRotation2d() {
-    return Rotation2d.fromDegrees((analogEncoder.getAbsolutePosition() - voltageOffset) * 360.0);
+    return Rotation2d.fromDegrees(getAdjustedVoltage() * 360.0);
   }
 
   public Rotation2d getAdjustedRotation2d() {

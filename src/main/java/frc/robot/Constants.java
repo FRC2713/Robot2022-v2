@@ -126,7 +126,7 @@ public final class Constants {
         PIDFFGains.builder("Default Driving").kP(0).kV(0).build();
 
     public static final PIDFFGains kFrontLeftAzimuthGains =
-        PIDFFGains.builder("Front Left").kP(0.0).kS(.126).tolerance(1.0).build();
+        PIDFFGains.builder("Front Left").kP(0.0).kS(0).tolerance(1.0).build();
     public static final PIDFFGains kFrontRightAzimuthGains =
         PIDFFGains.builder("Front Right").kP(0.0).kS(.12).tolerance(1.0).build();
     public static final PIDFFGains kBackLeftAzimuthGains =

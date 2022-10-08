@@ -28,17 +28,18 @@ public class SwerveModule extends SubsystemBase {
 
   // PIDController azimuthController = new
   // PIDController(DriveConstants.kDefaultAzimuthGains.kP.get(),
-  // DriveConstants.kDefaultAzimuthGains.kI.get(), DriveConstants.kDefaultAzimuthGains.kD.get());
+  // DriveConstants.kDefaultAzimuthGains.kI.get(),
+  // DriveConstants.kDefaultAzimuthGains.kD.get());
 
   public SwerveModule(
       int drivePort, int azimPort, int azimuthEncoderPort, double offset, PIDFFGains azimuthGains) {
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
 
-    azimuth.setInverted(false);
-
     driver.restoreFactoryDefaults();
     azimuth.restoreFactoryDefaults();
+
+    azimuth.setInverted(true);
 
     azimuthController = new PIDFFController(azimuthGains);
 
@@ -81,8 +82,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    state = desiredState;
-    // state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
+    state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
   }
 
   public void update() {

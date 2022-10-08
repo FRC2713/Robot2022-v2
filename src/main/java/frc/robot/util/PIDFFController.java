@@ -35,6 +35,8 @@ public class PIDFFController extends PIDController {
       }
     }
 
+    // Logger.getInstance().recordOutput(key, value);
+
     return super.calculate(measurement) + feedforward.calculate(getSetpoint());
   }
 }
