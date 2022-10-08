@@ -20,25 +20,29 @@ public class BabySwerver extends SubsystemBase {
           Constants.RobotMap.frontLeftDrive,
           Constants.RobotMap.frontLeftAzi,
           Constants.RobotMap.frontLeftAzimuthEncoder,
-          Constants.RobotMap.frontLeftOffset);
+          Constants.RobotMap.frontLeftOffset,
+          Constants.DriveConstants.kFrontLeftAzimuthGains);
   private final SwerveModule frontRight =
       new SwerveModule(
           Constants.RobotMap.frontRightDrive,
           Constants.RobotMap.frontRightAzi,
           Constants.RobotMap.frontRightAzimuthEncoder,
-          Constants.RobotMap.frontRightOffset);
+          Constants.RobotMap.frontRightOffset,
+          Constants.DriveConstants.kFrontRightAzimuthGains);
   private final SwerveModule backLeft =
       new SwerveModule(
           Constants.RobotMap.backLeftDrive,
           Constants.RobotMap.backLeftAzi,
           Constants.RobotMap.backLeftAzimuthEncoder,
-          Constants.RobotMap.backLeftOffset);
+          Constants.RobotMap.backLeftOffset,
+          Constants.DriveConstants.kBackLeftAzimuthGains);
   private final SwerveModule backRight =
       new SwerveModule(
           Constants.RobotMap.backRightDrive,
           Constants.RobotMap.backRightAzi,
           Constants.RobotMap.backRightAzimuthEncoder,
-          Constants.RobotMap.backRightOffset);
+          Constants.RobotMap.backRightOffset,
+          Constants.DriveConstants.kBackRightAzimuthGains);
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
@@ -65,10 +69,7 @@ public class BabySwerver extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.maxSwerveVel);
 
-    frontLeft.setDesiredState(swerveModuleStates[0]);
-    frontRight.setDesiredState(swerveModuleStates[1]);
-    backLeft.setDesiredState(swerveModuleStates[2]);
-    backRight.setDesiredState(swerveModuleStates[3]);
+    setModuleStates(swerveModuleStates);
   }
 
   public double getAverageVoltageAppliedForCharacterization() {
@@ -96,10 +97,14 @@ public class BabySwerver extends SubsystemBase {
   }
 
   public void setModuleStates(SwerveModuleState swerveModuleStates[]) {
-    frontLeft.setDesiredState(swerveModuleStates[0]);
-    frontRight.setDesiredState(swerveModuleStates[1]);
-    backLeft.setDesiredState(swerveModuleStates[2]);
-    backRight.setDesiredState(swerveModuleStates[3]);
+    frontLeft.setDesiredState(
+        SwerveModuleState.optimize(swerveModuleStates[0], frontLeft.getState().angle));
+    frontRight.setDesiredState(
+        SwerveModuleState.optimize(swerveModuleStates[1], frontRight.getState().angle));
+    backLeft.setDesiredState(
+        SwerveModuleState.optimize(swerveModuleStates[2], backLeft.getState().angle));
+    backRight.setDesiredState(
+        SwerveModuleState.optimize(swerveModuleStates[3], backRight.getState().angle));
   }
 
   @Override

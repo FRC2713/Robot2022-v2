@@ -32,26 +32,25 @@ public final class Constants {
     public static final int frontLeftDrive = 1;
     public static final int frontLeftAzi = 8;
     public static final int frontLeftAzimuthEncoder = 0;
+    public static final double frontLeftOffset = 2.92;
 
-    public static final double frontLeftOffset = 0;
-    // placeholder
-    public static final int backLeftDrive = 4;
-    public static final int backLeftAzi = 5;
-    public static final int backLeftAzimuthEncoder = 2;
-
-    public static final double backLeftOffset = 0;
     // placeholder
     public static final int frontRightDrive = 3;
     public static final int frontRightAzi = 2;
     public static final int frontRightAzimuthEncoder = 1;
+    public static final double frontRightOffset = 2.8605;
 
-    public static final double frontRightOffset = 0;
+    // placeholder
+    public static final int backLeftDrive = 4;
+    public static final int backLeftAzi = 5;
+    public static final int backLeftAzimuthEncoder = 2;
+    public static final double backLeftOffset = 2.935;
+
     // placeholder
     public static final int backRightDrive = 6;
     public static final int backRightAzi = 7;
     public static final int backRightAzimuthEncoder = 3;
-
-    public static final double backRightOffset = 0;
+    public static final double backRightOffset = 3.7135;
     // placeholder
 
     public static final int flywheelLeftPort = 5;
@@ -118,13 +117,22 @@ public final class Constants {
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
 
     public static final PIDFFGains kHeadingControllerGains =
-        PIDFFGains.builder("Heading Controller").kP(0.1).tolerance(0.5).build();
+        PIDFFGains.builder("Heading Controller").kP(0.0).tolerance(0.5).build();
     public static final double headingControllerDriverChangeRate = 0.1;
 
     public static final PIDFFGains kDefaultAzimuthGains =
-        PIDFFGains.builder("Default Azimuth").kP(0.08).build();
+        PIDFFGains.builder("Default Azimuth").kP(0.1).tolerance(0).build();
     public static final PIDFFGains kDefaultDrivingGains =
-        PIDFFGains.builder("Default Driving").kP(12.0).kV(2.45).build();
+        PIDFFGains.builder("Default Driving").kP(0).kV(0).build();
+
+    public static final PIDFFGains kFrontLeftAzimuthGains =
+        PIDFFGains.builder("Front Left").kP(0.0).kS(.126).tolerance(1.0).build();
+    public static final PIDFFGains kFrontRightAzimuthGains =
+        PIDFFGains.builder("Front Right").kP(0.0).kS(.12).tolerance(1.0).build();
+    public static final PIDFFGains kBackLeftAzimuthGains =
+        PIDFFGains.builder("Back Left").kP(0.0).kS(.2075).tolerance(1.0).build();
+    public static final PIDFFGains kBackRightAzimuthGains =
+        PIDFFGains.builder("Back Right").kP(0.0).kS(.13).tolerance(1.0).build();
   }
 
   public static final class AutoConstants {
