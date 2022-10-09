@@ -117,13 +117,13 @@ public final class Constants {
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
 
     public static final PIDFFGains kHeadingControllerGains =
-        PIDFFGains.builder("Heading Controller").kP(0.0).tolerance(0.5).build();
+        PIDFFGains.builder("Heading Controller").kP(0.0).tolerance(0).build();
     public static final double headingControllerDriverChangeRate = 0.1;
 
     public static final PIDFFGains kDefaultAzimuthGains =
-        PIDFFGains.builder("Default Azimuth").kP(0.1).tolerance(0).build();
+        PIDFFGains.builder("Default Azimuth").kP(0.65).tolerance(0).build();
     public static final PIDFFGains kDefaultDrivingGains =
-        PIDFFGains.builder("Default Driving").kP(0).kV(0).build();
+        PIDFFGains.builder("Default Driving").kP(0).kS(0.08314).kV(2.34746).build();
 
     public static final PIDFFGains kFrontLeftAzimuthGains =
         PIDFFGains.builder("Front Left").kP(0.0).kS(0).tolerance(1.0).build();

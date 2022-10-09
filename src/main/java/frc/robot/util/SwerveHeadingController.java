@@ -47,7 +47,10 @@ public class SwerveHeadingController {
 
     Rotation2d currentHeading = Robot.swerveDrive.getPose().getRotation();
     double output = controller.calculate(currentHeading.getDegrees(), setpoint.getDegrees());
+
     SmartDashboard.putNumber("Heading Controller/update", output);
+    SmartDashboard.putNumber(
+        "Heading Controller/error", currentHeading.getDegrees() - setpoint.getDegrees());
     return output;
   }
 }

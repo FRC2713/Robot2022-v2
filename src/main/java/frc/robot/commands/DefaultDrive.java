@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -23,9 +24,13 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double forwardReverseInput = Robot.driver.getLeftY();
-    double leftRightInput = Robot.driver.getLeftX();
-    double rotationalInput = Robot.driver.getRightX();
+    // The y joystick value is negated, eg pressing up is -1, because flight sticks
+    double forwardReverseInput =
+        MathUtil.applyDeadband(-Robot.driver.getLeftY(), DriveConstants.kJoystickTurnDeadzone);
+    double leftRightInput =
+        MathUtil.applyDeadband(Robot.driver.getLeftX(), DriveConstants.kJoystickTurnDeadzone);
+    double rotationalInput =
+        MathUtil.applyDeadband(Robot.driver.getRightX(), DriveConstants.kJoystickTurnDeadzone);
 
     double headingControllerDegreesChange =
         rotationalInput * DriveConstants.headingControllerDriverChangeRate;
@@ -36,7 +41,7 @@ public class DefaultDrive extends CommandBase {
 
     SwerveHeadingController.getInstance().setSetpoint(newHeadingSetpoint);
 
-    Robot.swerveDrive.drive(leftRightInput, forwardReverseInput);
+    Robot.swerveDrive.drive(forwardReverseInput, leftRightInput);
   }
 
   // Called once the command ends or is interrupted.

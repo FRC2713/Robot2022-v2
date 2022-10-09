@@ -21,28 +21,32 @@ public class BabySwerver extends SubsystemBase {
           Constants.RobotMap.frontLeftAzi,
           Constants.RobotMap.frontLeftAzimuthEncoder,
           Constants.RobotMap.frontLeftOffset,
-          Constants.DriveConstants.kFrontLeftAzimuthGains);
+          Constants.DriveConstants.kFrontLeftAzimuthGains,
+          false);
   private final SwerveModule frontRight =
       new SwerveModule(
           Constants.RobotMap.frontRightDrive,
           Constants.RobotMap.frontRightAzi,
           Constants.RobotMap.frontRightAzimuthEncoder,
           Constants.RobotMap.frontRightOffset,
-          Constants.DriveConstants.kFrontRightAzimuthGains);
+          Constants.DriveConstants.kFrontRightAzimuthGains,
+          true);
   private final SwerveModule backLeft =
       new SwerveModule(
           Constants.RobotMap.backLeftDrive,
           Constants.RobotMap.backLeftAzi,
           Constants.RobotMap.backLeftAzimuthEncoder,
           Constants.RobotMap.backLeftOffset,
-          Constants.DriveConstants.kBackLeftAzimuthGains);
+          Constants.DriveConstants.kBackLeftAzimuthGains,
+          false);
   private final SwerveModule backRight =
       new SwerveModule(
           Constants.RobotMap.backRightDrive,
           Constants.RobotMap.backRightAzi,
           Constants.RobotMap.backRightAzimuthEncoder,
           Constants.RobotMap.backRightOffset,
-          Constants.DriveConstants.kBackRightAzimuthGains);
+          Constants.DriveConstants.kBackRightAzimuthGains,
+          true);
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
@@ -51,6 +55,7 @@ public class BabySwerver extends SubsystemBase {
 
   public BabySwerver() {
     gyro.zeroGyroBiasNow();
+    gyro.setYaw(0);
   }
 
   public Pose2d getPose() {
@@ -72,11 +77,11 @@ public class BabySwerver extends SubsystemBase {
     setModuleStates(swerveModuleStates);
   }
 
-  public double getAverageVoltageAppliedForCharacterization() {
-    return (frontLeft.getVoltageAppliedForCharacterization()
-            + frontRight.getVoltageAppliedForCharacterization()
-            + backLeft.getVoltageAppliedForCharacterization()
-            + backRight.getVoltageAppliedForCharacterization())
+  public double getAverageVelocity() {
+    return (frontLeft.getState().speedMetersPerSecond
+            + frontRight.getState().speedMetersPerSecond
+            + backLeft.getState().speedMetersPerSecond
+            + backRight.getState().speedMetersPerSecond)
         / 4;
   }
 
@@ -105,6 +110,8 @@ public class BabySwerver extends SubsystemBase {
 
   @Override
   public void periodic() {
+    updateOdometry();
+
     SmartDashboard.putNumber("Gyro/Yaw", gyro.getYaw());
     SmartDashboard.putNumber("Gyro/Pitch", gyro.getPitch());
     SmartDashboard.putNumber("Gyro/Roll", gyro.getRoll());

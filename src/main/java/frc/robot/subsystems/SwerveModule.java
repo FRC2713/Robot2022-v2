@@ -8,7 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
@@ -32,7 +31,12 @@ public class SwerveModule extends SubsystemBase {
   // DriveConstants.kDefaultAzimuthGains.kD.get());
 
   public SwerveModule(
-      int drivePort, int azimPort, int azimuthEncoderPort, double offset, PIDFFGains azimuthGains) {
+      int drivePort,
+      int azimPort,
+      int azimuthEncoderPort,
+      double offset,
+      PIDFFGains azimuthGains,
+      boolean reverseDriveMotor) {
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
 
@@ -46,8 +50,11 @@ public class SwerveModule extends SubsystemBase {
     driver.setIdleMode(IdleMode.kBrake);
     azimuth.setIdleMode(IdleMode.kCoast);
 
-    getDriveEncoder()
-        .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
+    driver.setSmartCurrentLimit(50);
+    azimuth.setSmartCurrentLimit(20);
+
+    getDriveEncoder().setPositionConversionFactor(DriveConstants.distPerPulse);
+    getDriveEncoder().setVelocityConversionFactor(DriveConstants.distPerPulse / 60);
 
     azimuthController.enableContinuousInput(-180, 180);
 
@@ -58,6 +65,9 @@ public class SwerveModule extends SubsystemBase {
     azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0);
     azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0);
     azimuth.getEncoder().setPosition(azimuthEncoder.getAdjustedRotation2d().getDegrees() / 360.0);
+
+    // driver.burnFlash();
+    // azimuth.burnFlash();
   }
 
   private RelativeEncoder getDriveEncoder() {
@@ -94,6 +104,13 @@ public class SwerveModule extends SubsystemBase {
 
     String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";
+
+    SmartDashboard.putNumber(
+        keyPrefix + "azimuth error",
+        (getAziEncoder().getAdjustedRotation2d().getDegrees() - state.angle.getDegrees()));
+    SmartDashboard.putNumber(
+        keyPrefix + "drive velocity error",
+        (getDriveEncoder().getVelocity() - state.speedMetersPerSecond));
 
     driver.setVoltage(driveOutput);
     azimuth.setVoltage(turnOutput);

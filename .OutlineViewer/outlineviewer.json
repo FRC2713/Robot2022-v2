@@ -4,6 +4,21 @@
     "serverTeam": "2713"
   },
   "SmartDashboard": {
+    "TunableNumbers": {
+      "Back Left": {
+        "open": true
+      },
+      "Back Right": {
+        "open": true
+      },
+      "Front Left": {
+        "open": true
+      },
+      "Front Right": {
+        "open": true
+      },
+      "open": true
+    },
     "open": true
   }
 }
