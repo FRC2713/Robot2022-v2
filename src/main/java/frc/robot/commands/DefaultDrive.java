@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
@@ -28,27 +27,27 @@ public class DefaultDrive extends CommandBase {
     double forwardReverseInput =
         MathUtil.applyDeadband(-Robot.driver.getLeftY(), DriveConstants.kJoystickTurnDeadzone);
     double leftRightInput =
-        MathUtil.applyDeadband(Robot.driver.getLeftX(), DriveConstants.kJoystickTurnDeadzone);
+        MathUtil.applyDeadband(-Robot.driver.getLeftX(), DriveConstants.kJoystickTurnDeadzone);
     double rotationalInput =
         MathUtil.applyDeadband(Robot.driver.getRightX(), DriveConstants.kJoystickTurnDeadzone);
 
-    double headingControllerDegreesChange =
-        rotationalInput * DriveConstants.headingControllerDriverChangeRate;
-    Rotation2d newHeadingSetpoint =
-        SwerveHeadingController.getInstance()
-            .getSetpoint()
-            .plus(Rotation2d.fromDegrees(headingControllerDegreesChange));
+    // double headingControllerDegreesChange =
+    //     rotationalInput * DriveConstants.headingControllerDriverChangeRate;
+    // Rotation2d newHeadingSetpoint =
+    //     SwerveHeadingController.getInstance()
+    //         .getSetpoint()
+    //         .plus(Rotation2d.fromDegrees(headingControllerDegreesChange));
 
-    SwerveHeadingController.getInstance().setSetpoint(newHeadingSetpoint);
+    // SwerveHeadingController.getInstance().setSetpoint(newHeadingSetpoint);
 
-    Robot.swerveDrive.drive(forwardReverseInput, leftRightInput);
+    Robot.swerveDrive.drive(forwardReverseInput, leftRightInput, rotationalInput);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     SwerveHeadingController.getInstance().setSetpoint(Robot.swerveDrive.getPose().getRotation());
-    Robot.swerveDrive.drive(0, 0);
+    Robot.swerveDrive.drive(0, 0, 0);
   }
 
   // Returns true when the command should end.

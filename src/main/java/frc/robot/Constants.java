@@ -85,8 +85,8 @@ public final class Constants {
     public static final double distPerPulse =
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
-    public static final double maxSwerveVel = 3;
-    public static final double maxSwerveAzi = Math.PI;
+    public static final double maxSwerveVel = Units.feetToMeters(8);
+    // public static final double maxSwerveAzi = Math.PI;
 
     public static final int currentLimit = 65;
 
@@ -117,22 +117,22 @@ public final class Constants {
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
 
     public static final PIDFFGains kHeadingControllerGains =
-        PIDFFGains.builder("Heading Controller").kP(0.0).tolerance(0).build();
-    public static final double headingControllerDriverChangeRate = 0.1;
+        PIDFFGains.builder("Heading Controller").kP(0.1).kD(0.001000).tolerance(3).build();
+    public static final double headingControllerDriverChangeRate = 10;
 
     public static final PIDFFGains kDefaultAzimuthGains =
         PIDFFGains.builder("Default Azimuth").kP(0.65).tolerance(0).build();
     public static final PIDFFGains kDefaultDrivingGains =
-        PIDFFGains.builder("Default Driving").kP(0).kS(0.08314).kV(2.34746).build();
+        PIDFFGains.builder("Default Driving").kP(1.0).kS(0.15).kV(2).build();
 
     public static final PIDFFGains kFrontLeftAzimuthGains =
-        PIDFFGains.builder("Front Left").kP(0.0).kS(0).tolerance(1.0).build();
+        PIDFFGains.builder("Front Left").kP(0.25).kS(0).tolerance(1.0).build();
     public static final PIDFFGains kFrontRightAzimuthGains =
-        PIDFFGains.builder("Front Right").kP(0.0).kS(.12).tolerance(1.0).build();
+        PIDFFGains.builder("Front Right").kP(0.25).kS(.12).tolerance(1.0).build();
     public static final PIDFFGains kBackLeftAzimuthGains =
-        PIDFFGains.builder("Back Left").kP(0.0).kS(.2075).tolerance(1.0).build();
+        PIDFFGains.builder("Back Left").kP(0.25).kS(.2075).tolerance(1.0).build();
     public static final PIDFFGains kBackRightAzimuthGains =
-        PIDFFGains.builder("Back Right").kP(0.0).kS(.13).tolerance(1.0).build();
+        PIDFFGains.builder("Back Right").kP(0.25).kS(.13).tolerance(1.0).build();
   }
 
   public static final class AutoConstants {

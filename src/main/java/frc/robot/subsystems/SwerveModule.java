@@ -44,11 +44,12 @@ public class SwerveModule extends SubsystemBase {
     azimuth.restoreFactoryDefaults();
 
     azimuth.setInverted(true);
+    driver.setInverted(reverseDriveMotor);
 
     azimuthController = new PIDFFController(azimuthGains);
 
     driver.setIdleMode(IdleMode.kBrake);
-    azimuth.setIdleMode(IdleMode.kCoast);
+    azimuth.setIdleMode(IdleMode.kBrake);
 
     driver.setSmartCurrentLimit(50);
     azimuth.setSmartCurrentLimit(20);

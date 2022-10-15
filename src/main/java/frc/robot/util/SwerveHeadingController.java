@@ -45,12 +45,19 @@ public class SwerveHeadingController {
       SmartDashboard.putNumber("Heading Controller/setpoint degrees", setpoint.getDegrees());
     }
 
-    Rotation2d currentHeading = Robot.swerveDrive.getPose().getRotation();
-    double output = controller.calculate(currentHeading.getDegrees(), setpoint.getDegrees());
+    SmartDashboard.putBoolean("Heading Controller/at setpoint", controller.atSetpoint());
+
+    controller.setSetpoint(setpoint.getDegrees());
+    SmartDashboard.putNumber("Heading Controller/setpoint", setpoint.getDegrees());
+    double output = 0;
+    if (!controller.atSetpoint()) {
+      Rotation2d currentHeading = Robot.swerveDrive.getPose().getRotation();
+      output = controller.calculate(currentHeading.getDegrees(), setpoint.getDegrees());
+      SmartDashboard.putNumber(
+          "Heading Controller/error", currentHeading.getDegrees() - setpoint.getDegrees());
+    }
 
     SmartDashboard.putNumber("Heading Controller/update", output);
-    SmartDashboard.putNumber(
-        "Heading Controller/error", currentHeading.getDegrees() - setpoint.getDegrees());
     return output;
   }
 }

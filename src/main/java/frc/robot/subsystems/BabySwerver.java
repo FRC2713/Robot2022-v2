@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
-import frc.robot.util.SwerveHeadingController;
 
 public class BabySwerver extends SubsystemBase {
   private final SwerveModule frontLeft =
@@ -55,20 +54,25 @@ public class BabySwerver extends SubsystemBase {
 
   public BabySwerver() {
     gyro.zeroGyroBiasNow();
-    gyro.setYaw(0);
+    gyro.setYaw(90);
+  }
+
+  public void resetGyro(Rotation2d rotation) {
+    gyro.setYaw(rotation.getDegrees());
   }
 
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
 
-  public void drive(double xSpeed, double ySpeed) {
+  public void drive(double xSpeed, double ySpeed, double rSpeed) {
     SwerveModuleState[] swerveModuleStates =
         DriveConstants.kinematics.toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed,
-                ySpeed,
-                SwerveHeadingController.getInstance().update(),
+                xSpeed * DriveConstants.maxSwerveVel,
+                ySpeed * DriveConstants.maxSwerveVel,
+                // SwerveHeadingController.getInstance().update(),
+                rSpeed * Math.PI * -2,
                 getPose().getRotation()));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(

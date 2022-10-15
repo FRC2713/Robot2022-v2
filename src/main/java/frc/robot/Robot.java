@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -42,26 +41,27 @@ public class Robot extends LoggedRobot {
         .whenPressed(
             new InstantCommand(
                 () -> {
-                  swerveDrive.setModuleStates(
-                      new SwerveModuleState[] {
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                      });
+                  // swerveDrive.setModuleStates(
+                  //     new SwerveModuleState[] {
+                  //       new SwerveModuleState(1, Rotation2d.fromDegrees(0)),
+                  //       new SwerveModuleState(1, Rotation2d.fromDegrees(0)),
+                  //       new SwerveModuleState(1, Rotation2d.fromDegrees(0)),
+                  //       new SwerveModuleState(1, Rotation2d.fromDegrees(0)),
+                  //     });
                 },
                 swerveDrive));
     new JoystickButton(driver, XboxController.Button.kB.value)
         .whenPressed(
             new InstantCommand(
                 () -> {
-                  swerveDrive.setModuleStates(
-                      new SwerveModuleState[] {
-                        new SwerveModuleState(1, Rotation2d.fromDegrees(90)),
-                        new SwerveModuleState(1, Rotation2d.fromDegrees(90)),
-                        new SwerveModuleState(1, Rotation2d.fromDegrees(90)),
-                        new SwerveModuleState(1, Rotation2d.fromDegrees(90)),
-                      });
+                  // swerveDrive.setModuleStates(
+                  //     new SwerveModuleState[] {
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
+                  //     });
+                  SwerveHeadingController.getInstance().setSetpoint(Rotation2d.fromDegrees(135));
                 },
                 swerveDrive));
     new JoystickButton(driver, XboxController.Button.kY.value)
@@ -70,10 +70,10 @@ public class Robot extends LoggedRobot {
                 () -> {
                   // swerveDrive.setModuleStates(
                   //     new SwerveModuleState[] {
-                  //       new SwerveModuleState(2, Rotation2d.fromDegrees(180)),
-                  //       new SwerveModuleState(2, Rotation2d.fromDegrees(180)),
-                  //       new SwerveModuleState(2, Rotation2d.fromDegrees(180)),
-                  //       new SwerveModuleState(2, Rotation2d.fromDegrees(180)),
+                  //       new SwerveModuleState(-0.5, Rotation2d.fromDegrees(0)),
+                  //       new SwerveModuleState(-0.5, Rotation2d.fromDegrees(0)),
+                  //       new SwerveModuleState(-0.5, Rotation2d.fromDegrees(0)),
+                  //       new SwerveModuleState(-0.5, Rotation2d.fromDegrees(0)),
                   //     });
                   SwerveHeadingController.getInstance().setSetpoint(Rotation2d.fromDegrees(0));
                 },
@@ -84,15 +84,42 @@ public class Robot extends LoggedRobot {
                 () -> {
                   // swerveDrive.setModuleStates(
                   //     new SwerveModuleState[] {
-                  //       new SwerveModuleState(3, Rotation2d.fromDegrees(270)),
-                  //       new SwerveModuleState(3, Rotation2d.fromDegrees(270)),
-                  //       new SwerveModuleState(3, Rotation2d.fromDegrees(270)),
-                  //       new SwerveModuleState(3, Rotation2d.fromDegrees(270)),
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(270)),
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(270)),
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(270)),
+                  //       new SwerveModuleState(0, Rotation2d.fromDegrees(270)),
                   //     });
 
                   SwerveHeadingController.getInstance().setSetpoint(Rotation2d.fromDegrees(90));
                 },
                 swerveDrive));
+    new JoystickButton(driver, XboxController.Button.kStart.value)
+        .whenPressed(
+            new InstantCommand(
+                () -> {
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(0));
+                }));
+
+    new JoystickButton(driver, XboxController.Button.kBack.value)
+        .whenPressed(
+            new InstantCommand(
+                () -> {
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(90));
+                }));
+
+    new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
+        .whenPressed(
+            new InstantCommand(
+                () -> {
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
+                }));
+
+    new JoystickButton(driver, XboxController.Button.kRightBumper.value)
+        .whenPressed(
+            new InstantCommand(
+                () -> {
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(270));
+                }));
   }
 
   @Override
