@@ -104,14 +104,14 @@ public class Robot extends LoggedRobot {
         .whenPressed(
             new InstantCommand(
                 () -> {
-                  swerveDrive.resetGyro(Rotation2d.fromDegrees(90));
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
                 }));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
         .whenPressed(
             new InstantCommand(
                 () -> {
-                  swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(90));
                 }));
 
     new JoystickButton(driver, XboxController.Button.kRightBumper.value)

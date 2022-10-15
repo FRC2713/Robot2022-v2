@@ -25,9 +25,9 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     // The y joystick value is negated, eg pressing up is -1, because flight sticks
     double forwardReverseInput =
-        MathUtil.applyDeadband(-Robot.driver.getLeftY(), DriveConstants.kJoystickTurnDeadzone);
+        MathUtil.applyDeadband(Robot.driver.getLeftY(), DriveConstants.kJoystickTurnDeadzone);
     double leftRightInput =
-        MathUtil.applyDeadband(-Robot.driver.getLeftX(), DriveConstants.kJoystickTurnDeadzone);
+        MathUtil.applyDeadband(Robot.driver.getLeftX(), DriveConstants.kJoystickTurnDeadzone);
     double rotationalInput =
         MathUtil.applyDeadband(Robot.driver.getRightX(), DriveConstants.kJoystickTurnDeadzone);
 
