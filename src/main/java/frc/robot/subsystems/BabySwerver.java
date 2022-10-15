@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
-import frc.robot.util.SwerveHeadingController;
+import frc.robot.subsystems.SwerveIO.SwerveIO;
 import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
-import frc.robot.subsystems.SwerveIO.SwerveModuleIO.SwerveModuleInputs;
+import frc.robot.subsystems.SwerveIO.SwerveModuleIOSparkMAX;
+import frc.robot.util.SwerveHeadingController;
 
 public class BabySwerver extends SubsystemBase {
 
@@ -27,28 +28,28 @@ public class BabySwerver extends SubsystemBase {
           Constants.RobotMap.frontLeftAzi,
           Constants.RobotMap.frontLeftAzimuthEncoder,
           Constants.RobotMap.frontLeftOffset,
-          new SwerveModuleInputs());
+          new SwerveModuleIOSparkMAX());
   private final SwerveModule frontRight =
       new SwerveModule(
           Constants.RobotMap.frontRightDrive,
           Constants.RobotMap.frontRightAzi,
           Constants.RobotMap.frontRightAzimuthEncoder,
           Constants.RobotMap.frontRightOffset,
-          new SwerveModuleInputs());
+          new SwerveModuleIOSparkMAX());
   private final SwerveModule backLeft =
       new SwerveModule(
           Constants.RobotMap.backLeftDrive,
           Constants.RobotMap.backLeftAzi,
           Constants.RobotMap.backLeftAzimuthEncoder,
           Constants.RobotMap.backLeftOffset,
-          new SwerveModuleInputs());
+          new SwerveModuleIOSparkMAX());
   private final SwerveModule backRight =
       new SwerveModule(
           Constants.RobotMap.backRightDrive,
           Constants.RobotMap.backRightAzi,
           Constants.RobotMap.backRightAzimuthEncoder,
           Constants.RobotMap.backRightOffset,
-          new SwerveModuleInputs());
+          new SwerveModuleIOSparkMAX());
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
@@ -57,7 +58,7 @@ public class BabySwerver extends SubsystemBase {
 
   public BabySwerver(SwerveIO swerveIO) {
     io = swerveIO;
-    io.updateInputs(inputs)
+    io.updateInputs(inputs);
     gyro.zeroGyroBiasNow();
   }
 

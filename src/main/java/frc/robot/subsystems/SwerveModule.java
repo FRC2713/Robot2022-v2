@@ -10,14 +10,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.SwerveIO.SwerveIO;
+import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
-import frc.robot.subsystems.SwerveIO.SwerveModuleIO.SwerveModuleInputs;
 
 public class SwerveModule extends SubsystemBase {
 
-  SwerveModuleIO io;
-  SwerveModuleInputs inputs = new SwerveModuleInputs();
+  SwerveIO io;
+  SwerveInputs inputs = new SwerveInputs();
 
   CANSparkMax driver;
   CANSparkMax azimuth;
@@ -29,8 +30,9 @@ public class SwerveModule extends SubsystemBase {
   PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
   PIDFFController azimuthController = new PIDFFController(DriveConstants.kDefaultAzimuthGains);
 
-  public SwerveModule(int drivePort, int azimPort, int azimuthEncoderPort, double offset, SwerveModuleIO swerveModuleIO) {
-    io = swerveModuleIO;
+  public SwerveModule(
+      int drivePort, int azimPort, int azimuthEncoderPort, double offset, SwerveIO swerveIO) {
+    io = swerveIO;
     io.updateInputs(inputs);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
@@ -91,7 +93,7 @@ public class SwerveModule extends SubsystemBase {
   @Override
   public void periodic() {
     update();
-    
+
     io.updateInputs(inputs);
 
     String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
