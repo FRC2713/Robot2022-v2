@@ -41,7 +41,11 @@ public class OffsetAbsoluteAnalogEncoder {
   }
 
   public Rotation2d getAdjustedRotation2d() {
-    double unadjustedDegrees = getUnadjustedRotation2d().getDegrees();
+    return simplifyRotation2d(getUnadjustedRotation2d());
+  }
+
+  public static Rotation2d simplifyRotation2d(Rotation2d rotation) {
+    double unadjustedDegrees = rotation.getDegrees();
     double min = -180, max = 180;
 
     while (unadjustedDegrees < min) {
