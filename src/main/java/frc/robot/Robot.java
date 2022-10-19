@@ -6,8 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.subsystems.BabySwerver;
@@ -23,7 +26,7 @@ public class Robot extends LoggedRobot {
 
   public static final FeedForwardCharacterizationData ffData =
       new FeedForwardCharacterizationData("Module Driving");
-  public static final CharacterizationCommand cmd =
+  public static final CharacterizationCommand characterization =
       new CharacterizationCommand(
           swerveDrive,
           true,
@@ -32,6 +35,35 @@ public class Robot extends LoggedRobot {
             swerveDrive.applyVoltageForCharacterization(voltage);
           },
           () -> swerveDrive.getAverageVelocity());
+
+  public static final Command taxitaxi =
+      new RunCommand(
+          () -> {
+            swerveDrive.setModuleStates(
+                new SwerveModuleState[] {
+                  new SwerveModuleState(3, Rotation2d.fromDegrees(90)),
+                  new SwerveModuleState(3, Rotation2d.fromDegrees(90)),
+                  new SwerveModuleState(3, Rotation2d.fromDegrees(90)),
+                  new SwerveModuleState(3, Rotation2d.fromDegrees(90))
+                });
+          },
+          swerveDrive);
+
+  public static final Command stop =
+      new RunCommand(
+          () -> {
+            swerveDrive.setModuleStates(
+                new SwerveModuleState[] {
+                  new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
+                  new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
+                  new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
+                  new SwerveModuleState(0, Rotation2d.fromDegrees(90))
+                });
+          },
+          swerveDrive);
+
+  public static final SequentialCommandGroup taxi =
+      new SequentialCommandGroup(taxitaxi.withTimeout(5), stop);
 
   @Override
   public void robotInit() {
@@ -129,7 +161,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
-    cmd.cancel();
+    taxi.cancel();
   }
 
   @Override
@@ -137,7 +169,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    cmd.schedule();
+    taxi.schedule();
   }
 
   @Override
@@ -145,7 +177,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    cmd.cancel();
+    taxi.cancel();
   }
 
   @Override
