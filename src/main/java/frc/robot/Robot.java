@@ -21,6 +21,9 @@ import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharac
 import org.littletonrobotics.junction.LoggedRobot;
 
 public class Robot extends LoggedRobot {
+
+  public Command autoCommand;
+  
   public static final BabySwerver swerveDrive = new BabySwerver();
 
   public static final XboxController driver = new XboxController(Constants.zero);
@@ -66,35 +69,21 @@ public class Robot extends LoggedRobot {
           },
           swerveDrive);
 
-  public static SequentialCommandGroup taxi =
-      new SequentialCommandGroup(
-          new RunCommand(
-              () -> {
-                    swerveDrive.setModuleStates(
-                        new SwerveModuleState[] {
-                          new SwerveModuleState(3, Rotation2d.fromDegrees(180)),
-                          new SwerveModuleState(3, Rotation2d.fromDegrees(180)),
-                          new SwerveModuleState(3, Rotation2d.fromDegrees(180)),
-                          new SwerveModuleState(3, Rotation2d.fromDegrees(180))
-                        });
-                  }, swerveDrive)
-                  .withTimeout(5),
-              stop);
-
-    public SequentialCommandGroup setTaxi(double degrees) {
-      return new SequentialCommandGroup(
+  public SequentialCommandGroup setTaxi(double degrees) {
+    return new SequentialCommandGroup(
         new RunCommand(
-          () -> {
-                swerveDrive.setModuleStates(
-                    new SwerveModuleState[] {
-                      new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-                      new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-                      new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-                      new SwerveModuleState(3, Rotation2d.fromDegrees(degrees))}
-                      );
-              }, swerveDrive),
-          stop);
-    }
+            () -> {
+              swerveDrive.setModuleStates(
+                  new SwerveModuleState[] {
+                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
+                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
+                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
+                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees))
+                  });
+            },
+            swerveDrive).withTimeout(5),
+        stop);
+  }
 
   @Override
   public void robotInit() {
@@ -102,20 +91,23 @@ public class Robot extends LoggedRobot {
 
     autoSelect.addOption(
         "Left Fender",
-        new RunCommand(
-            () -> {
-              swerveDrive.resetGyro(Rotation2d.fromDegrees(130));
-              taxi = setTaxi(180);
-            },
-            swerveDrive));
+        new SequentialCommandGroup(
+            new RunCommand(
+                () -> {
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(130));
+                },
+                swerveDrive),
+            setTaxi(130)));
 
     autoSelect.addOption(
         "Left Tape",
-        new RunCommand(
-            () -> {
-              swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
-            },
-            swerveDrive));
+        new SequentialCommandGroup(
+            new RunCommand(
+                () -> {
+                  swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
+                },
+                swerveDrive),
+            setTaxi(180)));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
         .whenPressed(
@@ -139,7 +131,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
-    taxi.cancel();
+    autoCommand.cancel();
   }
 
   @Override
@@ -147,7 +139,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    taxi.schedule();
+    if(autoSelect.getSelected() != null) {
+    autoCommand = autoSelect.getSelected();
+    }
+    else autoCommand = setTaxi(180);
+    autoCommand.schedule();
   }
 
   @Override
@@ -155,7 +151,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    taxi.cancel();
+    autoCommand.cancel();
   }
 
   @Override
