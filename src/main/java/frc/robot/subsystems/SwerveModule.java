@@ -63,8 +63,8 @@ public class SwerveModule extends SubsystemBase {
 
     state = new SwerveModuleState(0, azimuthEncoder.getAdjustedRotation2d());
 
-    azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0);
-    azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0);
+    azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0 * 360);
+    azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0 * 360);
     azimuth.getEncoder().setPosition(azimuthEncoder.getAdjustedRotation2d().getDegrees() / 360.0);
 
     // driver.burnFlash();
@@ -118,6 +118,9 @@ public class SwerveModule extends SubsystemBase {
 
     SmartDashboard.putNumber(keyPrefix + "real output/driver", driveOutput);
     SmartDashboard.putNumber(keyPrefix + "real output/azimuth", turnOutput);
+
+    SmartDashboard.putNumber(keyPrefix + "neo/azimuth encoder", azimuth.getEncoder().getPosition());
+    SmartDashboard.putNumber(keyPrefix + "neo/drive encoder", driver.getEncoder().getPosition());
   }
 
   @Override
