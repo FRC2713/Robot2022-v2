@@ -126,13 +126,13 @@ public final class Constants {
         PIDFFGains.builder("Default Driving").kP(1.0).kS(0.15).kV(2).build();
 
     public static final PIDFFGains kFrontLeftAzimuthGains =
-        PIDFFGains.builder("Front Left").kP(0.25).kS(0).tolerance(1.0).build();
+        PIDFFGains.builder("Front Left").kP(0.1).kS(0.12).tolerance(1.0).build();
     public static final PIDFFGains kFrontRightAzimuthGains =
-        PIDFFGains.builder("Front Right").kP(0.25).kS(.12).tolerance(1.0).build();
+        PIDFFGains.builder("Front Right").kP(0.1).kS(.12).tolerance(1.0).build();
     public static final PIDFFGains kBackLeftAzimuthGains =
-        PIDFFGains.builder("Back Left").kP(0.25).kS(.2075).tolerance(1.0).build();
+        PIDFFGains.builder("Back Left").kP(0.1).kS(.15).tolerance(1.0).build();
     public static final PIDFFGains kBackRightAzimuthGains =
-        PIDFFGains.builder("Back Right").kP(0.25).kS(.13).tolerance(1.0).build();
+        PIDFFGains.builder("Back Right").kP(0.1).kS(.13).tolerance(1.0).build();
   }
 
   public static final class AutoConstants {
