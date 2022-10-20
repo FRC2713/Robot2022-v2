@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,7 +45,7 @@ public class SwerveModule extends SubsystemBase {
     azimuth.restoreFactoryDefaults();
 
     azimuth.setInverted(true);
-    driver.setInverted(reverseDriveMotor);
+    driver.setInverted(false);
 
     azimuthController = new PIDFFController(azimuthGains);
 
@@ -81,7 +82,9 @@ public class SwerveModule extends SubsystemBase {
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        getDriveEncoder().getVelocity(), getAziEncoder().getAdjustedRotation2d());
+        getDriveEncoder().getVelocity(),
+        OffsetAbsoluteAnalogEncoder.simplifyRotation2d(
+            Rotation2d.fromDegrees(azimuth.getEncoder().getPosition())));
   }
 
   public double getVoltageAppliedForCharacterization() {
@@ -93,7 +96,11 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    state = SwerveModuleState.optimize(desiredState, getAziEncoder().getAdjustedRotation2d());
+    state =
+        SwerveModuleState.optimize(
+            desiredState,
+            OffsetAbsoluteAnalogEncoder.simplifyRotation2d(
+                Rotation2d.fromDegrees(azimuth.getEncoder().getPosition())));
   }
 
   public void update() {
@@ -101,14 +108,20 @@ public class SwerveModule extends SubsystemBase {
         driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
     final double turnOutput =
         azimuthController.calculate(
-            getAziEncoder().getAdjustedRotation2d().getDegrees(), state.angle.getDegrees());
+            OffsetAbsoluteAnalogEncoder.simplifyRotation2d(
+                    Rotation2d.fromDegrees(azimuth.getEncoder().getPosition()))
+                .getDegrees(),
+            state.angle.getDegrees());
 
     String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";
 
     SmartDashboard.putNumber(
         keyPrefix + "azimuth error",
-        (getAziEncoder().getAdjustedRotation2d().getDegrees() - state.angle.getDegrees()));
+        (OffsetAbsoluteAnalogEncoder.simplifyRotation2d(
+                    Rotation2d.fromDegrees(azimuth.getEncoder().getPosition()))
+                .getDegrees()
+            - state.angle.getDegrees()));
     SmartDashboard.putNumber(
         keyPrefix + "drive velocity error",
         (getDriveEncoder().getVelocity() - state.speedMetersPerSecond));
