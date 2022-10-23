@@ -32,25 +32,25 @@ public final class Constants {
     public static final int frontLeftDrive = 1;
     public static final int frontLeftAzi = 8;
     public static final int frontLeftAzimuthEncoder = 0;
-    public static final double frontLeftOffset = 0.6215;
+    public static final double frontLeftOffset = 0.1124;
 
     // placeholder
     public static final int frontRightDrive = 3;
     public static final int frontRightAzi = 2;
     public static final int frontRightAzimuthEncoder = 1;
-    public static final double frontRightOffset = 0.5983;
+    public static final double frontRightOffset = 0.6028;
 
     // placeholder
     public static final int backLeftDrive = 4;
     public static final int backLeftAzi = 5;
     public static final int backLeftAzimuthEncoder = 2;
-    public static final double backLeftOffset = 0.6223;
+    public static final double backLeftOffset = 0.0626;
 
     // placeholder
     public static final int backRightDrive = 6;
     public static final int backRightAzi = 7;
     public static final int backRightAzimuthEncoder = 3;
-    public static final double backRightOffset = 0.78155;
+    public static final double backRightOffset = 0.775;
     // placeholder
 
     public static final int flywheelLeftPort = 5;
@@ -85,7 +85,7 @@ public final class Constants {
     public static final double distPerPulse =
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
-    public static final double maxSwerveVel = Units.feetToMeters(8);
+    public static final double maxSwerveVel = Units.feetToMeters(16.0 * 0.75);
     // public static final double maxSwerveAzi = Math.PI;
 
     public static final int currentLimit = 65;

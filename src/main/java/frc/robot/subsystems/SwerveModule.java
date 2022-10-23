@@ -45,7 +45,7 @@ public class SwerveModule extends SubsystemBase {
     azimuth.restoreFactoryDefaults();
 
     azimuth.setInverted(true);
-    driver.setInverted(false);
+    driver.setInverted(reverseDriveMotor);
 
     azimuthController = new PIDFFController(azimuthGains);
 
@@ -66,10 +66,12 @@ public class SwerveModule extends SubsystemBase {
 
     azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0 * 360);
     azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0 * 360);
-    azimuth.getEncoder().setPosition(azimuthEncoder.getAdjustedRotation2d().getDegrees() / 360.0);
+    // azimuth.getEncoder().setPosition(azimuthEncoder.getAdjustedRotation2d().getDegrees() /
+    // 360.0);
 
-    // driver.burnFlash();
-    // azimuth.burnFlash();
+    azimuth.getEncoder().setPosition(0);
+    driver.burnFlash();
+    azimuth.burnFlash();
   }
 
   private RelativeEncoder getDriveEncoder() {

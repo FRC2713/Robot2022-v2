@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.DefaultDrive;
 import frc.robot.subsystems.BabySwerver;
 import frc.robot.util.characterization.CharacterizationCommand;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
@@ -22,7 +22,7 @@ import org.littletonrobotics.junction.LoggedRobot;
 public class Robot extends LoggedRobot {
 
   public Command autoCommand;
-  
+
   public static final BabySwerver swerveDrive = new BabySwerver();
 
   public static final XboxController driver = new XboxController(Constants.zero);
@@ -68,25 +68,26 @@ public class Robot extends LoggedRobot {
           },
           swerveDrive);
 
-  public SequentialCommandGroup setTaxi(double degrees) {
-    return new SequentialCommandGroup(
-        new RunCommand(
-            () -> {
-              swerveDrive.setModuleStates(
-                  new SwerveModuleState[] {
-                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-                    new SwerveModuleState(3, Rotation2d.fromDegrees(degrees))
-                  });
-            },
-            swerveDrive).withTimeout(5),
-        stop);
-  }
+  // public SequentialCommandGroup setTaxi(double degrees) {
+  //   return new SequentialCommandGroup(
+  //       new RunCommand(
+  //               () -> {
+  //                 swerveDrive.setModuleStates(
+  //                     new SwerveModuleState[] {
+  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
+  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
+  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
+  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees))
+  //                     });
+  //               },
+  //               swerveDrive)
+  //           .withTimeout(5),
+  //       stop);
+  // }
 
   @Override
   public void robotInit() {
-    // swerveDrive.setDefaultCommand(new DefaultDrive());
+    swerveDrive.setDefaultCommand(new DefaultDrive());
 
     new JoystickButton(driver, XboxController.Button.kA.value)
         .whenPressed(
@@ -115,26 +116,26 @@ public class Robot extends LoggedRobot {
                   // SwerveHeadingController.getInstance().setSetpoint(Rotation2d.fromDegrees(135));
                 },
                 swerveDrive));
-                
-    autoSelect.addOption(
-        "Left Fender",
-        new SequentialCommandGroup(
-            new RunCommand(
-                () -> {
-                  swerveDrive.resetGyro(Rotation2d.fromDegrees(130));
-                },
-                swerveDrive),
-            setTaxi(130)));
 
-    autoSelect.addOption(
-        "Left Tape",
-        new SequentialCommandGroup(
-            new RunCommand(
-                () -> {
-                  swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
-                },
-                swerveDrive),
-            setTaxi(180)));
+    // autoSelect.addOption(
+    //     "Left Fender",
+    //     new SequentialCommandGroup(
+    //         new InstantCommand(
+    //             () -> {
+    //               swerveDrive.resetGyro(Rotation2d.fromDegrees(130));
+    //             },
+    //             swerveDrive),
+    //         setTaxi(130)));
+
+    // autoSelect.addOption(
+    //     "Left Tape",
+    //     new SequentialCommandGroup(
+    //         new RunCommand(
+    //             () -> {
+    //               swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
+    //             },
+    //             swerveDrive),
+    //         setTaxi(180)));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
         .whenPressed(
@@ -158,7 +159,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
-    autoCommand.cancel();
+    if (autoCommand != null) {
+
+      autoCommand.cancel();
+    }
   }
 
   @Override
@@ -166,11 +170,13 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    if(autoSelect.getSelected() != null) {
-    autoCommand = autoSelect.getSelected();
+    if (autoSelect.getSelected() != null) {
+      autoCommand = autoSelect.getSelected();
     }
-    else autoCommand = setTaxi(180);
-    autoCommand.schedule();
+    if (autoCommand != null) {
+
+      autoCommand.schedule();
+    }
   }
 
   @Override
@@ -178,7 +184,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    autoCommand.cancel();
+    if (autoCommand != null) {
+
+      autoCommand.cancel();
+    }
   }
 
   @Override

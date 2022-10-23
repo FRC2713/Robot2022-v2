@@ -29,7 +29,7 @@ public class BabySwerver extends SubsystemBase {
           Constants.RobotMap.frontRightAzimuthEncoder,
           Constants.RobotMap.frontRightOffset,
           Constants.DriveConstants.kFrontRightAzimuthGains,
-          true);
+          false);
   private final SwerveModule backLeft =
       new SwerveModule(
           Constants.RobotMap.backLeftDrive,
@@ -45,7 +45,7 @@ public class BabySwerver extends SubsystemBase {
           Constants.RobotMap.backRightAzimuthEncoder,
           Constants.RobotMap.backRightOffset,
           Constants.DriveConstants.kBackRightAzimuthGains,
-          true);
+          false);
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
@@ -54,7 +54,7 @@ public class BabySwerver extends SubsystemBase {
 
   public BabySwerver() {
     gyro.zeroGyroBiasNow();
-    gyro.setYaw(90);
+    // gyro.setYaw(90);
   }
 
   public void resetGyro(Rotation2d rotation) {
