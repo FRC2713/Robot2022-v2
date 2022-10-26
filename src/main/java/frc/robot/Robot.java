@@ -68,23 +68,6 @@ public class Robot extends LoggedRobot {
           },
           swerveDrive);
 
-  // public SequentialCommandGroup setTaxi(double degrees) {
-  //   return new SequentialCommandGroup(
-  //       new RunCommand(
-  //               () -> {
-  //                 swerveDrive.setModuleStates(
-  //                     new SwerveModuleState[] {
-  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees)),
-  //                       new SwerveModuleState(3, Rotation2d.fromDegrees(degrees))
-  //                     });
-  //               },
-  //               swerveDrive)
-  //           .withTimeout(5),
-  //       stop);
-  // }
-
   @Override
   public void robotInit() {
     swerveDrive.setDefaultCommand(new DefaultDrive());
@@ -113,29 +96,8 @@ public class Robot extends LoggedRobot {
                         new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
                         new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
                       });
-                  // SwerveHeadingController.getInstance().setSetpoint(Rotation2d.fromDegrees(135));
                 },
                 swerveDrive));
-
-    // autoSelect.addOption(
-    //     "Left Fender",
-    //     new SequentialCommandGroup(
-    //         new InstantCommand(
-    //             () -> {
-    //               swerveDrive.resetGyro(Rotation2d.fromDegrees(130));
-    //             },
-    //             swerveDrive),
-    //         setTaxi(130)));
-
-    // autoSelect.addOption(
-    //     "Left Tape",
-    //     new SequentialCommandGroup(
-    //         new RunCommand(
-    //             () -> {
-    //               swerveDrive.resetGyro(Rotation2d.fromDegrees(180));
-    //             },
-    //             swerveDrive),
-    //         setTaxi(180)));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
         .whenPressed(

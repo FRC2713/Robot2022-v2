@@ -71,7 +71,6 @@ public class BabySwerver extends SubsystemBase {
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed * DriveConstants.maxSwerveVel,
                 ySpeed * DriveConstants.maxSwerveVel,
-                // SwerveHeadingController.getInstance().update(),
                 rSpeed * Math.PI * -2,
                 getPose().getRotation()));
 
