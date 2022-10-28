@@ -12,12 +12,13 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveIO.SwerveIO;
 import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
 
 public class SwerveModule extends SubsystemBase {
 
-  SwerveIO io;
+  SwerveModuleIO io;
   SwerveInputs inputs = new SwerveInputs();
 
   CANSparkMax driver;
@@ -48,6 +49,7 @@ public class SwerveModule extends SubsystemBase {
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
 
     state = new SwerveModuleState(0, azimuthEncoder.getAdjustedRotation2d());
+    state = new SwerveModuleState(0, inputs.
 
     azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0);
     azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0);

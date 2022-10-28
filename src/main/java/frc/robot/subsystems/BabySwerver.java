@@ -14,7 +14,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.SwerveIO.SwerveIO;
 import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
-import frc.robot.subsystems.SwerveIO.SwerveModuleIOSparkMAX;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
 import frc.robot.util.SwerveHeadingController;
 
 public class BabySwerver extends SubsystemBase {
@@ -22,34 +22,30 @@ public class BabySwerver extends SubsystemBase {
   SwerveIO io;
   SwerveInputs inputs = new SwerveInputs();
 
-  private final SwerveModule frontLeft =
-      new SwerveModule(
+  private final SwerveModuleIOSparkMAX frontLeft =
+      new SwerveModuleIOSparkMAX(
           Constants.RobotMap.frontLeftDrive,
           Constants.RobotMap.frontLeftAzi,
           Constants.RobotMap.frontLeftAzimuthEncoder,
-          Constants.RobotMap.frontLeftOffset,
-          new SwerveModuleIOSparkMAX());
-  private final SwerveModule frontRight =
-      new SwerveModule(
+          Constants.RobotMap.frontLeftOffset);
+  private final SwerveModuleIOSparkMAX frontRight =
+      new SwerveModuleIOSparkMAX(
           Constants.RobotMap.frontRightDrive,
           Constants.RobotMap.frontRightAzi,
           Constants.RobotMap.frontRightAzimuthEncoder,
-          Constants.RobotMap.frontRightOffset,
-          new SwerveModuleIOSparkMAX());
-  private final SwerveModule backLeft =
-      new SwerveModule(
+          Constants.RobotMap.frontRightOffset);
+  private final SwerveModuleIOSparkMAX backLeft =
+      new SwerveModuleIOSparkMAX(
           Constants.RobotMap.backLeftDrive,
           Constants.RobotMap.backLeftAzi,
           Constants.RobotMap.backLeftAzimuthEncoder,
-          Constants.RobotMap.backLeftOffset,
-          new SwerveModuleIOSparkMAX());
-  private final SwerveModule backRight =
-      new SwerveModule(
+          Constants.RobotMap.backLeftOffset);
+  private final SwerveModuleIOSparkMAX backRight =
+      new SwerveModuleIOSparkMAX(
           Constants.RobotMap.backRightDrive,
           Constants.RobotMap.backRightAzi,
           Constants.RobotMap.backRightAzimuthEncoder,
-          Constants.RobotMap.backRightOffset,
-          new SwerveModuleIOSparkMAX());
+          Constants.RobotMap.backRightOffset);
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
