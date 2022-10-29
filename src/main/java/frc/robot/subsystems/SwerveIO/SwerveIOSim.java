@@ -1,7 +1,6 @@
 package frc.robot.subsystems.SwerveIO;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.RobotMap;
 
@@ -26,6 +25,6 @@ public class SwerveIOSim implements SwerveIO {
   @Override
   public void setDesiredState(SwerveModuleState desiredState) {
     // TODO Auto-generated method stub
-    
+
   }
 }

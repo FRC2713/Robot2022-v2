@@ -39,11 +39,10 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
-
   }
 
   @Override
-  public void updateInputs(SwerveInputs inputs) {
+  public void updateInputs(SwerveModuleInputs inputs) {
     inputs.aziEncoderRawVolts = azimuthEncoder.getAdjustedVoltage();
     inputs.aziEncoderAdjVolts = azimuthEncoder.getAdjustedVoltage();
     inputs.aziEncoderAdjAngle = azimuthEncoder.getAdjustedRotation2d().getDegrees();

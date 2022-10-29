@@ -1,8 +1,7 @@
 package frc.robot.subsystems.SwerveIO;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface SwerveIO {
 
@@ -12,11 +11,10 @@ public interface SwerveIO {
     public double gyroPitchPosition = 0.0;
     public double gyroRollPosition = 0.0;
     public double gyroCompassHeading = 0.0;
-    public double targetAngle = 0.0;
+    // public double targetAngle = 0.0;
   }
 
   public void updateInputs(SwerveInputs inputs);
 
-  public void setDesiredState(SwerveModuleState desiredState)
-
+  public void setDesiredState(SwerveModuleState desiredState);
 }

@@ -10,16 +10,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.SwerveIO.SwerveIO;
-import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO.SwerveModuleInputs;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
 
 public class SwerveModule extends SubsystemBase {
 
   SwerveModuleIO io;
-  SwerveInputs inputs = new SwerveInputs();
+  // SwerveModuleInputs inputs = new SwerveModuleInputs();
+  public final SwerveModuleInputs inputs = new SwerveModuleInputs();
 
   CANSparkMax driver;
   CANSparkMax azimuth;
@@ -31,9 +32,8 @@ public class SwerveModule extends SubsystemBase {
   PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
   PIDFFController azimuthController = new PIDFFController(DriveConstants.kDefaultAzimuthGains);
 
-  public SwerveModule(
-      int drivePort, int azimPort, int azimuthEncoderPort, double offset, SwerveIO swerveIO) {
-    io = swerveIO;
+  public SwerveModule(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
+    io = new SwerveModuleIOSparkMAX(drivePort, azimPort, azimuthEncoderPort, offset);
     io.updateInputs(inputs);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
@@ -49,7 +49,7 @@ public class SwerveModule extends SubsystemBase {
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
 
     state = new SwerveModuleState(0, azimuthEncoder.getAdjustedRotation2d());
-    state = new SwerveModuleState(0, inputs.
+    // state = new SwerveModuleState(0, inputs.
 
     azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0);
     azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0);
