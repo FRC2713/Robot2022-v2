@@ -122,6 +122,7 @@ public class Robot extends LoggedRobot {
         new SequentialCommandGroup(
             new InstantCommand(
                 () -> {
+                  swerveDrive.resetGyro(taxi.getInitialHolonomicPose().getRotation());
                   swerveDrive.resetOdometry(taxi.getInitialHolonomicPose());
                 }),
             new PPSwerveControllerCommand(
@@ -130,7 +131,7 @@ public class Robot extends LoggedRobot {
                 Constants.DriveConstants.kinematics,
                 new PIDController(0.9, 0, 0),
                 new PIDController(0.9, 0, 0),
-                new PIDController(0.1, 0, 0),
+                new PIDController(0.5, 0, 0),
                 (states) -> {
                   swerveDrive.setModuleStates(states);
                 },
