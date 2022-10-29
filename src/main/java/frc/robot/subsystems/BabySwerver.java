@@ -49,16 +49,24 @@ public class BabySwerver extends SubsystemBase {
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
-  private final SwerveDriveOdometry odometry =
-      new SwerveDriveOdometry(DriveConstants.kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
+  private final SwerveDriveOdometry odometry;
 
   public BabySwerver() {
     gyro.zeroGyroBiasNow();
+    gyro.setYaw(0);
+    odometry =
+        new SwerveDriveOdometry(DriveConstants.kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
     // gyro.setYaw(90);
+    // gyro.config
   }
 
   public void resetGyro(Rotation2d rotation) {
     gyro.setYaw(rotation.getDegrees());
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    // gyro.setYaw(pose.getRotation().getDegrees());
+    odometry.resetPosition(pose, pose.getRotation());
   }
 
   public Pose2d getPose() {
@@ -71,7 +79,7 @@ public class BabySwerver extends SubsystemBase {
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed * DriveConstants.maxSwerveVel,
                 ySpeed * DriveConstants.maxSwerveVel,
-                rSpeed * Math.PI * -2,
+                rSpeed * Math.PI * 2,
                 getPose().getRotation()));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -119,5 +127,9 @@ public class BabySwerver extends SubsystemBase {
     SmartDashboard.putNumber("Gyro/Pitch", gyro.getPitch());
     SmartDashboard.putNumber("Gyro/Roll", gyro.getRoll());
     SmartDashboard.putNumber("Gyro/Compass Heading", gyro.getAbsoluteCompassHeading());
+
+    SmartDashboard.putNumber("Odometry/X", odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("Odometry/Y", odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Odometry/H", odometry.getPoseMeters().getRotation().getDegrees());
   }
 }

@@ -45,7 +45,7 @@ public class SwerveModule extends SubsystemBase {
     azimuth.restoreFactoryDefaults();
 
     azimuth.setInverted(true);
-    driver.setInverted(reverseDriveMotor);
+    driver.setInverted(true);
 
     azimuthController = new PIDFFController(azimuthGains);
 
@@ -76,7 +76,7 @@ public class SwerveModule extends SubsystemBase {
     return driver.getEncoder();
   }
 
-  private OffsetAbsoluteAnalogEncoder getAziEncoder() {
+  private OffsetAbsoluteAnalogEncoder getAnalogEncoder() {
     return azimuthEncoder;
   }
 
