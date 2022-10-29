@@ -23,6 +23,9 @@ import frc.robot.util.characterization.CharacterizationCommand;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import java.util.HashMap;
 import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedNetworkTables;
+import org.littletonrobotics.junction.io.LogSocketServer;
 
 public class Robot extends LoggedRobot {
 
@@ -51,6 +54,12 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
+
+    setUseTiming(isReal());
+    LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
+    Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
+    Logger.getInstance().start();
+
     swerveDrive.setDefaultCommand(new DefaultDrive());
 
     new JoystickButton(driver, XboxController.Button.kA.value)
@@ -131,7 +140,7 @@ public class Robot extends LoggedRobot {
                 Constants.DriveConstants.kinematics,
                 new PIDController(0.9, 0, 0),
                 new PIDController(0.9, 0, 0),
-                new PIDController(0.5, 0, 0),
+                new PIDController(1.0, 0, 0),
                 (states) -> {
                   swerveDrive.setModuleStates(states);
                 },

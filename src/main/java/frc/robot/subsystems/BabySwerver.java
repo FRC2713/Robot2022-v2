@@ -7,11 +7,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
+import org.littletonrobotics.junction.Logger;
 
 public class BabySwerver extends SubsystemBase {
   private final SwerveModule frontLeft =
@@ -123,13 +123,14 @@ public class BabySwerver extends SubsystemBase {
   public void periodic() {
     updateOdometry();
 
-    SmartDashboard.putNumber("Gyro/Yaw", gyro.getYaw());
-    SmartDashboard.putNumber("Gyro/Pitch", gyro.getPitch());
-    SmartDashboard.putNumber("Gyro/Roll", gyro.getRoll());
-    SmartDashboard.putNumber("Gyro/Compass Heading", gyro.getAbsoluteCompassHeading());
+    Logger.getInstance().recordOutput("Gyro/Yaw", gyro.getYaw());
+    Logger.getInstance().recordOutput("Gyro/Pitch", gyro.getPitch());
+    Logger.getInstance().recordOutput("Gyro/Roll", gyro.getRoll());
+    Logger.getInstance().recordOutput("Gyro/Compass Heading", gyro.getAbsoluteCompassHeading());
 
-    SmartDashboard.putNumber("Odometry/X", odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("Odometry/Y", odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Odometry/H", odometry.getPoseMeters().getRotation().getDegrees());
+    Logger.getInstance().recordOutput("Odometry/X", odometry.getPoseMeters().getX());
+    Logger.getInstance().recordOutput("Odometry/Y", odometry.getPoseMeters().getY());
+    Logger.getInstance()
+        .recordOutput("Odometry/H", odometry.getPoseMeters().getRotation().getDegrees());
   }
 }

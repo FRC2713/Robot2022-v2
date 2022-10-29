@@ -7,12 +7,12 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
 import frc.robot.util.PIDFFGains;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
 
@@ -116,24 +116,28 @@ public class SwerveModule extends SubsystemBase {
     String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";
 
-    SmartDashboard.putNumber(
-        keyPrefix + "azimuth error",
-        (OffsetAbsoluteAnalogEncoder.simplifyRotation2d(
-                    Rotation2d.fromDegrees(azimuth.getEncoder().getPosition()))
-                .getDegrees()
-            - state.angle.getDegrees()));
-    SmartDashboard.putNumber(
-        keyPrefix + "drive velocity error",
-        (getDriveEncoder().getVelocity() - state.speedMetersPerSecond));
+    Logger.getInstance()
+        .recordOutput(
+            keyPrefix + "azimuth error",
+            (OffsetAbsoluteAnalogEncoder.simplifyRotation2d(
+                        Rotation2d.fromDegrees(azimuth.getEncoder().getPosition()))
+                    .getDegrees()
+                - state.angle.getDegrees()));
+    Logger.getInstance()
+        .recordOutput(
+            keyPrefix + "drive velocity error",
+            (getDriveEncoder().getVelocity() - state.speedMetersPerSecond));
 
     driver.setVoltage(driveOutput);
     azimuth.setVoltage(turnOutput);
 
-    SmartDashboard.putNumber(keyPrefix + "real output/driver", driveOutput);
-    SmartDashboard.putNumber(keyPrefix + "real output/azimuth", turnOutput);
+    Logger.getInstance().recordOutput(keyPrefix + "real output/driver", driveOutput);
+    Logger.getInstance().recordOutput(keyPrefix + "real output/azimuth", turnOutput);
 
-    SmartDashboard.putNumber(keyPrefix + "neo/azimuth encoder", azimuth.getEncoder().getPosition());
-    SmartDashboard.putNumber(keyPrefix + "neo/drive encoder", driver.getEncoder().getPosition());
+    Logger.getInstance()
+        .recordOutput(keyPrefix + "neo/azimuth encoder", azimuth.getEncoder().getPosition());
+    Logger.getInstance()
+        .recordOutput(keyPrefix + "neo/drive encoder", driver.getEncoder().getPosition());
   }
 
   @Override
@@ -143,21 +147,26 @@ public class SwerveModule extends SubsystemBase {
     String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
     String keyPrefix = "Modules/" + moduleId + "/";
 
-    SmartDashboard.putNumber(
-        keyPrefix + "azi encoder/raw volts", azimuthEncoder.getUnadjustedVoltage());
-    SmartDashboard.putNumber(
-        keyPrefix + "azi encoder/adj volts", azimuthEncoder.getAdjustedVoltage());
-    SmartDashboard.putNumber(
-        keyPrefix + "azi encoder/adj angle", azimuthEncoder.getAdjustedRotation2d().getDegrees());
+    Logger.getInstance()
+        .recordOutput(keyPrefix + "azi encoder/raw volts", azimuthEncoder.getUnadjustedVoltage());
+    Logger.getInstance()
+        .recordOutput(keyPrefix + "azi encoder/adj volts", azimuthEncoder.getAdjustedVoltage());
+    Logger.getInstance()
+        .recordOutput(
+            keyPrefix + "azi encoder/adj angle",
+            azimuthEncoder.getAdjustedRotation2d().getDegrees());
 
-    SmartDashboard.putNumber(keyPrefix + "azi encoder/offset", azimuthEncoder.getFilteredOffset());
+    Logger.getInstance()
+        .recordOutput(keyPrefix + "azi encoder/offset", azimuthEncoder.getFilteredOffset());
 
-    SmartDashboard.putNumber(
-        keyPrefix + "output/driver",
-        driver.getAppliedOutput() * RobotController.getBatteryVoltage());
-    SmartDashboard.putNumber(
-        keyPrefix + "output/azimuth",
-        azimuth.getAppliedOutput() * RobotController.getBatteryVoltage());
-    SmartDashboard.putNumber(keyPrefix + "target angle", state.angle.getDegrees());
+    Logger.getInstance()
+        .recordOutput(
+            keyPrefix + "output/driver",
+            driver.getAppliedOutput() * RobotController.getBatteryVoltage());
+    Logger.getInstance()
+        .recordOutput(
+            keyPrefix + "output/azimuth",
+            azimuth.getAppliedOutput() * RobotController.getBatteryVoltage());
+    Logger.getInstance().recordOutput(keyPrefix + "target angle", state.angle.getDegrees());
   }
 }

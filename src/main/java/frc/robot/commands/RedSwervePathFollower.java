@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.util.RedHolonomicDriveController;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 /** Custom PathPlanner version of SwerveControllerCommand */
 public class RedSwervePathFollower extends CommandBase {
@@ -82,13 +83,14 @@ public class RedSwervePathFollower extends CommandBase {
     Pose2d currentPose = this.poseSupplier.get();
     this.field.setRobotPose(currentPose);
 
-    SmartDashboard.putNumber(
-        "RedSwerve_xError", currentPose.getX() - desiredState.poseMeters.getX());
-    SmartDashboard.putNumber(
-        "RedSwerve_yError", currentPose.getY() - desiredState.poseMeters.getY());
-    SmartDashboard.putNumber(
-        "RedSwerve_hError",
-        currentPose.getRotation().getRadians() - desiredState.holonomicRotation.getRadians());
+    Logger.getInstance()
+        .recordOutput("RedSwerve_xError", currentPose.getX() - desiredState.poseMeters.getX());
+    Logger.getInstance()
+        .recordOutput("RedSwerve_yError", currentPose.getY() - desiredState.poseMeters.getY());
+    Logger.getInstance()
+        .recordOutput(
+            "RedSwerve_hError",
+            currentPose.getRotation().getRadians() - desiredState.holonomicRotation.getRadians());
 
     ChassisSpeeds targetChassisSpeeds =
         this.controller.calculate(currentPose, desiredState, desiredState.holonomicRotation);
