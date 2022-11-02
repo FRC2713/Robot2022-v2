@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.SwerveIO.module;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -10,9 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
-import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO.SwerveModuleInputs;
-import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
 
@@ -20,7 +17,7 @@ public class SwerveModule extends SubsystemBase {
 
   SwerveModuleIO io;
   // SwerveModuleInputs inputs = new SwerveModuleInputs();
-  public final SwerveModuleInputs inputs = new SwerveModuleInputs();
+  public final SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
 
   CANSparkMax driver;
   CANSparkMax azimuth;

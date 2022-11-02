@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.SwerveIO;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
-import frc.robot.subsystems.SwerveIO.SwerveIO;
 import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
+import frc.robot.subsystems.SwerveIO.module.SwerveModule;
 import frc.robot.util.SwerveHeadingController;
 
 public class BabySwerver extends SubsystemBase {

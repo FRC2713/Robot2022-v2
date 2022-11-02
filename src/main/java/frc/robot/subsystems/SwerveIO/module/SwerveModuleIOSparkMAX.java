@@ -46,12 +46,20 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     inputs.aziEncoderRawVolts = azimuthEncoder.getAdjustedVoltage();
     inputs.aziEncoderAdjVolts = azimuthEncoder.getAdjustedVoltage();
     inputs.aziEncoderAdjAngle = azimuthEncoder.getAdjustedRotation2d().getDegrees();
-    inputs.outputDriver = driver.getAppliedOutput();
     inputs.aziOutput = azimuth.getAppliedOutput();
+
+    inputs.driveEncoderPosition = getDriveEncoder().getPosition();
+    inputs.driveEncoderVelocity = getDriveEncoder().getVelocity();
+    inputs.driveOutput = driver.getAppliedOutput();
   }
 
   @Override
-  public void setAzimuthVoltage(double volts) {
-    azimuth.setVoltage(volts);
+  public void setAzimuthVoltage(double aziVolts) {
+    azimuth.setVoltage(aziVolts);
+  }
+
+  @Override
+  public void setDriveVoltage(double driveVolts) {
+    driver.setVoltage(driveVolts);
   }
 }
