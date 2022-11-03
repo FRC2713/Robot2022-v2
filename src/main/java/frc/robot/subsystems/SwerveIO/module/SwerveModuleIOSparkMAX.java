@@ -17,13 +17,12 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     return driver.getEncoder();
   }
 
-  private OffsetAbsoluteAnalogEncoder getAziEncoder() {
-    return azimuthEncoder;
+  private RelativeEncoder getAziEncoder() {
+    return azimuth.getEncoder();
   }
 
-  public SwerveModuleState getState() {
-    return new SwerveModuleState(
-        getDriveEncoder().getVelocity(), getAziEncoder().getAdjustedRotation2d());
+  private OffsetAbsoluteAnalogEncoder getAziAbsoluteEncoder() {
+    return azimuthEncoder;
   }
 
   public double getVoltageAppliedForCharacterization() {
@@ -43,14 +42,20 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
 
   @Override
   public void updateInputs(SwerveModuleInputs inputs) {
-    inputs.aziEncoderRawVolts = azimuthEncoder.getAdjustedVoltage();
-    inputs.aziEncoderAdjVolts = azimuthEncoder.getAdjustedVoltage();
-    inputs.aziEncoderAdjAngle = azimuthEncoder.getAdjustedRotation2d().getDegrees();
+    inputs.aziAbsoluteEncoderRawVolts = azimuthEncoder.getAdjustedVoltage();
+    inputs.aziAbsoluteEncoderAdjVolts = azimuthEncoder.getAdjustedVoltage();
+    inputs.aziAbsoluteEncoderAdjAngle = azimuthEncoder.getAdjustedRotation2d().getDegrees();
     inputs.aziOutput = azimuth.getAppliedOutput();
+    inputs.aziTemp = azimuth.getMotorTemperature();
+    inputs.aziCurrentDraw = azimuth.getOutputCurrent();
+    inputs.aziEncoderPosition = getAziEncoder().getPosition();
+    inputs.aziEncoderVelocity = getAziEncoder().getVelocity();
 
     inputs.driveEncoderPosition = getDriveEncoder().getPosition();
     inputs.driveEncoderVelocity = getDriveEncoder().getVelocity();
-    inputs.driveOutput = driver.getAppliedOutput();
+    inputs.driveOutputVolts = driver.getAppliedOutput() * RobotController.getBatteryVoltage();
+    inputs.driveCurrentDraw = driver.getOutputCurrent();
+    inputs.driveTemp = driver.getMotorTemperature();
   }
 
   @Override

@@ -6,14 +6,20 @@ public interface SwerveModuleIO {
 
   @AutoLog
   public class SwerveModuleInputs {
-    public double aziEncoderRawVolts = 0.0;
-    public double aziEncoderAdjVolts = 0.0;
-    public double aziEncoderAdjAngle = 0.0;
+    public double aziAbsoluteEncoderRawVolts = 0.0;
+    public double aziAbsoluteEncoderAdjVolts = 0.0;
+    public double aziAbsoluteEncoderAdjAngleDeg = 0.0;
     public double aziOutput = 0.0;
+    public double aziCurrentDrawAmps = 0.0;
+    public double aziEncoderPositionDeg = 0.0;
+    public double aziEncoderVelocityDegPerSecond = 0.0;
+    public double aziTemp;
 
-    public double driveEncoderPosition = 0.0;
-    public double driveEncoderVelocity = 0.0;
+    public double driveEncoderPositionMetres = 0.0;
+    public double driveEncoderVelocityMetresPerSecond = 0.0;
     public double driveOutput = 0.0;
+    public double driveCurrentDrawAmps = 0.0;
+    public double driveTemp = 0.0;
   }
 
   public void updateInputs(SwerveModuleInputs inputs);

@@ -1,12 +1,14 @@
 package frc.robot.subsystems.SwerveIO.module;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class SwerveModuleIOSim implements SwerveModuleIO {
 
-  FlywheelSim azimuthSim = new FlywheelSim(DCMotor.getNEO(0), 7.0 / 150.0, 5);
-  FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), 7.0 / 150.0, 5);
+  FlywheelSim azimuthSim = new FlywheelSim(DCMotor.getNEO(1), 150.0 / 7.0, 5);
+  FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), 6.12, 5);
+
   double theAziVolts = 0;
   double theDriveVolts = 0;
 
@@ -15,14 +17,22 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
   @Override
   public void updateInputs(SwerveModuleInputs inputs) {
     azimuthSim.update(0.02);
-    inputs.aziEncoderRawVolts = theAziVolts;
-    inputs.aziEncoderAdjVolts = theAziVolts;
-    inputs.aziEncoderAdjAngle = azimuthSim.getAngularVelocityRPM() / 0.02;
+    driveSim.update(0.02);
+
+    inputs.aziAbsoluteEncoderRawVolts = theAziVolts;
+    inputs.aziAbsoluteEncoderAdjVolts = theAziVolts;
+    inputs.aziAbsoluteEncoderAdjAngle = azimuthSim.getAngularVelocityRPM() / 0.02;
     inputs.aziOutput = azimuthSim.getOutput(0);
+    inputs.aziTemp = 0.0;
+    inputs.aziCurrentDraw = azimuthSim.getCurrentDrawAmps();
+    inputs.aziEncoderPosition += Units.radiansToDegrees(azimuthSim.getAngularVelocityRadPerSec()) * 0.02;
+    inputs.aziEncoderVelocity = Units.radiansToDegrees(azimuthSim.getAngularVelocityRadPerSec());
 
     inputs.driveEncoderVelocity = driveSim.getAngularVelocityRPM();
     inputs.driveEncoderPosition = driveSim.getAngularVelocityRPM() / 0.02;
-    inputs.driveOutput = driveSim.getOutput(1);
+    inputs.driveOutput = driveSim.getOutput(0);
+    inputs.driveCurrentDraw = driveSim.getCurrentDrawAmps();
+    inputs.driveTemp = 0.0;
   }
 
   @Override
