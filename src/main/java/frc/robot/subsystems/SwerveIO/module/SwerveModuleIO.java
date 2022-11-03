@@ -9,17 +9,17 @@ public interface SwerveModuleIO {
     public double aziAbsoluteEncoderRawVolts = 0.0;
     public double aziAbsoluteEncoderAdjVolts = 0.0;
     public double aziAbsoluteEncoderAdjAngleDeg = 0.0;
-    public double aziOutput = 0.0;
+    public double aziOutputVolts = 0.0;
     public double aziCurrentDrawAmps = 0.0;
     public double aziEncoderPositionDeg = 0.0;
     public double aziEncoderVelocityDegPerSecond = 0.0;
-    public double aziTemp;
+    public double aziTempCelcius;
 
     public double driveEncoderPositionMetres = 0.0;
     public double driveEncoderVelocityMetresPerSecond = 0.0;
-    public double driveOutput = 0.0;
+    public double driveOutputVolts = 0.0;
     public double driveCurrentDrawAmps = 0.0;
-    public double driveTemp = 0.0;
+    public double driveTempCelcius = 0.0;
   }
 
   public void updateInputs(SwerveModuleInputs inputs);

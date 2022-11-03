@@ -42,7 +42,7 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
 
   @Override
   public void updateInputs(SwerveModuleInputs inputs) {
-    inputs.aziAbsoluteEncoderRawVolts = azimuthEncoder.getAdjustedVoltage();
+    inputs.aziAbsoluteEncoderRawVolts = azimuthEncoder.getUnadjustedVoltage();
     inputs.aziAbsoluteEncoderAdjVolts = azimuthEncoder.getAdjustedVoltage();
     inputs.aziAbsoluteEncoderAdjAngle = azimuthEncoder.getAdjustedRotation2d().getDegrees();
     inputs.aziOutput = azimuth.getAppliedOutput();

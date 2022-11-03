@@ -19,9 +19,9 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     azimuthSim.update(0.02);
     driveSim.update(0.02);
 
-    inputs.aziAbsoluteEncoderRawVolts = theAziVolts;
-    inputs.aziAbsoluteEncoderAdjVolts = theAziVolts;
-    inputs.aziAbsoluteEncoderAdjAngle = azimuthSim.getAngularVelocityRPM() / 0.02;
+    inputs.aziAbsoluteEncoderRawVolts = 0;
+    inputs.aziAbsoluteEncoderAdjVolts = 0;
+    inputs.aziAbsoluteEncoderAdjAngle = 0;
     inputs.aziOutput = azimuthSim.getOutput(0);
     inputs.aziTemp = 0.0;
     inputs.aziCurrentDraw = azimuthSim.getCurrentDrawAmps();
