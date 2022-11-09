@@ -3,7 +3,6 @@ package frc.robot.subsystems.SwerveIO.module;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 
@@ -44,18 +43,18 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
   public void updateInputs(SwerveModuleInputs inputs) {
     inputs.aziAbsoluteEncoderRawVolts = azimuthEncoder.getUnadjustedVoltage();
     inputs.aziAbsoluteEncoderAdjVolts = azimuthEncoder.getAdjustedVoltage();
-    inputs.aziAbsoluteEncoderAdjAngle = azimuthEncoder.getAdjustedRotation2d().getDegrees();
-    inputs.aziOutput = azimuth.getAppliedOutput();
-    inputs.aziTemp = azimuth.getMotorTemperature();
-    inputs.aziCurrentDraw = azimuth.getOutputCurrent();
-    inputs.aziEncoderPosition = getAziEncoder().getPosition();
-    inputs.aziEncoderVelocity = getAziEncoder().getVelocity();
+    inputs.aziAbsoluteEncoderAdjAngleDeg = azimuthEncoder.getAdjustedRotation2d().getDegrees();
+    inputs.aziOutputVolts = azimuth.getAppliedOutput() * RobotController.getBatteryVoltage();
+    inputs.aziTempCelcius = azimuth.getMotorTemperature();
+    inputs.aziCurrentDrawAmps = azimuth.getOutputCurrent();
+    inputs.aziEncoderPositionDeg = getAziEncoder().getPosition();
+    inputs.aziEncoderVelocityDegPerSecond = getAziEncoder().getVelocity();
 
-    inputs.driveEncoderPosition = getDriveEncoder().getPosition();
-    inputs.driveEncoderVelocity = getDriveEncoder().getVelocity();
+    inputs.driveEncoderPositionMetres = getDriveEncoder().getPosition();
+    inputs.driveEncoderVelocityMetresPerSecond = getDriveEncoder().getVelocity();
     inputs.driveOutputVolts = driver.getAppliedOutput() * RobotController.getBatteryVoltage();
-    inputs.driveCurrentDraw = driver.getOutputCurrent();
-    inputs.driveTemp = driver.getMotorTemperature();
+    inputs.driveCurrentDrawAmps = driver.getOutputCurrent();
+    inputs.driveTempCelcius = driver.getMotorTemperature();
   }
 
   @Override

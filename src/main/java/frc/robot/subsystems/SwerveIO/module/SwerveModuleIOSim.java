@@ -1,5 +1,6 @@
 package frc.robot.subsystems.SwerveIO.module;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -21,18 +22,22 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
 
     inputs.aziAbsoluteEncoderRawVolts = 0;
     inputs.aziAbsoluteEncoderAdjVolts = 0;
-    inputs.aziAbsoluteEncoderAdjAngle = 0;
-    inputs.aziOutput = azimuthSim.getOutput(0);
-    inputs.aziTemp = 0.0;
-    inputs.aziCurrentDraw = azimuthSim.getCurrentDrawAmps();
-    inputs.aziEncoderPosition += Units.radiansToDegrees(azimuthSim.getAngularVelocityRadPerSec()) * 0.02;
-    inputs.aziEncoderVelocity = Units.radiansToDegrees(azimuthSim.getAngularVelocityRadPerSec());
+    inputs.aziAbsoluteEncoderAdjAngleDeg = 0;
+    inputs.aziOutputVolts = MathUtil.clamp(azimuthSim.getOutput(0), -12.0, 12.0);
+    inputs.aziTempCelcius = 0.0;
+    inputs.aziCurrentDrawAmps = azimuthSim.getCurrentDrawAmps();
+    inputs.aziEncoderPositionDeg +=
+        Units.radiansToDegrees(azimuthSim.getAngularVelocityRadPerSec()) * 0.02;
+    inputs.aziEncoderVelocityDegPerSecond =
+        Units.radiansToDegrees(azimuthSim.getAngularVelocityRadPerSec());
 
-    inputs.driveEncoderVelocity = driveSim.getAngularVelocityRPM();
-    inputs.driveEncoderPosition = driveSim.getAngularVelocityRPM() / 0.02;
-    inputs.driveOutput = driveSim.getOutput(0);
-    inputs.driveCurrentDraw = driveSim.getCurrentDrawAmps();
-    inputs.driveTemp = 0.0;
+    inputs.driveEncoderPositionMetres =
+        driveSim.getAngularVelocityRPM() * Math.PI * Units.inchesToMeters(4) * 0.02 / 60;
+
+    inputs.driveEncoderVelocityMetresPerSecond = driveSim.getAngularVelocityRPM() / 0.02;
+    inputs.driveOutputVolts = MathUtil.clamp(driveSim.getOutput(0), -12.0, 12.0);
+    inputs.driveCurrentDrawAmps = driveSim.getCurrentDrawAmps();
+    inputs.driveTempCelcius = 0.0;
   }
 
   @Override

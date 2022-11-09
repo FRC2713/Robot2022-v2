@@ -63,7 +63,7 @@ public class SwerveModule extends SubsystemBase {
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        getDriveEncoder().getVelocity(), getAziEncoder().getAdjustedRotation2d());
+        inputs.driveEncoderVelocityMetresPerSecond, getAziEncoder().getAdjustedRotation2d());
   }
 
   public double getVoltageAppliedForCharacterization() {
