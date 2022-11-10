@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
+import frc.robot.util.MotionHandler;
 import frc.robot.util.SwerveHeadingController;
 
 public class DefaultDrive extends CommandBase {
@@ -23,31 +24,13 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // The y joystick value is negated, eg pressing up is -1, because flight sticks
-    double forwardReverseInput =
-        MathUtil.applyDeadband(-Robot.driver.getLeftY(), DriveConstants.kJoystickTurnDeadzone);
-    double leftRightInput =
-        MathUtil.applyDeadband(-Robot.driver.getLeftX(), DriveConstants.kJoystickTurnDeadzone);
-    double rotationalInput =
-        MathUtil.applyDeadband(-Robot.driver.getRightX(), DriveConstants.kJoystickTurnDeadzone);
-
-    // double headingControllerDegreesChange =
-    //     rotationalInput * DriveConstants.headingControllerDriverChangeRate;
-    // Rotation2d newHeadingSetpoint =
-    //     SwerveHeadingController.getInstance()
-    //         .getSetpoint()
-    //         .plus(Rotation2d.fromDegrees(headingControllerDegreesChange));
-
-    // SwerveHeadingController.getInstance().setSetpoint(newHeadingSetpoint);
-
-    Robot.swerveDrive.drive(forwardReverseInput, leftRightInput, rotationalInput);
+    Robot.swerveDrive.drive(Robot.motionHandler.driveFullControl());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     SwerveHeadingController.getInstance().setSetpoint(Robot.swerveDrive.getPose().getRotation());
-    Robot.swerveDrive.drive(0, 0, 0);
   }
 
   // Returns true when the command should end.

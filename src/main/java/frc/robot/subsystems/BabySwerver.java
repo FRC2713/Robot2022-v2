@@ -74,15 +74,7 @@ public class BabySwerver extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
-  public void drive(double xSpeed, double ySpeed, double rSpeed) {
-    SwerveModuleState[] swerveModuleStates =
-        DriveConstants.kinematics.toSwerveModuleStates(
-            ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed * DriveConstants.maxSwerveVel,
-                ySpeed * DriveConstants.maxSwerveVel,
-                rSpeed * Math.PI * 2,
-                getPose().getRotation()));
-
+  public void drive(SwerveModuleState[] swerveModuleStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.maxSwerveVel);
 

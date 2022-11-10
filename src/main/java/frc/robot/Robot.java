@@ -9,16 +9,18 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.subsystems.BabySwerver;
+import frc.robot.util.MotionHandler;
+import frc.robot.util.MotionHandler.MotionMode;
 import frc.robot.util.characterization.CharacterizationCommand;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import java.util.HashMap;
@@ -29,7 +31,11 @@ import org.littletonrobotics.junction.io.LogSocketServer;
 
 public class Robot extends LoggedRobot {
 
+  public MotionMode motionMode = MotionMode.LOCKDOWN;
+
   public Command autoCommand;
+
+  public static final MotionHandler motionHandler = new MotionHandler();
 
   public static final BabySwerver swerveDrive = new BabySwerver();
 
@@ -60,34 +66,12 @@ public class Robot extends LoggedRobot {
     Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
     Logger.getInstance().start();
 
-    swerveDrive.setDefaultCommand(new DefaultDrive());
-
-    new JoystickButton(driver, XboxController.Button.kA.value)
-        .whenPressed(
-            new InstantCommand(
-                () -> {
-                  swerveDrive.setModuleStates(
-                      new SwerveModuleState[] {
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-                      });
-                },
-                swerveDrive));
-    new JoystickButton(driver, XboxController.Button.kB.value)
-        .whenPressed(
-            new InstantCommand(
-                () -> {
-                  swerveDrive.setModuleStates(
-                      new SwerveModuleState[] {
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(90)),
-                      });
-                },
-                swerveDrive));
+    if (motionMode == MotionMode.FULL_DRIVE) {
+      swerveDrive.setDefaultCommand(new DefaultDrive());
+    }
+    if (motionMode == MotionMode.LOCKDOWN) {
+      swerveDrive.setDefaultCommand(new RunCommand(() -> motionHandler.lockdown()));
+    }
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
         .whenPressed(

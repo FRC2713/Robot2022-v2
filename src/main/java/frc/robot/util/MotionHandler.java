@@ -1,9 +1,11 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 
@@ -12,7 +14,8 @@ public class MotionHandler {
   public enum MotionMode {
     FULL_DRIVE,
     HEADING_CONTROLLER,
-    TRAJECTORY
+    TRAJECTORY,
+    LOCKDOWN
   }
 
   public SwerveModuleState[] driveHeadingController() {
@@ -57,6 +60,20 @@ public class MotionHandler {
         DriveConstants.kinematics.toSwerveModuleStates(TrajectoryController.getInstance().update());
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.maxSwerveVel);
+
+    return swerveModuleStates;
+  }
+
+  public SwerveModuleState[] lockdown() {
+    double currentHeading = Robot.swerveDrive.getPose().getRotation().getDegrees();
+
+    SwerveModuleState[] swerveModuleStates =
+        new SwerveModuleState[] {
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading + 45)),
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading - 45)),
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading - 45)),
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading + 45))
+        };
 
     return swerveModuleStates;
   }
