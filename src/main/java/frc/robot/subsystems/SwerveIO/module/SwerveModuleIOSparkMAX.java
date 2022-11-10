@@ -1,9 +1,11 @@
 package frc.robot.subsystems.SwerveIO.module;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.Constants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 
 public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
@@ -34,9 +36,21 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
 
   public SwerveModuleIOSparkMAX(
       int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
+    ;
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
+    driver.setIdleMode(IdleMode.kBrake);
+    azimuth.setIdleMode(IdleMode.kBrake);
+
+    getDriveEncoder()
+        .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
+
+    getAziEncoder().setPositionConversionFactor(7.0 / 150.0);
+    getAziEncoder().setVelocityConversionFactor(7.0 / 150.0);
+    getAziEncoder().setPosition(getAziAbsoluteEncoder().getAdjustedRotation2d().getDegrees());
+
+    azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
   }
 
   @Override

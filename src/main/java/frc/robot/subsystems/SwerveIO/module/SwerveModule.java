@@ -1,16 +1,9 @@
 package frc.robot.subsystems.SwerveIO.module;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
 
 public class SwerveModule extends SubsystemBase {
@@ -19,12 +12,12 @@ public class SwerveModule extends SubsystemBase {
   // SwerveModuleInputs inputs = new SwerveModuleInputs();
   public final SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
 
-  CANSparkMax driver;
-  CANSparkMax azimuth;
+  // CANSparkMax driver;
+  // CANSparkMax azimuth;
 
   SwerveModuleState state;
 
-  OffsetAbsoluteAnalogEncoder azimuthEncoder;
+  // OffsetAbsoluteAnalogEncoder azimuthEncoder;
 
   PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
   PIDFFController azimuthController = new PIDFFController(DriveConstants.kDefaultAzimuthGains);
@@ -32,46 +25,36 @@ public class SwerveModule extends SubsystemBase {
   public SwerveModule(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
     io = new SwerveModuleIOSparkMAX(drivePort, azimPort, azimuthEncoderPort, offset);
     io.updateInputs(inputs);
-    driver = new CANSparkMax(drivePort, MotorType.kBrushless);
-    azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
+    // driver = new CANSparkMax(drivePort, MotorType.kBrushless);
+    // azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
 
-    driver.setIdleMode(IdleMode.kBrake);
-    azimuth.setIdleMode(IdleMode.kBrake);
+    // driver.setIdleMode(IdleMode.kBrake);
+    // azimuth.setIdleMode(IdleMode.kBrake);
 
-    getDriveEncoder()
-        .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
+    // getDriveEncoder()
+    //     .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
 
+    // azimuthController.enableContinuousInput(-Math.PI, Math.PI);
+
+    // azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
+
+    state = new SwerveModuleState(0, Rotation2d.fromDegrees(inputs.aziEncoderPositionDeg));
     azimuthController.enableContinuousInput(-Math.PI, Math.PI);
-
-    azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
-
-    state = new SwerveModuleState(0, azimuthEncoder.getAdjustedRotation2d());
     // state = new SwerveModuleState(0, inputs.
-
-    azimuth.getEncoder().setPositionConversionFactor(7.0 / 150.0);
-    azimuth.getEncoder().setVelocityConversionFactor(7.0 / 150.0);
-    azimuth.getEncoder().setPosition(azimuthEncoder.getAdjustedRotation2d().getDegrees() / 360.0);
-  }
-
-  private RelativeEncoder getDriveEncoder() {
-    return driver.getEncoder();
-  }
-
-  private OffsetAbsoluteAnalogEncoder getAziEncoder() {
-    return azimuthEncoder;
   }
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        inputs.driveEncoderVelocityMetresPerSecond, getAziEncoder().getAdjustedRotation2d());
+        inputs.driveEncoderVelocityMetresPerSecond,
+        Rotation2d.fromDegrees(inputs.aziEncoderPositionDeg));
   }
 
   public double getVoltageAppliedForCharacterization() {
-    return driver.getAppliedOutput() * RobotController.getBatteryVoltage();
+    return inputs.driveOutputVolts;
   }
 
   public void applyVoltageForCharacterization(double voltage) {
-    driver.setVoltage(voltage);
+    io.setDriveVoltage(voltage);
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
@@ -80,13 +63,13 @@ public class SwerveModule extends SubsystemBase {
 
   public void update() {
     final double driveOutput =
-        driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
+        driveController.calculate(
+            inputs.driveEncoderVelocityMetresPerSecond, state.speedMetersPerSecond);
     final double turnOutput =
-        azimuthController.calculate(
-            getAziEncoder().getAdjustedRotation2d().getDegrees(), state.angle.getDegrees());
+        azimuthController.calculate(inputs.aziAbsoluteEncoderAdjAngleDeg, state.angle.getDegrees());
 
-    driver.setVoltage(driveOutput);
-    azimuth.setVoltage(turnOutput);
+    applyVoltageForCharacterization(driveOutput);
+    io.setAzimuthVoltage(turnOutput);
   }
 
   @Override
@@ -94,19 +77,5 @@ public class SwerveModule extends SubsystemBase {
     update();
 
     io.updateInputs(inputs);
-
-    String moduleId = "[" + driver.getDeviceId() + "|" + azimuth.getDeviceId() + "]";
-    String keyPrefix = "Modules/" + moduleId + "/";
-
-    SmartDashboard.putNumber(
-        keyPrefix + "azi encoder/raw volts", azimuthEncoder.getUnadjustedVoltage());
-    SmartDashboard.putNumber(
-        keyPrefix + "azi encoder/adj volts", azimuthEncoder.getAdjustedVoltage());
-    SmartDashboard.putNumber(
-        keyPrefix + "azi encoder/adj angle", azimuthEncoder.getAdjustedRotation2d().getDegrees());
-
-    SmartDashboard.putNumber(keyPrefix + "output/driver", driver.getAppliedOutput());
-    SmartDashboard.putNumber(keyPrefix + "output/azimuth", azimuth.getAppliedOutput());
-    SmartDashboard.putNumber(keyPrefix + "target angle", state.angle.getDegrees());
   }
 }
