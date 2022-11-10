@@ -9,12 +9,18 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.PIDFFController;
 import frc.robot.util.PIDFFGains;
 
 public class SwerveModule extends SubsystemBase {
+
+  enum DrivewheelControlmode {
+    PID,
+    OPEN_LOOP
+  }
 
   CANSparkMax driver;
   CANSparkMax azimuth;
@@ -25,6 +31,8 @@ public class SwerveModule extends SubsystemBase {
 
   PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
   PIDFFController azimuthController;
+
+  DrivewheelControlmode drivewheelControlmode = DrivewheelControlmode.PID;
 
   // PIDController azimuthController = new
   // PIDController(DriveConstants.kDefaultAzimuthGains.kP.get(),
@@ -104,8 +112,17 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void update() {
-    final double driveOutput =
-        driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
+    double driveOutput = 0;
+    if (drivewheelControlmode == DrivewheelControlmode.PID) {
+      driveOutput =
+          driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
+    } else if (drivewheelControlmode == DrivewheelControlmode.OPEN_LOOP) {
+      driveOutput =
+          state.speedMetersPerSecond
+              / Constants.DriveConstants.maxSwerveVel
+              * RobotController.getBatteryVoltage();
+    }
+    // driveController.calculate(getDriveEncoder().getVelocity(), state.speedMetersPerSecond);
     final double turnOutput =
         azimuthController.calculate(
             OffsetAbsoluteAnalogEncoder.simplifyRotation2d(
