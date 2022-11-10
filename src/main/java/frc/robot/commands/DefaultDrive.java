@@ -4,13 +4,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
-import frc.robot.util.MotionHandler;
-import frc.robot.util.SwerveHeadingController;
 import frc.robot.util.MotionHandler.MotionMode;
+import frc.robot.util.SwerveHeadingController;
 
 public class DefaultDrive extends CommandBase {
   /** Creates a new DefaultDrive. */
@@ -25,16 +22,13 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Robot.motionMode == MotionMode.FULL_DRIVE) {
-    Robot.swerveDrive.drive(Robot.motionHandler.driveFullControl());
-    }
-    else if(Robot.motionMode == MotionMode.HEADING_CONTROLLER) {
+    if (Robot.motionMode == MotionMode.FULL_DRIVE) {
+      Robot.swerveDrive.drive(Robot.motionHandler.driveFullControl());
+    } else if (Robot.motionMode == MotionMode.HEADING_CONTROLLER) {
       Robot.swerveDrive.drive(Robot.motionHandler.driveHeadingController());
-    }
-    else if(Robot.motionMode == MotionMode.TRAJECTORY) {
+    } else if (Robot.motionMode == MotionMode.TRAJECTORY) {
       Robot.swerveDrive.drive(Robot.motionHandler.driveTrajectory());
-    }
-    else{
+    } else if (Robot.motionMode == MotionMode.LOCKDOWN) {
       Robot.swerveDrive.drive(Robot.motionHandler.lockdown());
     }
   }

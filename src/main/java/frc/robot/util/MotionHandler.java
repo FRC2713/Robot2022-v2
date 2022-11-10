@@ -65,14 +65,12 @@ public class MotionHandler {
   }
 
   public SwerveModuleState[] lockdown() {
-    double currentHeading = Robot.swerveDrive.getPose().getRotation().getDegrees();
-
     SwerveModuleState[] swerveModuleStates =
         new SwerveModuleState[] {
-          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading + 45)),
-          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading - 45)),
-          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading - 45)),
-          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(currentHeading + 45))
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(45)),
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(-45)),
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(-45)),
+          new SwerveModuleState(Constants.zero, Rotation2d.fromDegrees(45))
         };
 
     return swerveModuleStates;

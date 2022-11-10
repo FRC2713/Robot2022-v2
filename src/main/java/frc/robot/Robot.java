@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDrive;
@@ -34,7 +33,7 @@ public class Robot extends LoggedRobot {
   public Command autoCommand;
 
   public static MotionMode motionMode = MotionMode.FULL_DRIVE;
-  
+
   public static final MotionHandler motionHandler = new MotionHandler();
 
   public static final BabySwerver swerveDrive = new BabySwerver();
@@ -75,12 +74,12 @@ public class Robot extends LoggedRobot {
                   motionMode = MotionMode.LOCKDOWN;
                 }));
 
-                new JoystickButton(driver, XboxController.Button.kA.value)
-                .whenPressed(
-                    new InstantCommand(
-                        () -> {
-                          motionMode = MotionMode.FULL_DRIVE;
-                        }));
+    new JoystickButton(driver, XboxController.Button.kA.value)
+        .whenPressed(
+            new InstantCommand(
+                () -> {
+                  motionMode = MotionMode.FULL_DRIVE;
+                }));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
         .whenPressed(
