@@ -31,10 +31,10 @@ import org.littletonrobotics.junction.io.LogSocketServer;
 
 public class Robot extends LoggedRobot {
 
-  public MotionMode motionMode = MotionMode.LOCKDOWN;
-
   public Command autoCommand;
 
+  public static MotionMode motionMode = MotionMode.FULL_DRIVE;
+  
   public static final MotionHandler motionHandler = new MotionHandler();
 
   public static final BabySwerver swerveDrive = new BabySwerver();
@@ -66,12 +66,21 @@ public class Robot extends LoggedRobot {
     Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
     Logger.getInstance().start();
 
-    if (motionMode == MotionMode.FULL_DRIVE) {
-      swerveDrive.setDefaultCommand(new DefaultDrive());
-    }
-    if (motionMode == MotionMode.LOCKDOWN) {
-      swerveDrive.setDefaultCommand(new RunCommand(() -> motionHandler.lockdown()));
-    }
+    swerveDrive.setDefaultCommand(new DefaultDrive());
+
+    new JoystickButton(driver, XboxController.Button.kY.value)
+        .whenPressed(
+            new InstantCommand(
+                () -> {
+                  motionMode = MotionMode.LOCKDOWN;
+                }));
+
+                new JoystickButton(driver, XboxController.Button.kA.value)
+                .whenPressed(
+                    new InstantCommand(
+                        () -> {
+                          motionMode = MotionMode.FULL_DRIVE;
+                        }));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
         .whenPressed(
