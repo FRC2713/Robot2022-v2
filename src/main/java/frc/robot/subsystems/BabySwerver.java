@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
+import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class BabySwerver extends SubsystemBase {
@@ -114,6 +115,23 @@ public class BabySwerver extends SubsystemBase {
   @Override
   public void periodic() {
     updateOdometry();
+
+    switch (Robot.motionMode) {
+      case FULL_DRIVE:
+        drive(Robot.motionHandler.driveFullControl());
+        break;
+      case HEADING_CONTROLLER:
+        drive(Robot.motionHandler.driveHeadingController());
+        break;
+      case LOCKDOWN:
+        drive(Robot.motionHandler.lockdown());
+        break;
+      case TRAJECTORY:
+        drive(Robot.motionHandler.driveTrajectory());
+        break;
+      default:
+        break;
+    }
 
     Logger.getInstance().recordOutput("Gyro/Yaw", gyro.getYaw());
     Logger.getInstance().recordOutput("Gyro/Pitch", gyro.getPitch());

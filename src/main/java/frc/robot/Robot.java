@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DefaultDrive;
 import frc.robot.subsystems.BabySwerver;
 import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
+import frc.robot.util.TrajectoryController;
 import frc.robot.util.characterization.CharacterizationCommand;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import java.util.HashMap;
@@ -65,8 +65,6 @@ public class Robot extends LoggedRobot {
     Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
     Logger.getInstance().start();
 
-    swerveDrive.setDefaultCommand(new DefaultDrive());
-
     new JoystickButton(driver, XboxController.Button.kY.value)
         .whenPressed(
             new InstantCommand(
@@ -79,6 +77,18 @@ public class Robot extends LoggedRobot {
             new InstantCommand(
                 () -> {
                   motionMode = MotionMode.FULL_DRIVE;
+                }));
+
+    new JoystickButton(driver, XboxController.Button.kStart.value)
+        .whenPressed(
+            new InstantCommand(
+                () -> {
+                  if (motionMode == MotionMode.FULL_DRIVE) {
+                    motionMode = MotionMode.HEADING_CONTROLLER;
+                  }
+                  if (motionMode == MotionMode.HEADING_CONTROLLER) {
+                    motionMode = MotionMode.FULL_DRIVE;
+                  }
                 }));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
@@ -139,7 +149,13 @@ public class Robot extends LoggedRobot {
                 eventMap,
                 swerveDrive));
 
+    autoSelect.addOption(
+        "taxitaxi", new InstantCommand(() -> TrajectoryController.getInstance().loadPath(taxi)));
+
+    autoCommand = autoSelect.getSelected();
+
     if (autoCommand != null) {
+      motionMode = MotionMode.TRAJECTORY;
       autoCommand.schedule();
     }
   }
@@ -150,7 +166,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     if (autoCommand != null) {
-
+      motionMode = MotionMode.LOCKDOWN;
       autoCommand.cancel();
     }
   }
