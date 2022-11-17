@@ -7,6 +7,7 @@ import frc.robot.Constants.RobotMap;
 public class SwerveIOPigeon2 implements SwerveIO {
 
   private final Pigeon2 gyro;
+
   // SwerveModuleState state;
 
   public SwerveIOPigeon2() {
