@@ -26,10 +26,6 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     return azimuthEncoder;
   }
 
-  public double getVoltageAppliedForCharacterization() {
-    return driver.getAppliedOutput() * RobotController.getBatteryVoltage();
-  }
-
   public void applyVoltageForCharacterization(double voltage) {
     driver.setVoltage(voltage);
   }

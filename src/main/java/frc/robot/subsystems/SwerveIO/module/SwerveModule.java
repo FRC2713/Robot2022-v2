@@ -22,8 +22,8 @@ public class SwerveModule extends SubsystemBase {
   PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
   PIDFFController azimuthController = new PIDFFController(DriveConstants.kDefaultAzimuthGains);
 
-  public SwerveModule(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
-    io = new SwerveModuleIOSparkMAX(drivePort, azimPort, azimuthEncoderPort, offset);
+  public SwerveModule(SwerveModuleIO swerveModuleIO) {
+    io = swerveModuleIO;
     io.updateInputs(inputs);
     // driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     // azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);

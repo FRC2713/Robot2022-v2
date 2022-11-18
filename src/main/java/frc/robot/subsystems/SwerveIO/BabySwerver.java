@@ -13,6 +13,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.SwerveIO.SwerveIO.SwerveInputs;
 import frc.robot.subsystems.SwerveIO.module.SwerveModule;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
 import frc.robot.util.SwerveHeadingController;
 
 public class BabySwerver extends SubsystemBase {
@@ -20,37 +21,26 @@ public class BabySwerver extends SubsystemBase {
   SwerveIO io;
   public final SwerveInputs inputs = new SwerveInputs();
 
-  private final SwerveModule frontLeft =
-      new SwerveModule(
-          Constants.RobotMap.frontLeftDrive,
-          Constants.RobotMap.frontLeftAzi,
-          Constants.RobotMap.frontLeftAzimuthEncoder,
-          Constants.RobotMap.frontLeftOffset);
-  private final SwerveModule frontRight =
-      new SwerveModule(
-          Constants.RobotMap.frontRightDrive,
-          Constants.RobotMap.frontRightAzi,
-          Constants.RobotMap.frontRightAzimuthEncoder,
-          Constants.RobotMap.frontRightOffset);
-  private final SwerveModule backLeft =
-      new SwerveModule(
-          Constants.RobotMap.backLeftDrive,
-          Constants.RobotMap.backLeftAzi,
-          Constants.RobotMap.backLeftAzimuthEncoder,
-          Constants.RobotMap.backLeftOffset);
-  private final SwerveModule backRight =
-      new SwerveModule(
-          Constants.RobotMap.backRightDrive,
-          Constants.RobotMap.backRightAzi,
-          Constants.RobotMap.backRightAzimuthEncoder,
-          Constants.RobotMap.backRightOffset);
+  private final SwerveModule frontLeft;
+  private final SwerveModule frontRight;
+  private final SwerveModule backLeft;
+  private final SwerveModule backRight;
 
   private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
   private final SwerveDriveOdometry odometry =
       new SwerveDriveOdometry(DriveConstants.kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
 
-  public BabySwerver(SwerveIO swerveIO) {
+  public BabySwerver(
+      SwerveIO swerveIO,
+      SwerveModuleIO frontLeft,
+      SwerveModuleIO frontRight,
+      SwerveModuleIO backLeft,
+      SwerveModuleIO backRight) {
+    this.frontLeft = new SwerveModule(frontLeft);
+    this.frontRight = new SwerveModule(frontRight);
+    this.backLeft = new SwerveModule(backLeft);
+    this.backRight = new SwerveModule(backRight);
     io = swerveIO;
     io.updateInputs(inputs);
     gyro.zeroGyroBiasNow();

@@ -11,13 +11,36 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.SwerveIO.BabySwerver;
-import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
+import frc.robot.subsystems.SwerveIO.SwerveIOSim;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSim;
 import frc.robot.util.characterization.CharacterizationCommand;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import org.littletonrobotics.junction.LoggedRobot;
 
 public class Robot extends LoggedRobot {
-  public static final BabySwerver swerveDrive = new BabySwerver(new SwerveIOPigeon2());
+  public static final BabySwerver swerveDrive =
+      new BabySwerver(
+          new SwerveIOSim(),
+          new SwerveModuleIOSim(
+              Constants.RobotMap.frontLeftDrive,
+              Constants.RobotMap.frontLeftAzi,
+              Constants.RobotMap.frontLeftAzimuthEncoder,
+              Constants.RobotMap.frontLeftOffset),
+          new SwerveModuleIOSim(
+              Constants.RobotMap.frontRightDrive,
+              Constants.RobotMap.frontRightAzi,
+              Constants.RobotMap.frontRightAzimuthEncoder,
+              Constants.RobotMap.frontRightOffset),
+          new SwerveModuleIOSim(
+              Constants.RobotMap.backLeftDrive,
+              Constants.RobotMap.backLeftAzi,
+              Constants.RobotMap.backLeftAzimuthEncoder,
+              Constants.RobotMap.backLeftOffset),
+          new SwerveModuleIOSim(
+              Constants.RobotMap.backRightDrive,
+              Constants.RobotMap.backRightAzi,
+              Constants.RobotMap.backRightAzimuthEncoder,
+              Constants.RobotMap.backRightOffset));
 
   public static final XboxController driver = new XboxController(Constants.zero);
 
@@ -103,7 +126,32 @@ public class Robot extends LoggedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    BabySwerver swerve =
+        new BabySwerver(
+            new SwerveIOSim(),
+            new SwerveModuleIOSim(
+                Constants.RobotMap.frontLeftDrive,
+                Constants.RobotMap.frontLeftAzi,
+                Constants.RobotMap.frontLeftAzimuthEncoder,
+                Constants.RobotMap.frontLeftOffset),
+            new SwerveModuleIOSim(
+                Constants.RobotMap.frontRightDrive,
+                Constants.RobotMap.frontRightAzi,
+                Constants.RobotMap.frontRightAzimuthEncoder,
+                Constants.RobotMap.frontRightOffset),
+            new SwerveModuleIOSim(
+                Constants.RobotMap.backLeftDrive,
+                Constants.RobotMap.backLeftAzi,
+                Constants.RobotMap.backLeftAzimuthEncoder,
+                Constants.RobotMap.backLeftOffset),
+            new SwerveModuleIOSim(
+                Constants.RobotMap.backRightDrive,
+                Constants.RobotMap.backRightAzi,
+                Constants.RobotMap.backRightAzimuthEncoder,
+                Constants.RobotMap.backRightOffset));
+    swerve.drive(2, 3);
+  }
 
   @Override
   public void autonomousPeriodic() {}
