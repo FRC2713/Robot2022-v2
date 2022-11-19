@@ -1,14 +1,14 @@
 {
   "NetworkTables Settings": {
     "mode": "Client",
-    "serverTeam": "localhost"
+    "serverTeam": "2713"
   },
   "SmartDashboard": {
     "TunableNumbers": {
-      "Default Azimuth": {
+      "Front Right": {
         "open": true
       },
-      "Default Driving": {
+      "Heading Controller": {
         "open": true
       },
       "open": true

@@ -1,6 +1,6 @@
 package frc.robot.subsystems.SwerveIO;
 
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class SwerveIOSim implements SwerveIO {
 
@@ -13,8 +13,5 @@ public class SwerveIOSim implements SwerveIO {
   }
 
   @Override
-  public void setDesiredState(SwerveModuleState desiredState) {
-    // TODO Auto-generated method stub
-
-  }
+  public void resetGyro(Rotation2d rotation2d) {}
 }
