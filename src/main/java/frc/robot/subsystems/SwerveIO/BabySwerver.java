@@ -9,8 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Robot;
 import frc.robot.subsystems.SwerveIO.module.SwerveModule;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
 import org.littletonrobotics.junction.Logger;
@@ -41,8 +41,9 @@ public class BabySwerver extends SubsystemBase {
     io = swerveIO;
     io.updateInputs(inputs);
 
-    odometry = new SwerveDriveOdometry(
-        DriveConstants.kinematics, Rotation2d.fromDegrees(inputs.gyroYawPosition));
+    odometry =
+        new SwerveDriveOdometry(
+            DriveConstants.kinematics, Rotation2d.fromDegrees(inputs.gyroYawPosition));
     simOdometryPose = odometry.getPoseMeters();
   }
 
@@ -55,12 +56,13 @@ public class BabySwerver extends SubsystemBase {
   }
 
   public void drive(double xSpeed, double ySpeed, double rSpeed) {
-    SwerveModuleState[] swerveModuleStates = DriveConstants.kinematics.toSwerveModuleStates(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            xSpeed * Constants.DriveConstants.maxSwerveVel,
-            ySpeed * Constants.DriveConstants.maxSwerveVel,
-            rSpeed * Constants.DriveConstants.maxRotationalSpeedDegPerSec,
-            getPose().getRotation()));
+    SwerveModuleState[] swerveModuleStates =
+        DriveConstants.kinematics.toSwerveModuleStates(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed * Constants.DriveConstants.maxSwerveVel,
+                ySpeed * Constants.DriveConstants.maxSwerveVel,
+                rSpeed * Constants.DriveConstants.maxRotationalSpeedRadPerSec,
+                getPose().getRotation()));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.maxSwerveVel);
@@ -73,9 +75,9 @@ public class BabySwerver extends SubsystemBase {
 
   public double getAverageVoltageAppliedForCharacterization() {
     return (frontLeft.getVoltageAppliedForCharacterization()
-        + frontRight.getVoltageAppliedForCharacterization()
-        + backLeft.getVoltageAppliedForCharacterization()
-        + backRight.getVoltageAppliedForCharacterization())
+            + frontRight.getVoltageAppliedForCharacterization()
+            + backLeft.getVoltageAppliedForCharacterization()
+            + backRight.getVoltageAppliedForCharacterization())
         / 4;
   }
 
@@ -95,15 +97,17 @@ public class BabySwerver extends SubsystemBase {
         backRight.getState());
 
     if (Robot.isSimulation()) {
-      SwerveModuleState[] measuredStates = new SwerveModuleState[] { frontLeft.getState(),
-          frontRight.getState(),
-          backLeft.getState(),
-          backRight.getState() };
-          ChassisSpeeds speeds = Constants.DriveConstants.kinematics.toChassisSpeeds(measuredStates);
-          simOdometryPose = simOdometryPose.exp(new Twist2d(
-            speeds.vxMetersPerSecond * .02,
-            speeds.vyMetersPerSecond * .02,
-            speeds.omegaRadiansPerSecond * .02));
+      SwerveModuleState[] measuredStates =
+          new SwerveModuleState[] {
+            frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState()
+          };
+      ChassisSpeeds speeds = Constants.DriveConstants.kinematics.toChassisSpeeds(measuredStates);
+      simOdometryPose =
+          simOdometryPose.exp(
+              new Twist2d(
+                  speeds.vxMetersPerSecond * .02,
+                  speeds.vyMetersPerSecond * .02,
+                  speeds.omegaRadiansPerSecond * .02));
     }
   }
 
@@ -123,9 +127,7 @@ public class BabySwerver extends SubsystemBase {
         .recordOutput(
             "Swerve/Odometry",
             new double[] {
-                getPose().getX(),
-                getPose().getY(),
-                getPose().getRotation().getDegrees()
+              getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()
             });
   }
 }

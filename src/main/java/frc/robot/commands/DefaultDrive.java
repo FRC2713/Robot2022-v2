@@ -23,7 +23,7 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     double forwardReverseInput = -Robot.driver.getLeftY();
     double leftRightInput = -Robot.driver.getLeftX();
-    double rotationalInput = Robot.driver.getRightX();
+    double rotationalInput = -Robot.driver.getRightX();
 
     Robot.swerveDrive.drive(forwardReverseInput, leftRightInput, rotationalInput);
   }
