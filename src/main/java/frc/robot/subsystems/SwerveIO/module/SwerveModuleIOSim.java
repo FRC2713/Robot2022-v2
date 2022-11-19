@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class SwerveModuleIOSim implements SwerveModuleIO {
 
-  FlywheelSim azimuthSim = new FlywheelSim(DCMotor.getNEO(1), 150.0 / 7.0, 5);
-  FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), 6.12, 5);
+  FlywheelSim azimuthSim = new FlywheelSim(DCMotor.getNEO(1), 150.0 / 7.0, 0.004096955);
+  FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), 6.12, 0.025);
 
   double theAziVolts = 0;
   double theDriveVolts = 0;
@@ -31,10 +31,11 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     inputs.aziEncoderVelocityDegPerSecond =
         Units.radiansToDegrees(azimuthSim.getAngularVelocityRadPerSec());
 
-    inputs.driveEncoderPositionMetres =
-        driveSim.getAngularVelocityRPM() * Math.PI * Units.inchesToMeters(4) * 0.02 / 60;
+    inputs.driveEncoderPositionMetres +=
+        driveSim.getAngularVelocityRPM() * Math.PI * Units.inchesToMeters(4) / 60 * 0.02;
 
-    inputs.driveEncoderVelocityMetresPerSecond = driveSim.getAngularVelocityRPM() / 0.02;
+    inputs.driveEncoderVelocityMetresPerSecond =
+        driveSim.getAngularVelocityRPM() * Math.PI * Units.inchesToMeters(4) / 60;
     inputs.driveOutputVolts = MathUtil.clamp(driveSim.getOutput(0), -12.0, 12.0);
     inputs.driveCurrentDrawAmps = driveSim.getCurrentDrawAmps();
     inputs.driveTempCelcius = 0.0;

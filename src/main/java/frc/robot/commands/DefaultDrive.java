@@ -4,9 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.util.SwerveHeadingController;
 
@@ -23,27 +21,18 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double forwardReverseInput = Robot.driver.getLeftY();
-    double leftRightInput = Robot.driver.getLeftX();
+    double forwardReverseInput = -Robot.driver.getLeftY();
+    double leftRightInput = -Robot.driver.getLeftX();
     double rotationalInput = Robot.driver.getRightX();
 
-    double headingControllerDegreesChange =
-        rotationalInput * DriveConstants.headingControllerDriverChangeRate;
-    Rotation2d newHeadingSetpoint =
-        SwerveHeadingController.getInstance()
-            .getSetpoint()
-            .plus(Rotation2d.fromDegrees(headingControllerDegreesChange));
-
-    SwerveHeadingController.getInstance().setSetpoint(newHeadingSetpoint);
-
-    Robot.swerveDrive.drive(leftRightInput, forwardReverseInput);
+    Robot.swerveDrive.drive(forwardReverseInput, leftRightInput, rotationalInput);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     SwerveHeadingController.getInstance().setSetpoint(Robot.swerveDrive.getPose().getRotation());
-    Robot.swerveDrive.drive(0, 0);
+    Robot.swerveDrive.drive(0, 0, 0);
   }
 
   // Returns true when the command should end.

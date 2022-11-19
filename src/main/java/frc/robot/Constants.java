@@ -86,8 +86,9 @@ public final class Constants {
     public static final double distPerPulse =
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
-    public static final double maxSwerveVel = 3;
+    public static final double maxSwerveVel = Units.feetToMeters(16);
     public static final double maxSwerveAzi = Math.PI;
+    public static final double maxRotationalSpeedDegPerSec = 180;
 
     public static final int currentLimit = 65;
 
@@ -122,9 +123,9 @@ public final class Constants {
     public static final double headingControllerDriverChangeRate = 0.1;
 
     public static final PIDFFGains kDefaultAzimuthGains =
-        PIDFFGains.builder("Default Azimuth").kP(0.08).build();
+        PIDFFGains.builder("Default Azimuth").kP(0.25).build();
     public static final PIDFFGains kDefaultDrivingGains =
-        PIDFFGains.builder("Default Driving").kP(12.0).kV(2.45).build();
+        PIDFFGains.builder("Default Driving").kP(10).kV(2.3).build();
   }
 
   public static final class AutoConstants {
