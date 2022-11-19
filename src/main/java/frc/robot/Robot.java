@@ -26,42 +26,50 @@ public class Robot extends LoggedRobot {
   public static final BabySwerver swerveDrive =
       new BabySwerver(
           Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
-
-          Robot.isReal() ? new SwerveModuleIOSparkMAX(Constants.RobotMap.frontLeftDrive,
-          Constants.RobotMap.frontLeftAzi,
-          Constants.RobotMap.frontLeftAzimuthEncoder,
-          Constants.RobotMap.frontLeftOffset) : new SwerveModuleIOSim(
-              Constants.RobotMap.frontLeftDrive,
-              Constants.RobotMap.frontLeftAzi,
-              Constants.RobotMap.frontLeftAzimuthEncoder,
-              Constants.RobotMap.frontLeftOffset),
-
-          Robot.isReal() ? new SwerveModuleIOSparkMAX(Constants.RobotMap.frontRightDrive,
-          Constants.RobotMap.frontRightAzi,
-          Constants.RobotMap.frontRightAzimuthEncoder,
-          Constants.RobotMap.frontRightOffset) : new SwerveModuleIOSim(
-              Constants.RobotMap.frontRightDrive,
-              Constants.RobotMap.frontRightAzi,
-              Constants.RobotMap.frontRightAzimuthEncoder,
-              Constants.RobotMap.frontRightOffset),
-
-          Robot.isReal() ? new SwerveModuleIOSparkMAX(Constants.RobotMap.backLeftDrive,
-          Constants.RobotMap.backLeftAzi,
-          Constants.RobotMap.backLeftAzimuthEncoder,
-          Constants.RobotMap.backLeftOffset) : new SwerveModuleIOSim(
-              Constants.RobotMap.backLeftDrive,
-              Constants.RobotMap.backLeftAzi,
-              Constants.RobotMap.backLeftAzimuthEncoder,
-              Constants.RobotMap.backLeftOffset),
-
-          Robot.isReal() ? new SwerveModuleIOSparkMAX(Constants.RobotMap.backRightDrive,
-          Constants.RobotMap.backRightAzi,
-          Constants.RobotMap.backRightAzimuthEncoder,
-          Constants.RobotMap.backRightOffset) : new SwerveModuleIOSim(
-              Constants.RobotMap.backRightDrive,
-              Constants.RobotMap.backRightAzi,
-              Constants.RobotMap.backRightAzimuthEncoder,
-              Constants.RobotMap.backRightOffset));
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.frontLeftDrive,
+                  Constants.RobotMap.frontLeftAzi,
+                  Constants.RobotMap.frontLeftAzimuthEncoder,
+                  Constants.RobotMap.frontLeftOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.frontLeftDrive,
+                  Constants.RobotMap.frontLeftAzi,
+                  Constants.RobotMap.frontLeftAzimuthEncoder,
+                  Constants.RobotMap.frontLeftOffset),
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.frontRightDrive,
+                  Constants.RobotMap.frontRightAzi,
+                  Constants.RobotMap.frontRightAzimuthEncoder,
+                  Constants.RobotMap.frontRightOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.frontRightDrive,
+                  Constants.RobotMap.frontRightAzi,
+                  Constants.RobotMap.frontRightAzimuthEncoder,
+                  Constants.RobotMap.frontRightOffset),
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.backLeftDrive,
+                  Constants.RobotMap.backLeftAzi,
+                  Constants.RobotMap.backLeftAzimuthEncoder,
+                  Constants.RobotMap.backLeftOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.backLeftDrive,
+                  Constants.RobotMap.backLeftAzi,
+                  Constants.RobotMap.backLeftAzimuthEncoder,
+                  Constants.RobotMap.backLeftOffset),
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.backRightDrive,
+                  Constants.RobotMap.backRightAzi,
+                  Constants.RobotMap.backRightAzimuthEncoder,
+                  Constants.RobotMap.backRightOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.backRightDrive,
+                  Constants.RobotMap.backRightAzi,
+                  Constants.RobotMap.backRightAzimuthEncoder,
+                  Constants.RobotMap.backRightOffset));
 
   public static final XboxController driver = new XboxController(Constants.zero);
 
