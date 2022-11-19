@@ -32,25 +32,25 @@ public final class Constants {
     public static final int frontLeftDrive = 1;
     public static final int frontLeftAzi = 8;
     public static final int frontLeftAzimuthEncoder = 0;
-    public static final double frontLeftOffset = 2.92;
+    public static final double frontLeftOffset = 0.1124;
 
     // placeholder
     public static final int frontRightDrive = 3;
     public static final int frontRightAzi = 2;
     public static final int frontRightAzimuthEncoder = 1;
-    public static final double frontRightOffset = 2.8605;
+    public static final double frontRightOffset = 0.6028;
 
     // placeholder
     public static final int backLeftDrive = 4;
     public static final int backLeftAzi = 5;
     public static final int backLeftAzimuthEncoder = 2;
-    public static final double backLeftOffset = 2.935;
+    public static final double backLeftOffset = 0.0626;
 
     // placeholder
     public static final int backRightDrive = 6;
     public static final int backRightAzi = 7;
     public static final int backRightAzimuthEncoder = 3;
-    public static final double backRightOffset = 3.7135;
+    public static final double backRightOffset = 0.775;
     // placeholder
 
     public static final int flywheelLeftPort = 5;
@@ -85,8 +85,10 @@ public final class Constants {
     public static final double distPerPulse =
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
-    public static final double maxSwerveVel = 3;
+    public static final double maxSwerveVel = Units.feetToMeters(16.0 * 0.75);
+    // public static final double maxSwerveAzi = Math.PI;
     public static final double maxSwerveAzi = Math.PI;
+    public static final double maxRotationalSpeedRadPerSec = Units.degreesToRadians(180);
 
     public static final int currentLimit = 65;
 
@@ -117,22 +119,22 @@ public final class Constants {
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
 
     public static final PIDFFGains kHeadingControllerGains =
-        PIDFFGains.builder("Heading Controller").kP(0.0).tolerance(0.5).build();
-    public static final double headingControllerDriverChangeRate = 0.1;
+        PIDFFGains.builder("Heading Controller").kP(0.1).kD(0.001000).tolerance(3).build();
+    public static final double headingControllerDriverChangeRate = 10;
 
     public static final PIDFFGains kDefaultAzimuthGains =
-        PIDFFGains.builder("Default Azimuth").kP(0.1).tolerance(0).build();
+        PIDFFGains.builder("Default Azimuth").kP(0.65).tolerance(0).build();
     public static final PIDFFGains kDefaultDrivingGains =
-        PIDFFGains.builder("Default Driving").kP(0).kV(0).build();
+        PIDFFGains.builder("Default Driving").kP(1.0).kS(0.15).kV(2).build();
 
     public static final PIDFFGains kFrontLeftAzimuthGains =
-        PIDFFGains.builder("Front Left").kP(0.0).kS(.126).tolerance(1.0).build();
+        PIDFFGains.builder("Front Left").kP(0.1).kS(0.12).tolerance(1.0).build();
     public static final PIDFFGains kFrontRightAzimuthGains =
-        PIDFFGains.builder("Front Right").kP(0.0).kS(.12).tolerance(1.0).build();
+        PIDFFGains.builder("Front Right").kP(0.1).kS(.12).tolerance(1.0).build();
     public static final PIDFFGains kBackLeftAzimuthGains =
-        PIDFFGains.builder("Back Left").kP(0.0).kS(.2075).tolerance(1.0).build();
+        PIDFFGains.builder("Back Left").kP(0.1).kS(.15).tolerance(1.0).build();
     public static final PIDFFGains kBackRightAzimuthGains =
-        PIDFFGains.builder("Back Right").kP(0.0).kS(.13).tolerance(1.0).build();
+        PIDFFGains.builder("Back Right").kP(0.1).kS(.13).tolerance(1.0).build();
   }
 
   public static final class AutoConstants {

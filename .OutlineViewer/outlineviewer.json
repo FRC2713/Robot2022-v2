@@ -1,0 +1,18 @@
+{
+  "NetworkTables Settings": {
+    "mode": "Client",
+    "serverTeam": "2713"
+  },
+  "SmartDashboard": {
+    "TunableNumbers": {
+      "Front Right": {
+        "open": true
+      },
+      "Heading Controller": {
+        "open": true
+      },
+      "open": true
+    },
+    "open": true
+  }
+}

@@ -3,10 +3,10 @@ package frc.robot.subsystems.DriveIO;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveIO.DriveIO.DriveInputs;
+import org.littletonrobotics.junction.Logger;
 
 public class BabyDriver extends SubsystemBase {
 
@@ -30,17 +30,22 @@ public class BabyDriver extends SubsystemBase {
         inputs.leftEncPosition,
         inputs.rightEncPosition);
 
-    SmartDashboard.putNumber("Left Enc", inputs.leftEncPosition);
-    SmartDashboard.putNumber("Right Enc", inputs.rightEncPosition);
+    Logger.getInstance().recordOutput("Left Enc", inputs.leftEncPosition);
+    Logger.getInstance().recordOutput("Right Enc", inputs.rightEncPosition);
 
-    SmartDashboard.putNumber("Odo X", roboOdometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("Odo Y", roboOdometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Odo H", roboOdometry.getPoseMeters().getRotation().getDegrees());
+    Logger.getInstance()
+        .recordOutput(
+            "Odometry2",
+            new double[] {
+              roboOdometry.getPoseMeters().getX(),
+              roboOdometry.getPoseMeters().getY(),
+              roboOdometry.getPoseMeters().getRotation().getDegrees()
+            });
 
-    SmartDashboard.putNumber("L1 Current", inputs.frontLeftCurrent);
-    SmartDashboard.putNumber("R1 Current", inputs.frontRightCurrent);
-    //   SmartDashboard.putNumber("L2 Current", right1.getOutputCurrent());
-    //   SmartDashboard.putNumber("R2 Current", right2.getOutputCurrent());
+    Logger.getInstance().recordOutput("L1 Current", inputs.frontLeftCurrent);
+    Logger.getInstance().recordOutput("R1 Current", inputs.frontRightCurrent);
+    //   Logger.getInstance().recordOutput("L2 Current", right1.getOutputCurrent());
+    //   Logger.getInstance().recordOutput("R2 Current", right2.getOutputCurrent());
   }
 
   public void setPercent(double leftPercent, double rightPercent) {

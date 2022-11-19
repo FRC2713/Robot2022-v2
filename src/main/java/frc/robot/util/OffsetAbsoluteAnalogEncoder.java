@@ -1,17 +1,22 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 
 public class OffsetAbsoluteAnalogEncoder {
   private static final double MIN_VOLTAGE = 0.0;
   private static final double MAX_VOLTAGE = 4.77;
 
-  private AnalogInput analogInput;
   private final double voltageOffset;
+  private AnalogEncoder analogEncoder;
+
+  private LinearFilter offsetStabilizer = LinearFilter.movingAverage(20);
+  // private LinearFilter valueFilter = LinearFilter.singlePoleIIR(0.04, 0.02);
+  // private double value;
 
   public OffsetAbsoluteAnalogEncoder(int port, double voltageOffset) {
-    this.analogInput = new AnalogInput(port);
+    this.analogEncoder = new AnalogEncoder(port);
     this.voltageOffset = voltageOffset;
   }
 
@@ -20,45 +25,37 @@ public class OffsetAbsoluteAnalogEncoder {
   }
 
   public double getUnadjustedVoltage() {
-    return analogInput.getVoltage();
+    return analogEncoder.getAbsolutePosition();
   }
 
   public double getAdjustedVoltage() {
-    return getUnadjustedVoltage() - voltageOffset;
+    return analogEncoder.getAbsolutePosition() - voltageOffset;
+  }
+
+  public double getFilteredOffset() {
+    return offsetStabilizer.calculate(analogEncoder.getAbsolutePosition());
+  }
+
+  public Rotation2d getUnadjustedRotation2d() {
+    return Rotation2d.fromDegrees(getAdjustedVoltage() * 360.0);
   }
 
   public Rotation2d getAdjustedRotation2d() {
-    /*
-     adj from -2.2, 2.57
-     -2.2 = -180
-     2.57 = 180
+    return simplifyRotation2d(getUnadjustedRotation2d());
+  }
 
-     (-2.2 - 4.77) / (4.77) * 360
+  public static Rotation2d simplifyRotation2d(Rotation2d rotation) {
+    double unadjustedDegrees = rotation.getDegrees();
+    double min = -180, max = 180;
 
+    while (unadjustedDegrees < min) {
+      unadjustedDegrees += 360;
+    }
 
-     adj = [-2.2, 2.57]
-       ->  [-180, 180]
+    while (unadjustedDegrees >= max) {
+      unadjustedDegrees -= 360;
+    }
 
-     y -> degrees
-     x -> adj voltage
-
-     (y - y1) = m * (x - x1)
-     (180 - -180) = m * (2.57 - -offset)
-     m = 75.4717
-
-     y - 180 = 75.4717 * (x + 2.2)
-     y = 75.4717 * (x + offset) + 180
-
-
-
-
-
-
-    */
-
-    return Rotation2d.fromDegrees(360 / MAX_VOLTAGE * getAdjustedVoltage() - 180);
-
-    // return Rotation2d.fromDegrees(
-    //     (getAdjustedVoltage() - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE) * 360.0);
+    return Rotation2d.fromDegrees(unadjustedDegrees);
   }
 }
