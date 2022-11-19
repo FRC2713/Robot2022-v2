@@ -16,16 +16,18 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.BabySwerver;
+import frc.robot.subsystems.SwerveIO.BabySwerver;
+import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
+import frc.robot.subsystems.SwerveIO.SwerveIOSim;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSim;
+import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
 import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
 import frc.robot.util.TrajectoryController;
-import frc.robot.util.characterization.CharacterizationCommand;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import java.util.HashMap;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.inputs.LoggedNetworkTables;
 import org.littletonrobotics.junction.io.LogSocketServer;
 
 public class Robot extends LoggedRobot {
@@ -36,7 +38,53 @@ public class Robot extends LoggedRobot {
 
   public static final MotionHandler motionHandler = new MotionHandler();
 
-  public static final BabySwerver swerveDrive = new BabySwerver();
+  public static final BabySwerver swerveDrive =
+      new BabySwerver(
+          Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.frontLeftDrive,
+                  Constants.RobotMap.frontLeftAzi,
+                  Constants.RobotMap.frontLeftAzimuthEncoder,
+                  Constants.RobotMap.frontLeftOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.frontLeftDrive,
+                  Constants.RobotMap.frontLeftAzi,
+                  Constants.RobotMap.frontLeftAzimuthEncoder,
+                  Constants.RobotMap.frontLeftOffset),
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.frontRightDrive,
+                  Constants.RobotMap.frontRightAzi,
+                  Constants.RobotMap.frontRightAzimuthEncoder,
+                  Constants.RobotMap.frontRightOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.frontRightDrive,
+                  Constants.RobotMap.frontRightAzi,
+                  Constants.RobotMap.frontRightAzimuthEncoder,
+                  Constants.RobotMap.frontRightOffset),
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.backLeftDrive,
+                  Constants.RobotMap.backLeftAzi,
+                  Constants.RobotMap.backLeftAzimuthEncoder,
+                  Constants.RobotMap.backLeftOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.backLeftDrive,
+                  Constants.RobotMap.backLeftAzi,
+                  Constants.RobotMap.backLeftAzimuthEncoder,
+                  Constants.RobotMap.backLeftOffset),
+          Robot.isReal()
+              ? new SwerveModuleIOSparkMAX(
+                  Constants.RobotMap.backRightDrive,
+                  Constants.RobotMap.backRightAzi,
+                  Constants.RobotMap.backRightAzimuthEncoder,
+                  Constants.RobotMap.backRightOffset)
+              : new SwerveModuleIOSim(
+                  Constants.RobotMap.backRightDrive,
+                  Constants.RobotMap.backRightAzi,
+                  Constants.RobotMap.backRightAzimuthEncoder,
+                  Constants.RobotMap.backRightOffset));
 
   public static final XboxController driver = new XboxController(Constants.zero);
 
@@ -47,21 +95,10 @@ public class Robot extends LoggedRobot {
 
   public static PathPlannerTrajectory taxi;
 
-  public static final CharacterizationCommand characterization =
-      new CharacterizationCommand(
-          swerveDrive,
-          true,
-          ffData,
-          (voltage) -> {
-            swerveDrive.applyVoltageForCharacterization(voltage);
-          },
-          () -> swerveDrive.getAverageVelocity());
-
   @Override
   public void robotInit() {
-
-    setUseTiming(isReal());
-    LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
+    // setUseTiming(isReal());
+    // LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
     Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
     Logger.getInstance().start();
 
@@ -117,6 +154,8 @@ public class Robot extends LoggedRobot {
 
       autoCommand.cancel();
     }
+
+    Robot.motionMode = MotionMode.LOCKDOWN;
   }
 
   @Override
@@ -169,6 +208,7 @@ public class Robot extends LoggedRobot {
       motionMode = MotionMode.LOCKDOWN;
       autoCommand.cancel();
     }
+    Robot.motionMode = MotionMode.FULL_DRIVE;
   }
 
   @Override
