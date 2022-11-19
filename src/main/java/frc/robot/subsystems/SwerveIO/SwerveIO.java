@@ -1,6 +1,6 @@
 package frc.robot.subsystems.SwerveIO;
 
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SwerveIO {
@@ -16,5 +16,5 @@ public interface SwerveIO {
 
   public void updateInputs(SwerveInputs inputs);
 
-  public void setDesiredState(SwerveModuleState desiredState);
+  public void resetGyro(Rotation2d rotation2d);
 }

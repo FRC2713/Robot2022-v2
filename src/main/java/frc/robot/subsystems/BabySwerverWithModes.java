@@ -1,68 +1,77 @@
-package frc.robot.subsystems.SwerveIO;
+package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Twist2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.RobotMap;
 import frc.robot.Robot;
-import frc.robot.subsystems.SwerveIO.module.SwerveModule;
-import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
 import org.littletonrobotics.junction.Logger;
 
-public class BabySwerver extends SubsystemBase {
+public class BabySwerverWithModes extends SubsystemBase {
 
-  SwerveIO io;
-  public final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
+  private final SwerveModule frontLeft =
+      new SwerveModule(
+          Constants.RobotMap.frontLeftDrive,
+          Constants.RobotMap.frontLeftAzi,
+          Constants.RobotMap.frontLeftAzimuthEncoder,
+          Constants.RobotMap.frontLeftOffset,
+          Constants.DriveConstants.kFrontLeftAzimuthGains,
+          false);
+  private final SwerveModule frontRight =
+      new SwerveModule(
+          Constants.RobotMap.frontRightDrive,
+          Constants.RobotMap.frontRightAzi,
+          Constants.RobotMap.frontRightAzimuthEncoder,
+          Constants.RobotMap.frontRightOffset,
+          Constants.DriveConstants.kFrontRightAzimuthGains,
+          false);
+  private final SwerveModule backLeft =
+      new SwerveModule(
+          Constants.RobotMap.backLeftDrive,
+          Constants.RobotMap.backLeftAzi,
+          Constants.RobotMap.backLeftAzimuthEncoder,
+          Constants.RobotMap.backLeftOffset,
+          Constants.DriveConstants.kBackLeftAzimuthGains,
+          false);
+  private final SwerveModule backRight =
+      new SwerveModule(
+          Constants.RobotMap.backRightDrive,
+          Constants.RobotMap.backRightAzi,
+          Constants.RobotMap.backRightAzimuthEncoder,
+          Constants.RobotMap.backRightOffset,
+          Constants.DriveConstants.kBackRightAzimuthGains,
+          false);
 
-  private final SwerveModule frontLeft;
-  private final SwerveModule frontRight;
-  private final SwerveModule backLeft;
-  private final SwerveModule backRight;
+  private final Pigeon2 gyro = new Pigeon2(RobotMap.pigeonCANId);
 
   private final SwerveDriveOdometry odometry;
-  private Pose2d simOdometryPose;
 
-  public BabySwerver(
-      SwerveIO swerveIO,
-      SwerveModuleIO frontLeft,
-      SwerveModuleIO frontRight,
-      SwerveModuleIO backLeft,
-      SwerveModuleIO backRight) {
-    this.frontLeft = new SwerveModule(frontLeft, "Front left");
-    this.frontRight = new SwerveModule(frontRight, "Front right");
-    this.backLeft = new SwerveModule(backLeft, "Back left");
-    this.backRight = new SwerveModule(backRight, "Back right");
-    io = swerveIO;
-    io.updateInputs(inputs);
-
+  public BabySwerverWithModes() {
+    gyro.zeroGyroBiasNow();
+    gyro.setYaw(0);
     odometry =
-        new SwerveDriveOdometry(
-            DriveConstants.kinematics, Rotation2d.fromDegrees(inputs.gyroYawPosition));
-    simOdometryPose = odometry.getPoseMeters();
+        new SwerveDriveOdometry(DriveConstants.kinematics, Rotation2d.fromDegrees(gyro.getYaw()));
+    // gyro.setYaw(90);
+    // gyro.config
   }
 
   public void resetGyro(Rotation2d rotation) {
-    io.resetGyro(rotation);
+    gyro.setYaw(rotation.getDegrees());
   }
 
   public void resetOdometry(Pose2d pose) {
     // gyro.setYaw(pose.getRotation().getDegrees());
     odometry.resetPosition(pose, pose.getRotation());
-    simOdometryPose = pose;
   }
 
   public Pose2d getPose() {
-    if (Robot.isReal()) {
-      return odometry.getPoseMeters();
-    } else {
-      return simOdometryPose;
-    }
+    return odometry.getPoseMeters();
   }
 
   public void drive(SwerveModuleState[] swerveModuleStates) {
@@ -89,25 +98,11 @@ public class BabySwerver extends SubsystemBase {
 
   public void updateOdometry() {
     odometry.update(
-        Rotation2d.fromDegrees(inputs.gyroYawPosition),
+        Rotation2d.fromDegrees(gyro.getYaw()),
         frontLeft.getState(),
         frontRight.getState(),
         backLeft.getState(),
         backRight.getState());
-
-    if (Robot.isSimulation()) {
-      SwerveModuleState[] measuredStates =
-          new SwerveModuleState[] {
-            frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState()
-          };
-      ChassisSpeeds speeds = Constants.DriveConstants.kinematics.toChassisSpeeds(measuredStates);
-      simOdometryPose =
-          simOdometryPose.exp(
-              new Twist2d(
-                  speeds.vxMetersPerSecond * .02,
-                  speeds.vyMetersPerSecond * .02,
-                  speeds.omegaRadiansPerSecond * .02));
-    }
   }
 
   public void setModuleStates(SwerveModuleState swerveModuleStates[]) {
@@ -119,7 +114,6 @@ public class BabySwerver extends SubsystemBase {
 
   @Override
   public void periodic() {
-    io.updateInputs(inputs);
     updateOdometry();
 
     switch (Robot.motionMode) {
@@ -139,12 +133,14 @@ public class BabySwerver extends SubsystemBase {
         break;
     }
 
-    Logger.getInstance().processInputs("Swerve/Chassis", inputs);
+    Logger.getInstance().recordOutput("Gyro/Yaw", gyro.getYaw());
+    Logger.getInstance().recordOutput("Gyro/Pitch", gyro.getPitch());
+    Logger.getInstance().recordOutput("Gyro/Roll", gyro.getRoll());
+    Logger.getInstance().recordOutput("Gyro/Compass Heading", gyro.getAbsoluteCompassHeading());
+
+    Logger.getInstance().recordOutput("Odometry/X", odometry.getPoseMeters().getX());
+    Logger.getInstance().recordOutput("Odometry/Y", odometry.getPoseMeters().getY());
     Logger.getInstance()
-        .recordOutput(
-            "Swerve/Odometry",
-            new double[] {
-              getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()
-            });
+        .recordOutput("Odometry/H", odometry.getPoseMeters().getRotation().getDegrees());
   }
 }

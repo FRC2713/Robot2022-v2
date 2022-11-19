@@ -1,7 +1,7 @@
 package frc.robot.subsystems.SwerveIO;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.RobotMap;
 
 public class SwerveIOPigeon2 implements SwerveIO {
@@ -27,8 +27,7 @@ public class SwerveIOPigeon2 implements SwerveIO {
   }
 
   @Override
-  public void setDesiredState(SwerveModuleState desiredState) {
-    // TODO Auto-generated method stub
-
+  public void resetGyro(Rotation2d rotation2d) {
+    gyro.setYaw(rotation2d.getDegrees());
   }
 }
