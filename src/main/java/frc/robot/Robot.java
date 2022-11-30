@@ -6,15 +6,12 @@ package frc.robot;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.SwerveIO.BabySwerver;
 import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
@@ -25,7 +22,6 @@ import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
 import frc.robot.util.TrajectoryController;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
-import java.util.HashMap;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.io.LogSocketServer;
@@ -163,35 +159,12 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-
-    HashMap<String, Command> eventMap = new HashMap<>();
-
     taxi = PathPlanner.loadPath("taxitaxi", PathPlanner.getConstraintsFromPath("taxitaxi"));
 
-    autoCommand =
-        new SequentialCommandGroup(
-            new InstantCommand(
-                () -> {
-                  swerveDrive.resetGyro(taxi.getInitialHolonomicPose().getRotation());
-                  swerveDrive.resetOdometry(taxi.getInitialHolonomicPose());
-                }),
-            new PPSwerveControllerCommand(
-                taxi,
-                () -> swerveDrive.getPose(),
-                Constants.DriveConstants.kinematics,
-                new PIDController(0.9, 0, 0),
-                new PIDController(0.9, 0, 0),
-                new PIDController(1.0, 0, 0),
-                (states) -> {
-                  swerveDrive.setModuleStates(states);
-                },
-                eventMap,
-                swerveDrive));
-
-    autoSelect.addOption(
+    autoSelect.setDefaultOption(
         "taxitaxi", new InstantCommand(() -> TrajectoryController.getInstance().loadPath(taxi)));
 
-    autoCommand = autoSelect.getSelected();
+    autoCommand = new InstantCommand(() -> TrajectoryController.getInstance().loadPath(taxi));
 
     if (autoCommand != null) {
       motionMode = MotionMode.TRAJECTORY;

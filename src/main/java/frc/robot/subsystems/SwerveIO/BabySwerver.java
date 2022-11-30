@@ -146,5 +146,6 @@ public class BabySwerver extends SubsystemBase {
             new double[] {
               getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()
             });
+    Logger.getInstance().recordOutput("Swerve/MotionMode", Robot.motionMode.name());
   }
 }

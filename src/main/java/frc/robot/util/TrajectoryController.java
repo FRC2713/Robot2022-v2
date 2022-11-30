@@ -32,6 +32,7 @@ public class TrajectoryController {
 
   public void loadPath(PathPlannerTrajectory newTrajectory) {
     traj = newTrajectory;
+    timer.reset();
   }
 
   public ChassisSpeeds update() {
@@ -40,6 +41,8 @@ public class TrajectoryController {
     }
     PathPlannerState targetState = (PathPlannerState) traj.sample(timer.get());
 
+    if(traj.getTotalTimeSeconds() < timer.get()) {
     return controller.calculate(Robot.swerveDrive.getPose(), targetState);
+    } else return new ChassisSpeeds();
   }
 }
