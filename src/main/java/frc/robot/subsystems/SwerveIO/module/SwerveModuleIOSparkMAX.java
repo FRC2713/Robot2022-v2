@@ -4,8 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.robot.Constants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 
 public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
@@ -32,21 +32,28 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
 
   public SwerveModuleIOSparkMAX(
       int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
-    ;
+
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
+
+    driver.restoreFactoryDefaults();
+    azimuth.restoreFactoryDefaults();
+
+    azimuth.setInverted(true);
+    driver.setInverted(true);
+
     driver.setIdleMode(IdleMode.kBrake);
     azimuth.setIdleMode(IdleMode.kBrake);
 
     getDriveEncoder()
-        .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
+        .setPositionConversionFactor((1.0 / 6.12) * Units.inchesToMeters(4.0) * Math.PI);
+    getDriveEncoder()
+        .setVelocityConversionFactor((1.0 / 6.12) * Units.inchesToMeters(4.0) * Math.PI / 60);
 
-    getAziEncoder().setPositionConversionFactor(7.0 / 150.0);
-    getAziEncoder().setVelocityConversionFactor(7.0 / 150.0);
+    getAziEncoder().setPositionConversionFactor(7.0 / 150.0 * 360.0);
+    getAziEncoder().setVelocityConversionFactor(7.0 / 150.0 * 360.0);
     getAziEncoder().setPosition(getAziAbsoluteEncoder().getAdjustedRotation2d().getDegrees());
-
-    azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
   }
 
   @Override
