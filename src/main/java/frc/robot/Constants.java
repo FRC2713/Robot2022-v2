@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.PIDFFGains;
+import lombok.experimental.UtilityClass;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -21,10 +22,18 @@ import frc.robot.util.PIDFFGains;
  */
 public final class Constants {
 
+  private Constants() {
+    throw new AssertionError();
+  }
+
   public static final boolean tuningMode = true;
   public static final int zero = 0; // in case you need a zero :)
 
   public static final class RobotMap {
+    private RobotMap() {
+      throw new AssertionError();
+    }
+
     public static final int pigeonCANId = 20;
 
     // MOTORS
@@ -79,6 +88,10 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
+    private DriveConstants() {
+      throw new AssertionError();
+    }
+
     public static final double kJoystickTurnDeadzone = 0.04;
     public static final double wheelDiameter = 4;
     public static final double gearRatio = 6.12;
@@ -121,11 +134,37 @@ public final class Constants {
     public static final PIDFFGains kHeadingControllerGains =
         PIDFFGains.builder("Heading Controller").kP(0.1).kD(0.001000).tolerance(3).build();
     public static final double headingControllerDriverChangeRate = 10;
-
-    public static final PIDFFGains kDefaultAzimuthGains =
-        PIDFFGains.builder("Default Azimuth").kP(0.65).tolerance(0).build();
-    public static final PIDFFGains kDefaultDrivingGains =
-        PIDFFGains.builder("Default Driving").kP(1.0).kS(0.15).kV(2).build();
+    @UtilityClass
+    public static final class Gains {
+      @UtilityClass
+      public static final class FrontLeft {
+        public static final PIDFFGains kDefaultAzimuthGains =
+            PIDFFGains.builder("FrontLeft/Default Azimuth").kP(0.65).tolerance(0).build();
+        public static final PIDFFGains kDefaultDrivingGains =
+            PIDFFGains.builder("FrontLeft/Default Driving").kP(1.0).kS(0.15).kV(2).build();
+      }
+      @UtilityClass
+      public static final class FrontRight {
+        public static final PIDFFGains kDefaultAzimuthGains =
+            PIDFFGains.builder("FrontRight/Default Azimuth").kP(0.65).tolerance(0).build();
+        public static final PIDFFGains kDefaultDrivingGains =
+            PIDFFGains.builder("FrontRight/Default Driving").kP(1.0).kS(0.15).kV(2).build();
+      }
+      @UtilityClass
+      public static final class BackLeft {
+        public static final PIDFFGains kDefaultAzimuthGains =
+            PIDFFGains.builder("BackLeft/Default Azimuth").kP(0.65).tolerance(0).build();
+        public static final PIDFFGains kDefaultDrivingGains =
+            PIDFFGains.builder("BackLeft/Default Driving").kP(1.0).kS(0.15).kV(2).build();
+      }
+      @UtilityClass
+      public static final class BackRight {
+        public static final PIDFFGains kDefaultAzimuthGains =
+            PIDFFGains.builder("BackRight/Default Azimuth").kP(0.65).tolerance(0).build();
+        public static final PIDFFGains kDefaultDrivingGains =
+            PIDFFGains.builder("BackRight/Default Driving").kP(1.0).kS(0.15).kV(2).build();
+      }
+    }
 
     public static final PIDFFGains kFrontLeftAzimuthGains =
         PIDFFGains.builder("Front Left").kP(0.1).kS(0.12).tolerance(1.0).build();
@@ -138,6 +177,9 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
+    private AutoConstants() {
+      throw new AssertionError();
+    }
     // FF and FB gains; NEED TO BE DETERMINED ON THE FULLY BUILT ROBOT, WILL CHANGE
     // WITH WEIGHT
     public static final double ksVolts = 0.15161; // 0.15166; // 0.20541;

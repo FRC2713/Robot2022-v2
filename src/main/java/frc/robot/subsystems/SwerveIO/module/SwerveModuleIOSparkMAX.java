@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
+import frc.robot.util.RedHawkUtil;
 
 public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
 
@@ -31,13 +32,12 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
   }
 
   public SwerveModuleIOSparkMAX(
-      int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
-    ;
+      int drivePort, int azimPort, int azimuthEncoderPort, double offset, SwerveModules name) {
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
-    driver.setIdleMode(IdleMode.kBrake);
-    azimuth.setIdleMode(IdleMode.kBrake);
+    RedHawkUtil.errorHandleSparkMAX(driver.setIdleMode(IdleMode.kBrake), "drive/" + name.toString());
+    RedHawkUtil.errorHandleSparkMAX(azimuth.setIdleMode(IdleMode.kBrake), "azimuth/" + name.toString());
 
     getDriveEncoder()
         .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));

@@ -10,9 +10,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.Gains.FrontLeft;
 import frc.robot.Robot;
 import frc.robot.subsystems.SwerveIO.module.SwerveModule;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
+import frc.robot.subsystems.SwerveIO.module.modules.FrontLeftModule;
+
 import org.littletonrobotics.junction.Logger;
 
 public class BabySwerver extends SubsystemBase {
@@ -34,10 +37,10 @@ public class BabySwerver extends SubsystemBase {
       SwerveModuleIO frontRight,
       SwerveModuleIO backLeft,
       SwerveModuleIO backRight) {
-    this.frontLeft = new SwerveModule(frontLeft, "Front left");
-    this.frontRight = new SwerveModule(frontRight, "Front right");
-    this.backLeft = new SwerveModule(backLeft, "Back left");
-    this.backRight = new SwerveModule(backRight, "Back right");
+    this.frontLeft = new FrontLeftModule(frontLeft);
+    this.frontRight = new FrontLeftModule(frontRight);
+    this.backLeft = new FrontLeftModule(backLeft);
+    this.backRight = new FrontLeftModule(backRight);
     io = swerveIO;
     io.updateInputs(inputs);
 

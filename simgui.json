@@ -15,5 +15,10 @@
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[9]": "PIDController"
     }
+  },
+  "NetworkTables": {
+    "FMSInfo": {
+      "open": true
+    }
   }
 }

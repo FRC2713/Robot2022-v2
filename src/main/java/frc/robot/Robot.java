@@ -21,6 +21,7 @@ import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
 import frc.robot.subsystems.SwerveIO.SwerveIOSim;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSim;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
+import frc.robot.subsystems.SwerveIO.module.SwerveModules;
 import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
 import frc.robot.util.TrajectoryController;
@@ -38,53 +39,7 @@ public class Robot extends LoggedRobot {
 
   public static final MotionHandler motionHandler = new MotionHandler();
 
-  public static final BabySwerver swerveDrive =
-      new BabySwerver(
-          Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.frontLeftDrive,
-                  Constants.RobotMap.frontLeftAzi,
-                  Constants.RobotMap.frontLeftAzimuthEncoder,
-                  Constants.RobotMap.frontLeftOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.frontLeftDrive,
-                  Constants.RobotMap.frontLeftAzi,
-                  Constants.RobotMap.frontLeftAzimuthEncoder,
-                  Constants.RobotMap.frontLeftOffset),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.frontRightDrive,
-                  Constants.RobotMap.frontRightAzi,
-                  Constants.RobotMap.frontRightAzimuthEncoder,
-                  Constants.RobotMap.frontRightOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.frontRightDrive,
-                  Constants.RobotMap.frontRightAzi,
-                  Constants.RobotMap.frontRightAzimuthEncoder,
-                  Constants.RobotMap.frontRightOffset),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.backLeftDrive,
-                  Constants.RobotMap.backLeftAzi,
-                  Constants.RobotMap.backLeftAzimuthEncoder,
-                  Constants.RobotMap.backLeftOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.backLeftDrive,
-                  Constants.RobotMap.backLeftAzi,
-                  Constants.RobotMap.backLeftAzimuthEncoder,
-                  Constants.RobotMap.backLeftOffset),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.backRightDrive,
-                  Constants.RobotMap.backRightAzi,
-                  Constants.RobotMap.backRightAzimuthEncoder,
-                  Constants.RobotMap.backRightOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.backRightDrive,
-                  Constants.RobotMap.backRightAzi,
-                  Constants.RobotMap.backRightAzimuthEncoder,
-                  Constants.RobotMap.backRightOffset));
+  public static BabySwerver swerveDrive;
 
   public static final XboxController driver = new XboxController(Constants.zero);
 
@@ -101,6 +56,58 @@ public class Robot extends LoggedRobot {
     // LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
     Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
     Logger.getInstance().start();
+
+    Robot.swerveDrive =
+        new BabySwerver(
+            Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(
+                    Constants.RobotMap.frontLeftDrive,
+                    Constants.RobotMap.frontLeftAzi,
+                    Constants.RobotMap.frontLeftAzimuthEncoder,
+                    Constants.RobotMap.frontLeftOffset,
+                    SwerveModules.FRONT_LEFT)
+                : new SwerveModuleIOSim(
+                    Constants.RobotMap.frontLeftDrive,
+                    Constants.RobotMap.frontLeftAzi,
+                    Constants.RobotMap.frontLeftAzimuthEncoder,
+                    Constants.RobotMap.frontLeftOffset),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(
+                    Constants.RobotMap.frontRightDrive,
+                    Constants.RobotMap.frontRightAzi,
+                    Constants.RobotMap.frontRightAzimuthEncoder,
+                    Constants.RobotMap.frontRightOffset,
+                    SwerveModules.FRONT_RIGHT)
+                : new SwerveModuleIOSim(
+                    Constants.RobotMap.frontRightDrive,
+                    Constants.RobotMap.frontRightAzi,
+                    Constants.RobotMap.frontRightAzimuthEncoder,
+                    Constants.RobotMap.frontRightOffset),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(
+                    Constants.RobotMap.backLeftDrive,
+                    Constants.RobotMap.backLeftAzi,
+                    Constants.RobotMap.backLeftAzimuthEncoder,
+                    Constants.RobotMap.backLeftOffset,
+                    SwerveModules.BACK_LEFT)
+                : new SwerveModuleIOSim(
+                    Constants.RobotMap.backLeftDrive,
+                    Constants.RobotMap.backLeftAzi,
+                    Constants.RobotMap.backLeftAzimuthEncoder,
+                    Constants.RobotMap.backLeftOffset),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(
+                    Constants.RobotMap.backRightDrive,
+                    Constants.RobotMap.backRightAzi,
+                    Constants.RobotMap.backRightAzimuthEncoder,
+                    Constants.RobotMap.backRightOffset,
+                    SwerveModules.BACK_RIGHT)
+                : new SwerveModuleIOSim(
+                    Constants.RobotMap.backRightDrive,
+                    Constants.RobotMap.backRightAzi,
+                    Constants.RobotMap.backRightAzimuthEncoder,
+                    Constants.RobotMap.backRightOffset));
 
     new JoystickButton(driver, XboxController.Button.kY.value)
         .whenPressed(
@@ -209,6 +216,7 @@ public class Robot extends LoggedRobot {
       autoCommand.cancel();
     }
     Robot.motionMode = MotionMode.FULL_DRIVE;
+    Logger.getInstance().recordOutput("RevLibError/AAAA", "test");
   }
 
   @Override

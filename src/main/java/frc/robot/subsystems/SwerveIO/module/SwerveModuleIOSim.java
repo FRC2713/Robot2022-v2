@@ -1,9 +1,11 @@
 package frc.robot.subsystems.SwerveIO.module;
 
+import com.revrobotics.REVLibError;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.util.RedHawkUtil;
 
 public class SwerveModuleIOSim implements SwerveModuleIO {
 
@@ -13,7 +15,8 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
   double theAziVolts = 0;
   double theDriveVolts = 0;
 
-  public SwerveModuleIOSim(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {}
+  public SwerveModuleIOSim(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {
+  }
 
   @Override
   public void updateInputs(SwerveModuleInputs inputs) {
