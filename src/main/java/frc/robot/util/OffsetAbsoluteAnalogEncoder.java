@@ -43,7 +43,11 @@ public class OffsetAbsoluteAnalogEncoder {
   public Rotation2d getAdjustedRotation2d() {
     return simplifyRotation2d(getUnadjustedRotation2d());
   }
-
+/**
+ * Given a Rotation2d object, returns a new Rotation2d object adjusted to a value between -180 and 180 degrees.
+ * @param rotation A rotation2d object to be simplified.
+ * @return A rotation2d object with a degree measure between -180 and 180.
+ */
   public static Rotation2d simplifyRotation2d(Rotation2d rotation) {
     double unadjustedDegrees = rotation.getDegrees();
     double min = -180, max = 180;

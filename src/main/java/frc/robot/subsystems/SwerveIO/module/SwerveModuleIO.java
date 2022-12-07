@@ -12,6 +12,7 @@ public interface SwerveModuleIO {
     public double aziOutputVolts = 0.0;
     public double aziCurrentDrawAmps = 0.0;
     public double aziEncoderPositionDeg = 0.0;
+    public double aziEncoderSimplifiedPositionDeg = 0.0;
     public double aziEncoderVelocityDegPerSecond = 0.0;
     public double aziTempCelcius;
 

@@ -28,22 +28,9 @@ public class SwerveModule extends SubsystemBase {
     io = swerveModuleIO;
     this.name = name;
     io.updateInputs(inputs);
-    // driver = new CANSparkMax(drivePort, MotorType.kBrushless);
-    // azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
-
-    // driver.setIdleMode(IdleMode.kBrake);
-    // azimuth.setIdleMode(IdleMode.kBrake);
-
-    // getDriveEncoder()
-    //     .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
-
-    // azimuthController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
 
     state = new SwerveModuleState(0, Rotation2d.fromDegrees(inputs.aziEncoderPositionDeg));
     azimuthController.enableContinuousInput(-180, 180);
-    // state = new SwerveModuleState(0, inputs.
   }
 
   public SwerveModuleState getState() {
@@ -91,5 +78,10 @@ public class SwerveModule extends SubsystemBase {
         .recordOutput(
             "Swerve/" + name + "/Drive Error",
             state.speedMetersPerSecond - inputs.driveEncoderVelocityMetresPerSecond);
+
+    Logger.getInstance()
+        .recordOutput(
+            "Swerve/" + name + "/Azimuth Encoder Delta",
+            inputs.aziEncoderPositionDeg - inputs.aziAbsoluteEncoderAdjAngleDeg);
   }
 }
