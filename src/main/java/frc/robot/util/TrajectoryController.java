@@ -41,8 +41,8 @@ public class TrajectoryController {
     }
     PathPlannerState targetState = (PathPlannerState) traj.sample(timer.get());
 
-    if(traj.getTotalTimeSeconds() < timer.get()) {
-    return controller.calculate(Robot.swerveDrive.getPose(), targetState);
+    if (traj.getTotalTimeSeconds() < timer.get()) {
+      return controller.calculate(Robot.swerveDrive.getPose(), targetState);
     } else return new ChassisSpeeds();
   }
 }

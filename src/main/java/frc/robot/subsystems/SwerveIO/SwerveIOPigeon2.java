@@ -17,6 +17,7 @@ public class SwerveIOPigeon2 implements SwerveIO {
     // state = new SwerveModuleState(0, azimuthEncoder.getAdjustedRotation2d());
   }
 
+  /** Updates inputs to reflect current gyro values */
   @Override
   public void updateInputs(SwerveInputs inputs) {
     inputs.gyroCompassHeading = gyro.getAbsoluteCompassHeading();
@@ -26,6 +27,7 @@ public class SwerveIOPigeon2 implements SwerveIO {
     // inputs.targetAngle = state.angle.getDegrees();
   }
 
+  /** Sets the gyro to the rotation of the swerve */
   @Override
   public void resetGyro(Rotation2d rotation2d) {
     gyro.setYaw(rotation2d.getDegrees());
