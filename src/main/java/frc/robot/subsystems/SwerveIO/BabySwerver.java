@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -65,11 +64,11 @@ public class BabySwerver extends SubsystemBase {
     }
   }
 
-  public void drive(SwerveModuleState[] swerveModuleStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, Constants.DriveConstants.maxSwerveVel);
-
-    setModuleStates(swerveModuleStates);
+  public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
+    frontLeft.setDesiredState(swerveModuleStates[0]);
+    frontRight.setDesiredState(swerveModuleStates[1]);
+    backLeft.setDesiredState(swerveModuleStates[2]);
+    backRight.setDesiredState(swerveModuleStates[3]);
   }
 
   public double getAverageVelocity() {
@@ -110,13 +109,6 @@ public class BabySwerver extends SubsystemBase {
     }
   }
 
-  public void setModuleStates(SwerveModuleState swerveModuleStates[]) {
-    frontLeft.setDesiredState(swerveModuleStates[0]);
-    frontRight.setDesiredState(swerveModuleStates[1]);
-    backLeft.setDesiredState(swerveModuleStates[2]);
-    backRight.setDesiredState(swerveModuleStates[3]);
-  }
-
   @Override
   public void periodic() {
     io.updateInputs(inputs);
@@ -124,16 +116,16 @@ public class BabySwerver extends SubsystemBase {
 
     switch (Robot.motionMode) {
       case FULL_DRIVE:
-        drive(Robot.motionHandler.driveFullControl());
+        setModuleStates(Robot.motionHandler.driveFullControl());
         break;
       case HEADING_CONTROLLER:
-        drive(Robot.motionHandler.driveHeadingController());
+        setModuleStates(Robot.motionHandler.driveHeadingController());
         break;
       case LOCKDOWN:
-        drive(Robot.motionHandler.lockdown());
+        setModuleStates(Robot.motionHandler.lockdown());
         break;
       case TRAJECTORY:
-        drive(Robot.motionHandler.driveTrajectory());
+        setModuleStates(Robot.motionHandler.driveTrajectory());
         break;
       default:
         break;

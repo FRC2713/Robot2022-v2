@@ -5,8 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 
 public class OffsetAbsoluteAnalogEncoder {
-  private static final double MIN_VOLTAGE = 0.0;
-  private static final double MAX_VOLTAGE = 4.77;
 
   private final double voltageOffset;
   private AnalogEncoder analogEncoder;

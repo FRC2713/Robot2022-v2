@@ -17,7 +17,11 @@ public class MotionHandler {
     TRAJECTORY,
     LOCKDOWN
   }
-
+  
+/**
+ * Calculates SwerveModuleState objects using the heading controller.
+ * @return The desired array of desaturated swerveModuleStates.
+ */
   public SwerveModuleState[] driveHeadingController() {
     double xSpeed =
         MathUtil.applyDeadband(-Robot.driver.getLeftY(), DriveConstants.kJoystickTurnDeadzone);
@@ -37,6 +41,10 @@ public class MotionHandler {
     return swerveModuleStates;
   }
 
+/**
+ * Calculates SwerveModuleState objects using pure driver control.
+ * @return The desired array of desaturated swerveModuleStates.
+ */
   public SwerveModuleState[] driveFullControl() {
     double xSpeed =
         MathUtil.applyDeadband(-Robot.driver.getLeftY(), DriveConstants.kJoystickTurnDeadzone);
@@ -58,6 +66,10 @@ public class MotionHandler {
     return swerveModuleStates;
   }
 
+/**
+ * Calculates swerveModuleStates using the current trajectory.
+ * @return The desired array of desaturated swerveModuleStates.
+ */
   public SwerveModuleState[] driveTrajectory() {
     SwerveModuleState[] swerveModuleStates =
         DriveConstants.kinematics.toSwerveModuleStates(TrajectoryController.getInstance().update());
@@ -67,6 +79,10 @@ public class MotionHandler {
     return swerveModuleStates;
   }
 
+/**
+ * Sets the robot to an unmoving lockdown configuration which is difficult to push.
+ * @return The lockdown array of swerveModuleStates.
+ */
   public SwerveModuleState[] lockdown() {
     SwerveModuleState[] swerveModuleStates =
         new SwerveModuleState[] {
