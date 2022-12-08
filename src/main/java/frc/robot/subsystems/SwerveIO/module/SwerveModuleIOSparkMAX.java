@@ -36,8 +36,10 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
     driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
-    RedHawkUtil.errorHandleSparkMAX(driver.setIdleMode(IdleMode.kBrake), "drive/" + name.toString());
-    RedHawkUtil.errorHandleSparkMAX(azimuth.setIdleMode(IdleMode.kBrake), "azimuth/" + name.toString());
+    RedHawkUtil.errorHandleSparkMAX(
+        driver.setIdleMode(IdleMode.kBrake), "drive/" + name.toString());
+    RedHawkUtil.errorHandleSparkMAX(
+        azimuth.setIdleMode(IdleMode.kBrake), "azimuth/" + name.toString());
 
     getDriveEncoder()
         .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));

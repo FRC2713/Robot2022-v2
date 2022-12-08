@@ -3,7 +3,6 @@ package frc.robot.subsystems.SwerveIO.module;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.util.PIDFFController;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,7 +22,11 @@ public abstract class SwerveModule extends SubsystemBase {
   SwerveModuleState state;
 
   // OffsetAbsoluteAnalogEncoder azimuthEncoder;
-  public SwerveModule(SwerveModuleIO swerveModuleIO, SwerveModules name, PIDFFController driveController, PIDFFController azimuthController) {
+  public SwerveModule(
+      SwerveModuleIO swerveModuleIO,
+      SwerveModules name,
+      PIDFFController driveController,
+      PIDFFController azimuthController) {
     this.driveController = driveController;
     this.azimuthController = azimuthController;
     io = swerveModuleIO;

@@ -10,12 +10,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.DriveConstants.Gains.FrontLeft;
 import frc.robot.Robot;
 import frc.robot.subsystems.SwerveIO.module.SwerveModule;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
 import frc.robot.subsystems.SwerveIO.module.modules.FrontLeftModule;
-
 import org.littletonrobotics.junction.Logger;
 
 public class BabySwerver extends SubsystemBase {

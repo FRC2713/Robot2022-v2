@@ -134,6 +134,7 @@ public final class Constants {
     public static final PIDFFGains kHeadingControllerGains =
         PIDFFGains.builder("Heading Controller").kP(0.1).kD(0.001000).tolerance(3).build();
     public static final double headingControllerDriverChangeRate = 10;
+
     @UtilityClass
     public static final class Gains {
       @UtilityClass
@@ -143,6 +144,7 @@ public final class Constants {
         public static final PIDFFGains kDefaultDrivingGains =
             PIDFFGains.builder("FrontLeft/Default Driving").kP(1.0).kS(0.15).kV(2).build();
       }
+
       @UtilityClass
       public static final class FrontRight {
         public static final PIDFFGains kDefaultAzimuthGains =
@@ -150,6 +152,7 @@ public final class Constants {
         public static final PIDFFGains kDefaultDrivingGains =
             PIDFFGains.builder("FrontRight/Default Driving").kP(1.0).kS(0.15).kV(2).build();
       }
+
       @UtilityClass
       public static final class BackLeft {
         public static final PIDFFGains kDefaultAzimuthGains =
@@ -157,6 +160,7 @@ public final class Constants {
         public static final PIDFFGains kDefaultDrivingGains =
             PIDFFGains.builder("BackLeft/Default Driving").kP(1.0).kS(0.15).kV(2).build();
       }
+
       @UtilityClass
       public static final class BackRight {
         public static final PIDFFGains kDefaultAzimuthGains =
