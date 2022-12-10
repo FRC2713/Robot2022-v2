@@ -13,7 +13,10 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.subsystems.SwerveIO.module.SwerveModule;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
+import frc.robot.subsystems.SwerveIO.module.modules.BackLeftModule;
+import frc.robot.subsystems.SwerveIO.module.modules.BackRightModule;
 import frc.robot.subsystems.SwerveIO.module.modules.FrontLeftModule;
+import frc.robot.subsystems.SwerveIO.module.modules.FrontRightModule;
 import org.littletonrobotics.junction.Logger;
 
 public class BabySwerver extends SubsystemBase {
@@ -36,9 +39,9 @@ public class BabySwerver extends SubsystemBase {
       SwerveModuleIO backLeft,
       SwerveModuleIO backRight) {
     this.frontLeft = new FrontLeftModule(frontLeft);
-    this.frontRight = new FrontLeftModule(frontRight);
-    this.backLeft = new FrontLeftModule(backLeft);
-    this.backRight = new FrontLeftModule(backRight);
+    this.frontRight = new FrontRightModule(frontRight);
+    this.backLeft = new BackLeftModule(backLeft);
+    this.backRight = new BackRightModule(backRight);
     io = swerveIO;
     io.updateInputs(inputs);
 
