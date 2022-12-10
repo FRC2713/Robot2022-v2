@@ -19,6 +19,10 @@ public class SwerveHeadingController {
     setpoint = Robot.swerveDrive.getPose().getRotation();
   }
 
+  /**
+   * Ensures the SwerveHeadingController is not created more than once.
+   * @return The SwerveHeadingController object.
+   */
   public static SwerveHeadingController getInstance() {
     if (instance == null) {
       instance = new SwerveHeadingController();
@@ -27,6 +31,10 @@ public class SwerveHeadingController {
     return instance;
   }
 
+  /**
+   * Changes the setpoint of the heading controller. (Note that this value is not loaded into the PID controller until update() is called.)
+   * @param setpoint The new setpoint of the heading controller.
+   */
   public void setSetpoint(Rotation2d setpoint) {
     this.setpoint = setpoint;
   }
@@ -35,6 +43,11 @@ public class SwerveHeadingController {
     return setpoint;
   }
 
+  /**
+   * Updates the heading controller PID with the setpoint and calculates output.
+   * 
+   * @return The speed, in degrees per second, of rotation.
+   */
   public double update() {
     if (Constants.tuningMode) {
       setSetpoint(

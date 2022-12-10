@@ -33,7 +33,7 @@ public class MotionHandler {
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed * DriveConstants.maxSwerveVel,
                 ySpeed * DriveConstants.maxSwerveVel,
-                SwerveHeadingController.getInstance().update(),
+                (SwerveHeadingController.getInstance().update() / 180), //converting from degrees to radians
                 Robot.swerveDrive.getPose().getRotation()));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.maxSwerveVel);
