@@ -24,23 +24,23 @@ public interface SwerveModuleIO {
   }
 
   /**
-  * Updates SwerveModule input values with given SwerveModuleInputs instance
-  *
-  * @param inputs SwerveModuleInputs instance
-  */
+   * Updates SwerveModule input values with given SwerveModuleInputs instance
+   *
+   * @param inputs SwerveModuleInputs instance
+   */
   public void updateInputs(SwerveModuleInputs inputs);
 
   /**
-  * Sets the azimuth of the current SwerveModule to the given volts
-  *
-  * @param aziVolts volts to set the azimuth to
-  */
+   * Sets the azimuth of the current SwerveModule to the given volts
+   *
+   * @param aziVolts volts to set the azimuth to
+   */
   public void setAzimuthVoltage(double aziVolts);
 
   /**
-  * Sets the drive of the current SwerveModule to the given volts
-  *
-  * @param driveVolts volts to set the drive to
-  */
+   * Sets the drive of the current SwerveModule to the given volts
+   *
+   * @param driveVolts volts to set the drive to
+   */
   public void setDriveVoltage(double driveVolts);
 }

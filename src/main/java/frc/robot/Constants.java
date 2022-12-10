@@ -21,7 +21,7 @@ import frc.robot.util.PIDFFGains;
  */
 public final class Constants {
 
-  public static final boolean tuningMode = true;
+  public static final boolean tuningMode = false;
   public static final int zero = 0; // in case you need a zero :)
 
   public static final class RobotMap {
@@ -119,8 +119,8 @@ public final class Constants {
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
 
     public static final PIDFFGains kHeadingControllerGains =
-        PIDFFGains.builder("Heading Controller").kP(0.1).kD(0.001000).tolerance(3).build();
-    public static final double headingControllerDriverChangeRate = 10;
+        PIDFFGains.builder("Heading Controller").kP(5).kD(0.001000).tolerance(0).build();
+    public static final double headingControllerDriverChangeRate = 4;
 
     public static final PIDFFGains kDefaultAzimuthGains =
         PIDFFGains.builder("Default Azimuth").kP(0.65).tolerance(0).build();
