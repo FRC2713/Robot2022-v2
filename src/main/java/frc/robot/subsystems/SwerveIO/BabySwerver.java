@@ -32,6 +32,15 @@ public class BabySwerver extends SubsystemBase {
   private final SwerveDriveOdometry odometry;
   private Pose2d simOdometryPose;
 
+  /**
+  * The mother of all things swerve
+  *
+  * @param swerveIO a swerveIO instance
+  * @param frontLeft the frontLeft SwerveModuleIO
+  * @param frontRight the frontRight SwerveModuleIO
+  * @param backLeft the backLeft SwerveModuleIO
+  * @param backRight the backRight SwerveModuleIO
+  */
   public BabySwerver(
       SwerveIO swerveIO,
       SwerveModuleIO frontLeft,
