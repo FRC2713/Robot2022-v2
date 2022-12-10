@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
@@ -33,7 +34,7 @@ public class MotionHandler {
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed * DriveConstants.maxSwerveVel,
                 ySpeed * DriveConstants.maxSwerveVel,
-                (SwerveHeadingController.getInstance().update() / 180), //converting from degrees to radians
+                Units.degreesToRadians(SwerveHeadingController.getInstance().update()), //converting from degrees to radians
                 Robot.swerveDrive.getPose().getRotation()));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.maxSwerveVel);
