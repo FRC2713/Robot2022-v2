@@ -34,6 +34,12 @@ public class Robot extends LoggedRobot {
 
   public static final MotionHandler motionHandler = new MotionHandler();
 
+  /**
+  Sets up swerve modules for all four wheels, both for the simulator and the physical SparkMAX. Checks if a real swerve module
+  or a simulated module. 
+  Takes in the IO being used (which is configured to be changeable), and the four swerve modules that this
+  wonderful robot uses. 
+  */
   public static final BabySwerver swerveDrive =
       new BabySwerver(
           Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
@@ -91,6 +97,11 @@ public class Robot extends LoggedRobot {
 
   public static PathPlannerTrajectory taxi;
 
+
+  /**
+  *Robot initialization. Doesn't require extra variables, which is nice. Currently used mostly to store keyinputs,
+  *Including drive mode changes and gyro resets for the swerve to standard angle measures (in this case 90 and 270 degrees)
+  */
   @Override
   public void robotInit() {
     // setUseTiming(isReal());
@@ -139,11 +150,21 @@ public class Robot extends LoggedRobot {
                 }));
   }
 
+
+  /**
+   * Robot periodic, it runs periodically. All it does now is run the command scheduler.
+   * Worth keeping around.
+   */
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
   }
 
+  /**
+   * For when the robot is disabled. Cancels autocommand and sets the motion mode to LOCKDOWN
+   * This turns off movement and also makes the robot generally harder to move.
+   * Like some defense configuartion in your favorite video game
+   */
   @Override
   public void disabledInit() {
     if (autoCommand != null) {
@@ -154,9 +175,16 @@ public class Robot extends LoggedRobot {
     Robot.motionMode = MotionMode.LOCKDOWN;
   }
 
+  /**
+   * Periodic stuff that occurs while disabled. Empty currently.
+   */
   @Override
   public void disabledPeriodic() {}
 
+  /**
+   *Initialization for autonomous programming. Path planner loads the "taxitaxi" program.
+   *Also, sets the motion mode to trajectory
+   */
   @Override
   public void autonomousInit() {
     taxi = PathPlanner.loadPath("taxitaxi", PathPlanner.getConstraintsFromPath("taxitaxi"));
@@ -172,9 +200,16 @@ public class Robot extends LoggedRobot {
     }
   }
 
+  /**
+   * Autonomous stuff that is called regularly. Isn't used right now!
+   */
   @Override
   public void autonomousPeriodic() {}
 
+  /**
+   * Initialization for the Teleop mode. Cancels autocommands and sets motion to lockdown, then reverts it to FULLDRIVE
+   * This is so our robot can be ready to go crazy on the field (see you at world 2023 I'm putting a lot of hope into that)
+   */
   @Override
   public void teleopInit() {
     if (autoCommand != null) {
@@ -184,17 +219,30 @@ public class Robot extends LoggedRobot {
     Robot.motionMode = MotionMode.FULL_DRIVE;
   }
 
+  /**
+   * Periodic updates during the Teleop (manual control). Isn't used!
+   */
   @Override
   public void teleopPeriodic() {}
 
+  /**
+   * Testing initialization code goes here. All it does right now is cancel all commands in the command scheduler.
+   * Neat.
+   */
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
   }
 
+  /**
+   * Periodic updates during testing modes. Not used
+   */
   @Override
   public void testPeriodic() {}
 
+  /**
+   * Contains vital code. Do not delete or code may break.
+   */
   public String goFast() {
     return "nyyooooom";
   }
