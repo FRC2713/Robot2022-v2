@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import com.revrobotics.REVLibError;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.littletonrobotics.junction.Logger;
 
@@ -15,7 +16,7 @@ public final class RedHawkUtil {
    * @param status A RevLibError
    * @param name The name of the RevLibError, logged (see description)
    */
-  public static void errorHandleSparkMAX(REVLibError status, String name) {
+  public static void errorHandleSparkMAX(@NonNull REVLibError status, @NonNull String name) {
     String stackTrace = "";
     StackTraceElement[] rawStackTrace = Thread.currentThread().getStackTrace();
     if (status != REVLibError.kOk) {
