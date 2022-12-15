@@ -21,7 +21,6 @@ import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
 import frc.robot.subsystems.SwerveIO.SwerveIOSim;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSim;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
-import frc.robot.subsystems.SwerveIO.module.SwerveModules;
 import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
 import frc.robot.util.TrajectoryController;
@@ -61,53 +60,17 @@ public class Robot extends LoggedRobot {
         new BabySwerver(
             Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
             Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(
-                    Constants.RobotMap.frontLeftDrive,
-                    Constants.RobotMap.frontLeftAzi,
-                    Constants.RobotMap.frontLeftAzimuthEncoder,
-                    Constants.RobotMap.frontLeftOffset,
-                    SwerveModules.FRONT_LEFT)
-                : new SwerveModuleIOSim(
-                    Constants.RobotMap.frontLeftDrive,
-                    Constants.RobotMap.frontLeftAzi,
-                    Constants.RobotMap.frontLeftAzimuthEncoder,
-                    Constants.RobotMap.frontLeftOffset),
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontLeft)
+                : new SwerveModuleIOSim(Constants.DriveConstants.frontLeft),
             Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(
-                    Constants.RobotMap.frontRightDrive,
-                    Constants.RobotMap.frontRightAzi,
-                    Constants.RobotMap.frontRightAzimuthEncoder,
-                    Constants.RobotMap.frontRightOffset,
-                    SwerveModules.FRONT_RIGHT)
-                : new SwerveModuleIOSim(
-                    Constants.RobotMap.frontRightDrive,
-                    Constants.RobotMap.frontRightAzi,
-                    Constants.RobotMap.frontRightAzimuthEncoder,
-                    Constants.RobotMap.frontRightOffset),
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontRight)
+                : new SwerveModuleIOSim(Constants.DriveConstants.frontRight),
             Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(
-                    Constants.RobotMap.backLeftDrive,
-                    Constants.RobotMap.backLeftAzi,
-                    Constants.RobotMap.backLeftAzimuthEncoder,
-                    Constants.RobotMap.backLeftOffset,
-                    SwerveModules.BACK_LEFT)
-                : new SwerveModuleIOSim(
-                    Constants.RobotMap.backLeftDrive,
-                    Constants.RobotMap.backLeftAzi,
-                    Constants.RobotMap.backLeftAzimuthEncoder,
-                    Constants.RobotMap.backLeftOffset),
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.backLeft)
+                : new SwerveModuleIOSim(Constants.DriveConstants.backLeft),
             Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(
-                    Constants.RobotMap.backRightDrive,
-                    Constants.RobotMap.backRightAzi,
-                    Constants.RobotMap.backRightAzimuthEncoder,
-                    Constants.RobotMap.backRightOffset,
-                    SwerveModules.BACK_RIGHT)
-                : new SwerveModuleIOSim(
-                    Constants.RobotMap.backRightDrive,
-                    Constants.RobotMap.backRightAzi,
-                    Constants.RobotMap.backRightAzimuthEncoder,
-                    Constants.RobotMap.backRightOffset));
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.backRight)
+                : new SwerveModuleIOSim(Constants.DriveConstants.backRight));
 
     new JoystickButton(driver, XboxController.Button.kY.value)
         .whenPressed(

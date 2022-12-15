@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.PIDFFController;
 import org.littletonrobotics.junction.Logger;
 
-public abstract class SwerveModule extends SubsystemBase {
+public class SwerveModule extends SubsystemBase {
 
   SwerveModuleIO io;
   SwerveModules name;
@@ -20,17 +20,15 @@ public abstract class SwerveModule extends SubsystemBase {
   // CANSparkMax azimuth;
 
   SwerveModuleState state;
+  public final ModuleInfo information;
 
   // OffsetAbsoluteAnalogEncoder azimuthEncoder;
-  public SwerveModule(
-      SwerveModuleIO swerveModuleIO,
-      SwerveModules name,
-      PIDFFController driveController,
-      PIDFFController azimuthController) {
-    this.driveController = driveController;
-    this.azimuthController = azimuthController;
+  public SwerveModule(SwerveModuleIO swerveModuleIO, ModuleInfo information) {
+    this.information = information;
+    this.driveController = new PIDFFController(this.information.getDriveGains());
+    this.azimuthController = new PIDFFController(this.information.getAzimuthGains());
     io = swerveModuleIO;
-    this.name = name;
+    this.name = this.information.getName();
     io.updateInputs(inputs);
     // driver = new CANSparkMax(drivePort, MotorType.kBrushless);
     // azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);

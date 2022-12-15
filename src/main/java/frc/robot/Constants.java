@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.SwerveIO.module.ModuleInfo;
+import frc.robot.subsystems.SwerveIO.module.SwerveModules;
 import frc.robot.util.PIDFFGains;
 import lombok.experimental.UtilityClass;
 
@@ -38,28 +40,30 @@ public final class Constants {
 
     // MOTORS
 
+    // FrontLeft
     public static final int frontLeftDrive = 1;
     public static final int frontLeftAzi = 8;
     public static final int frontLeftAzimuthEncoder = 0;
     public static final double frontLeftOffset = 0.1124;
 
-    // placeholder
+    // FrontRight
     public static final int frontRightDrive = 3;
     public static final int frontRightAzi = 2;
     public static final int frontRightAzimuthEncoder = 1;
     public static final double frontRightOffset = 0.6028;
 
-    // placeholder
+    // BackLeft
     public static final int backLeftDrive = 4;
     public static final int backLeftAzi = 5;
     public static final int backLeftAzimuthEncoder = 2;
     public static final double backLeftOffset = 0.0626;
 
-    // placeholder
+    // BackRight
     public static final int backRightDrive = 6;
     public static final int backRightAzi = 7;
     public static final int backRightAzimuthEncoder = 3;
     public static final double backRightOffset = 0.775;
+
     // placeholder
 
     public static final int flywheelLeftPort = 5;
@@ -135,39 +139,60 @@ public final class Constants {
         PIDFFGains.builder("Heading Controller").kP(0.1).kD(0.001000).tolerance(3).build();
     public static final double headingControllerDriverChangeRate = 10;
 
+    public static final ModuleInfo frontLeft =
+        ModuleInfo.builder()
+            .name(SwerveModules.FRONT_LEFT)
+            .driveGains(Constants.DriveConstants.Gains.kDefaultDrivingGains)
+            .azimuthGains(Constants.DriveConstants.Gains.kDefaultAzimuthGains)
+            .driveCANId(Constants.RobotMap.frontLeftDrive)
+            .aziCANId(Constants.RobotMap.frontLeftAzi)
+            .aziEncoderCANId(Constants.RobotMap.frontLeftAzimuthEncoder)
+            .offset(Constants.RobotMap.frontLeftOffset)
+            .location(Constants.DriveConstants.frontLeftLocation)
+            .build();
+
+    public static final ModuleInfo frontRight =
+        ModuleInfo.builder()
+            .name(SwerveModules.FRONT_RIGHT)
+            .driveGains(Constants.DriveConstants.Gains.kDefaultDrivingGains)
+            .azimuthGains(Constants.DriveConstants.Gains.kDefaultAzimuthGains)
+            .driveCANId(Constants.RobotMap.frontRightDrive)
+            .aziCANId(Constants.RobotMap.frontRightAzi)
+            .aziEncoderCANId(Constants.RobotMap.frontRightAzimuthEncoder)
+            .offset(Constants.RobotMap.frontRightOffset)
+            .location(Constants.DriveConstants.frontRightLocation)
+            .build();
+
+    public static final ModuleInfo backLeft =
+        ModuleInfo.builder()
+            .name(SwerveModules.BACK_LEFT)
+            .driveGains(Constants.DriveConstants.Gains.kDefaultDrivingGains)
+            .azimuthGains(Constants.DriveConstants.Gains.kDefaultAzimuthGains)
+            .driveCANId(Constants.RobotMap.backLeftDrive)
+            .aziCANId(Constants.RobotMap.backLeftAzi)
+            .aziEncoderCANId(Constants.RobotMap.backLeftAzimuthEncoder)
+            .offset(Constants.RobotMap.backLeftOffset)
+            .location(Constants.DriveConstants.backLeftLocation)
+            .build();
+
+    public static final ModuleInfo backRight =
+        ModuleInfo.builder()
+            .name(SwerveModules.BACK_RIGHT)
+            .driveGains(Constants.DriveConstants.Gains.kDefaultDrivingGains)
+            .azimuthGains(Constants.DriveConstants.Gains.kDefaultAzimuthGains)
+            .driveCANId(Constants.RobotMap.backRightDrive)
+            .aziCANId(Constants.RobotMap.backRightAzi)
+            .aziEncoderCANId(Constants.RobotMap.backRightAzimuthEncoder)
+            .offset(Constants.RobotMap.backRightOffset)
+            .location(Constants.DriveConstants.backRightLocation)
+            .build();
+
     @UtilityClass
     public static final class Gains {
-      @UtilityClass
-      public static final class FrontLeft {
-        public static final PIDFFGains kDefaultAzimuthGains =
-            PIDFFGains.builder("FrontLeft/Default Azimuth").kP(0.65).tolerance(0).build();
-        public static final PIDFFGains kDefaultDrivingGains =
-            PIDFFGains.builder("FrontLeft/Default Driving").kP(1.0).kS(0.15).kV(2).build();
-      }
-
-      @UtilityClass
-      public static final class FrontRight {
-        public static final PIDFFGains kDefaultAzimuthGains =
-            PIDFFGains.builder("FrontRight/Default Azimuth").kP(0.65).tolerance(0).build();
-        public static final PIDFFGains kDefaultDrivingGains =
-            PIDFFGains.builder("FrontRight/Default Driving").kP(1.0).kS(0.15).kV(2).build();
-      }
-
-      @UtilityClass
-      public static final class BackLeft {
-        public static final PIDFFGains kDefaultAzimuthGains =
-            PIDFFGains.builder("BackLeft/Default Azimuth").kP(0.65).tolerance(0).build();
-        public static final PIDFFGains kDefaultDrivingGains =
-            PIDFFGains.builder("BackLeft/Default Driving").kP(1.0).kS(0.15).kV(2).build();
-      }
-
-      @UtilityClass
-      public static final class BackRight {
-        public static final PIDFFGains kDefaultAzimuthGains =
-            PIDFFGains.builder("BackRight/Default Azimuth").kP(0.65).tolerance(0).build();
-        public static final PIDFFGains kDefaultDrivingGains =
-            PIDFFGains.builder("BackRight/Default Driving").kP(1.0).kS(0.15).kV(2).build();
-      }
+      public static final PIDFFGains kDefaultAzimuthGains =
+          PIDFFGains.builder("BackRight/Default Azimuth").kP(0.65).tolerance(0).build();
+      public static final PIDFFGains kDefaultDrivingGains =
+          PIDFFGains.builder("BackRight/Default Driving").kP(1.0).kS(0.15).kV(2).build();
     }
 
     public static final PIDFFGains kFrontLeftAzimuthGains =

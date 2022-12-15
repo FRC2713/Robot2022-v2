@@ -13,10 +13,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.subsystems.SwerveIO.module.SwerveModule;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIO;
-import frc.robot.subsystems.SwerveIO.module.modules.BackLeftModule;
-import frc.robot.subsystems.SwerveIO.module.modules.BackRightModule;
-import frc.robot.subsystems.SwerveIO.module.modules.FrontLeftModule;
-import frc.robot.subsystems.SwerveIO.module.modules.FrontRightModule;
 import org.littletonrobotics.junction.Logger;
 
 public class BabySwerver extends SubsystemBase {
@@ -33,24 +29,24 @@ public class BabySwerver extends SubsystemBase {
   private Pose2d simOdometryPose;
 
   /**
-  * The mother of all things swerve
-  *
-  * @param swerveIO a swerveIO instance
-  * @param frontLeft the frontLeft SwerveModuleIO
-  * @param frontRight the frontRight SwerveModuleIO
-  * @param backLeft the backLeft SwerveModuleIO
-  * @param backRight the backRight SwerveModuleIO
-  */
+   * The mother of all things swerve
+   *
+   * @param swerveIO a swerveIO instance
+   * @param frontLeft the frontLeft SwerveModuleIO
+   * @param frontRight the frontRight SwerveModuleIO
+   * @param backLeft the backLeft SwerveModuleIO
+   * @param backRight the backRight SwerveModuleIO
+   */
   public BabySwerver(
       SwerveIO swerveIO,
       SwerveModuleIO frontLeft,
       SwerveModuleIO frontRight,
       SwerveModuleIO backLeft,
       SwerveModuleIO backRight) {
-    this.frontLeft = new FrontLeftModule(frontLeft);
-    this.frontRight = new FrontRightModule(frontRight);
-    this.backLeft = new BackLeftModule(backLeft);
-    this.backRight = new BackRightModule(backRight);
+    this.frontLeft = new SwerveModule(frontLeft, Constants.DriveConstants.frontLeft);
+    this.frontRight = new SwerveModule(frontRight, Constants.DriveConstants.frontRight);
+    this.backLeft = new SwerveModule(backLeft, Constants.DriveConstants.backLeft);
+    this.backRight = new SwerveModule(backRight, Constants.DriveConstants.backRight);
     io = swerveIO;
     io.updateInputs(inputs);
 

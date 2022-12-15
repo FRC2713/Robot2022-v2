@@ -14,6 +14,7 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
   OffsetAbsoluteAnalogEncoder azimuthEncoder;
   CANSparkMax driver;
   CANSparkMax azimuth;
+  private final ModuleInfo information;
 
   private RelativeEncoder getDriveEncoder() {
     return driver.getEncoder();
@@ -31,15 +32,17 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     driver.setVoltage(voltage);
   }
 
-  public SwerveModuleIOSparkMAX(
-      int drivePort, int azimPort, int azimuthEncoderPort, double offset, SwerveModules name) {
-    azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
-    driver = new CANSparkMax(drivePort, MotorType.kBrushless);
-    azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
+  public SwerveModuleIOSparkMAX(ModuleInfo information) {
+    this.information = information;
+    azimuthEncoder =
+        new OffsetAbsoluteAnalogEncoder(
+            this.information.getAziEncoderCANId(), this.information.getOffset());
+    driver = new CANSparkMax(this.information.getDriveCANId(), MotorType.kBrushless);
+    azimuth = new CANSparkMax(this.information.getAziCANId(), MotorType.kBrushless);
     RedHawkUtil.errorHandleSparkMAX(
-        driver.setIdleMode(IdleMode.kBrake), "drive/" + name.toString());
+        driver.setIdleMode(IdleMode.kBrake), "drive/" + this.information.getName().toString());
     RedHawkUtil.errorHandleSparkMAX(
-        azimuth.setIdleMode(IdleMode.kBrake), "azimuth/" + name.toString());
+        azimuth.setIdleMode(IdleMode.kBrake), "azimuth/" + this.information.getName().toString());
 
     getDriveEncoder()
         .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
@@ -48,7 +51,9 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     getAziEncoder().setVelocityConversionFactor(7.0 / 150.0);
     getAziEncoder().setPosition(getAziAbsoluteEncoder().getAdjustedRotation2d().getDegrees());
 
-    azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
+    azimuthEncoder =
+        new OffsetAbsoluteAnalogEncoder(
+            this.information.getAziEncoderCANId(), this.information.getOffset());
   }
 
   @Override
