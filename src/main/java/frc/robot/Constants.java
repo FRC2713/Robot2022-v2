@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 // liam sais hi :)
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.PIDFFGains;
@@ -86,7 +85,6 @@ public final class Constants {
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
     public static final double maxSwerveVel = Units.feetToMeters(16.0 * 0.75);
-    // public static final double maxSwerveAzi = Math.PI;
     public static final double maxSwerveAzi = Math.PI;
     public static final double maxRotationalSpeedRadPerSec = Units.degreesToRadians(180);
 
@@ -138,39 +136,10 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    // FF and FB gains; NEED TO BE DETERMINED ON THE FULLY BUILT ROBOT, WILL CHANGE
-    // WITH WEIGHT
-    public static final double ksVolts = 0.15161; // 0.15166; // 0.20541;
-    public static final double kvVoltSecondsPerMeter = 2.511; // 2.5108; // 2.4361;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.34892; // 0.34944; // 0.25946;
-
-    public static final double kPDriveVel = 5.7664; // 2.9805; // 3.95;
-
-    // more kinematics stuff
-    public static final double trackWidth = Units.inchesToMeters(22);
-    public static final DifferentialDriveKinematics kinematics =
-        new DifferentialDriveKinematics(trackWidth);
-
-    public static final double maxCentripetalAcceleration = 1.5;
-
-    // Ramsete constants; generally the same on all robots
-    public static final double RamseteZeta = 0.7;
-    public static final double RamseteB = 2;
-
-    // Max speeds
-    public static final double maxSpeed = Units.feetToMeters(15);
-    public static final double maxAccel = Units.feetToMeters(10);
-    public static final double maxVoltageApplied = 10;
-
-    // swerve constants
     public static final double swerveMaxVel = Units.feetToMeters(3);
     public static final double swerveMacAccel = Units.feetToMeters(0.5);
 
     public static final double aziMaxVel = Units.feetToMeters(0.5);
     public static final double aziMaxAccel = Units.feetToMeters(0.1);
-
-    // five ball
-    public static final double waitForHumanPlayerDuration = 0.3;
-    public static final double crawlTowardsHumanPlayerVolts = 0.6;
   }
 }

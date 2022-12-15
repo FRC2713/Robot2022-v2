@@ -27,16 +27,27 @@ public class BabySwerver extends SubsystemBase {
   private final SwerveDriveOdometry odometry;
   private Pose2d simOdometryPose;
 
+  /**
+   * Creates a new BabySwerver (swerve drive) object.
+   *
+   * @param swerveIO The IO layer of the swerve drive. Change this to change which gyro you're using
+   *     (SwerveModuleIOPigeon2 vs SwerveModuleIOSim)
+   * @param frontLeft The IO layer for the front left swerve module. Change this to change which
+   *     motor controller you're using (SwerveModuleIOSim vs SwerveModuleIOSparkMAX)
+   * @param frontRight The IO layer for the front right swerve module.
+   * @param backLeft The IO layer for the back left swerve module.
+   * @param backRight The IO layer for the back left swerve module.
+   */
   public BabySwerver(
       SwerveIO swerveIO,
       SwerveModuleIO frontLeft,
       SwerveModuleIO frontRight,
       SwerveModuleIO backLeft,
       SwerveModuleIO backRight) {
-    this.frontLeft = new SwerveModule(frontLeft, "Front left");
-    this.frontRight = new SwerveModule(frontRight, "Front right");
-    this.backLeft = new SwerveModule(backLeft, "Back left");
-    this.backRight = new SwerveModule(backRight, "Back right");
+    this.frontLeft = new SwerveModule(frontLeft, "Front Left");
+    this.frontRight = new SwerveModule(frontRight, "Front Right");
+    this.backLeft = new SwerveModule(backLeft, "Back Left");
+    this.backRight = new SwerveModule(backRight, "Back Right");
     io = swerveIO;
     io.updateInputs(inputs);
 
@@ -46,16 +57,30 @@ public class BabySwerver extends SubsystemBase {
     simOdometryPose = odometry.getPoseMeters();
   }
 
+  /**
+   * Sets the gyro to the given rotation.
+   *
+   * @param rotation The rotation to reset the gyro to.
+   */
   public void resetGyro(Rotation2d rotation) {
     io.resetGyro(rotation);
   }
 
+  /**
+   * Resets the SwerveDriveOdometry to the given pose.
+   *
+   * @param pose The desired pose.
+   */
   public void resetOdometry(Pose2d pose) {
-    // gyro.setYaw(pose.getRotation().getDegrees());
     odometry.resetPosition(pose, pose.getRotation());
     simOdometryPose = pose;
   }
 
+  /**
+   * Returns the current pose of the robot.
+   *
+   * @return The position of the robot on the field.
+   */
   public Pose2d getPose() {
     if (Robot.isReal()) {
       return odometry.getPoseMeters();
@@ -64,6 +89,12 @@ public class BabySwerver extends SubsystemBase {
     }
   }
 
+  /**
+   * Sets the desired states of the swerve modules.
+   *
+   * @param swerveModuleStates The array of desired swerveModuleStates. Ensure they are ordered the
+   *     same way in this array as they are instantiated into SwerveDriveKinematics.
+   */
   public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
@@ -71,6 +102,11 @@ public class BabySwerver extends SubsystemBase {
     backRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  /**
+   * Returns the average velocity of the swerve modules.
+   *
+   * @return The average velocity at which all the swerve modules are moving.
+   */
   public double getAverageVelocity() {
     return (frontLeft.getState().speedMetersPerSecond
             + frontRight.getState().speedMetersPerSecond
@@ -79,6 +115,7 @@ public class BabySwerver extends SubsystemBase {
         / 4;
   }
 
+  // Only used for characterization
   public void applyVoltageForCharacterization(double volts) {
     frontLeft.applyVoltageForCharacterization(volts);
     frontRight.applyVoltageForCharacterization(volts);
@@ -86,6 +123,10 @@ public class BabySwerver extends SubsystemBase {
     backRight.applyVoltageForCharacterization(volts);
   }
 
+  /**
+   * Updates the odometry of the robot using the swerve module states and the gyro reading. Should
+   * be run in periodic() or during every code loop to maintain accuracy.
+   */
   public void updateOdometry() {
     odometry.update(
         Rotation2d.fromDegrees(inputs.gyroYawPosition),

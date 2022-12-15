@@ -10,8 +10,6 @@ public class OffsetAbsoluteAnalogEncoder {
   private AnalogEncoder analogEncoder;
 
   private LinearFilter offsetStabilizer = LinearFilter.movingAverage(20);
-  // private LinearFilter valueFilter = LinearFilter.singlePoleIIR(0.04, 0.02);
-  // private double value;
 
   public OffsetAbsoluteAnalogEncoder(int port, double voltageOffset) {
     this.analogEncoder = new AnalogEncoder(port);
