@@ -21,10 +21,11 @@ public final class RedHawkUtil {
   public static void errorHandleSparkMAX(@NonNull REVLibError status, @NonNull String name) {
     if (status != REVLibError.kOk) {
       StackTraceElement[] rawStackTrace = Thread.currentThread().getStackTrace();
-      String stackTrace = "";
+      StringBuilder strBuilder = new StringBuilder();
       for (int i = 0; i < rawStackTrace.length; i++) {
-        stackTrace.concat(rawStackTrace[i].toString() + " ");
+        strBuilder.append(rawStackTrace[i].getFileName() + rawStackTrace[i].getLineNumber() + " ");
       }
+      String stackTrace = strBuilder.toString();
       Logger.getInstance()
           .recordOutput("RevLibError/" + name, status.name() + " StackTrace: " + stackTrace);
       SmartDashboard.putBoolean("RevLibError/" + name, false);
@@ -36,7 +37,7 @@ public final class RedHawkUtil {
   public static class ErrHandler {
     private static ErrHandler INSTANCE;
 
-     /**
+    /**
      * Gets the instance of the ErrHandler singleton
      *
      * @return The one instance of ErrHandler
@@ -53,9 +54,8 @@ public final class RedHawkUtil {
     private List<String> errors = new ArrayList<>();
 
     /**
-    * Adds an error to the list of RevLib errors.
-    * Must be called on the singleton (see getInstance)
-    */
+     * Adds an error to the list of RevLib errors. Must be called on the singleton (see getInstance)
+     */
     public void addError(@NonNull String error) {
       this.errors.add(error);
       this.log();
