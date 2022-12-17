@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.testAuto;
 import frc.robot.subsystems.SwerveIO.BabySwerver;
 import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
 import frc.robot.subsystems.SwerveIO.SwerveIOSim;
@@ -94,7 +94,7 @@ public class Robot extends LoggedRobot {
   public static final FeedForwardCharacterizationData ffData =
       new FeedForwardCharacterizationData("Module Driving");
 
-  public static PathPlannerTrajectory taxi;
+  public static PathPlannerTrajectory part1, part2;
 
   /**
    * Robot initialization. Doesn't require extra variables, which is nice. Currently used mostly to
@@ -178,12 +178,14 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void autonomousInit() {
-    taxi = PathPlanner.loadPath("taxitaxi", PathPlanner.getConstraintsFromPath("taxitaxi"));
 
     autoSelect.setDefaultOption(
-        "taxitaxi", new InstantCommand(() -> TrajectoryController.getInstance().loadPath(taxi)));
+        "autopart1",
+        new InstantCommand(() -> TrajectoryController.getInstance().changePath(part1)));
 
-    autoCommand = new InstantCommand(() -> TrajectoryController.getInstance().loadPath(taxi));
+    autoCommand = new testAuto();
+
+    swerveDrive.resetOdometry(TrajectoryController.AutoPath.PART_1.getTrajectory().getInitialHolonomicPose());
 
     if (autoCommand != null) {
       motionMode = MotionMode.TRAJECTORY;
