@@ -185,7 +185,8 @@ public class Robot extends LoggedRobot {
 
     autoCommand = new testAuto();
 
-    swerveDrive.resetOdometry(TrajectoryController.AutoPath.PART_1.getTrajectory().getInitialHolonomicPose());
+    swerveDrive.resetOdometry(
+        TrajectoryController.AutoPath.PART_1.getTrajectory().getInitialHolonomicPose());
 
     if (autoCommand != null) {
       motionMode = MotionMode.TRAJECTORY;

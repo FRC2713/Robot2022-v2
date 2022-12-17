@@ -18,15 +18,14 @@ public class TrajectoryController {
     PART_1("autopart1"),
     PART_2("autopart2");
 
-    private PathPlannerTrajectory ppTrajectory;
+    private String filename;
 
     private AutoPath(String filename) {
-      this.ppTrajectory =
-          PathPlanner.loadPath(filename, PathPlanner.getConstraintsFromPath(filename));
+      this.filename = filename;
     }
 
     public PathPlannerTrajectory getTrajectory() {
-      return ppTrajectory;
+      return PathPlanner.loadPath(filename, PathPlanner.getConstraintsFromPath(filename));
     }
   }
 
@@ -49,6 +48,8 @@ public class TrajectoryController {
 
   public void changePath(@NonNull PathPlannerTrajectory newTrajectory) {
     traj = newTrajectory;
+
+    System.err.println("Assigning a traj, is null? " + (newTrajectory == null));
     timer.reset();
   }
 
@@ -57,6 +58,10 @@ public class TrajectoryController {
   }
 
   public ChassisSpeeds update() {
+
+    System.err.println("Trajectory/traj is null" + (traj == null));
+    System.err.println("Trajectory/timer is null" + (timer == null));
+
     if (timer.get() == 0) {
       timer.start();
     }

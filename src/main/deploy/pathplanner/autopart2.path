@@ -35,5 +35,8 @@
       "waitTime": 0
     }
   ],
+  "maxVelocity": 2.5,
+  "maxAcceleration": 2.5,
+  "isReversed": null,
   "markers": []
 }

@@ -13,11 +13,10 @@ public class testAuto extends SequentialCommandGroup {
             () ->
                 TrajectoryController.getInstance()
                     .changePath(TrajectoryController.AutoPath.PART_1.getTrajectory())),
-        new WaitUntilCommand(() -> TrajectoryController.getInstance().isFinished())
-        // new InstantCommand(
-        //     () ->
-        //         TrajectoryController.getInstance()
-        //             .changePath(TrajectoryController.AutoPath.PART_2.getTrajectory()))
-        );
+        new WaitUntilCommand(() -> TrajectoryController.getInstance().isFinished()),
+        new InstantCommand(
+            () ->
+                TrajectoryController.getInstance()
+                    .changePath(TrajectoryController.AutoPath.PART_2.getTrajectory())));
   }
 }
