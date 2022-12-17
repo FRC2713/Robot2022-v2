@@ -23,7 +23,7 @@ public final class RedHawkUtil {
       StackTraceElement[] rawStackTrace = Thread.currentThread().getStackTrace();
       StringBuilder strBuilder = new StringBuilder();
       for (int i = 0; i < rawStackTrace.length; i++) {
-        strBuilder.append(rawStackTrace[i].getFileName() + rawStackTrace[i].getLineNumber() + " ");
+        strBuilder.append(rawStackTrace[i].getFileName() + ":" + rawStackTrace[i].getLineNumber() + " ");
       }
       String stackTrace = strBuilder.toString();
       Logger.getInstance()
