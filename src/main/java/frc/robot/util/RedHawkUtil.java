@@ -1,7 +1,6 @@
 package frc.robot.util;
 
 import com.revrobotics.REVLibError;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.NonNull;
@@ -21,16 +20,23 @@ public final class RedHawkUtil {
   public static void errorHandleSparkMAX(@NonNull REVLibError status, @NonNull String name) {
     if (status != REVLibError.kOk) {
       StackTraceElement[] rawStackTrace = Thread.currentThread().getStackTrace();
-      StringBuilder strBuilder = new StringBuilder();
-      for (int i = 0; i < rawStackTrace.length; i++) {
-        strBuilder.append(rawStackTrace[i].getFileName() + ":" + rawStackTrace[i].getLineNumber() + " ");
-      }
-      String stackTrace = strBuilder.toString();
-      Logger.getInstance()
-          .recordOutput("RevLibError/" + name, status.name() + " StackTrace: " + stackTrace);
-      SmartDashboard.putBoolean("RevLibError/" + name, false);
-      SmartDashboard.putBoolean("RevLibError", false);
-      ErrHandler.getInstance().addError(status.name() + " StackTrace: " + stackTrace);
+      // StringBuilder strBuilder = new StringBuilder();
+      // for (int i = 0; i < rawStackTrace.length; i++) {
+      //   strBuilder.append(
+      //       rawStackTrace[i].getFileName() + ":" + rawStackTrace[i].getLineNumber() + " ");
+      // }
+      // String stackTrace = strBuilder.toString();
+      // Logger.getInstance()
+      //     .recordOutput("RevLibError/" + name, status.name() + " StackTrace: " + stackTrace);
+      // SmartDashboard.putBoolean("RevLibError/" + name, false);
+      // SmartDashboard.putBoolean("RevLibError", false);
+      ErrHandler.getInstance()
+          .addError(
+              status.name()
+                  + " StackTrace: "
+                  + rawStackTrace[2].getFileName()
+                  + ":"
+                  + rawStackTrace[2].getLineNumber());
     }
   }
 
@@ -58,11 +64,10 @@ public final class RedHawkUtil {
      */
     public void addError(@NonNull String error) {
       this.errors.add(error);
-      this.log();
     }
 
-    private void log() {
-      Logger.getInstance().recordOutput("RevLibErrors", String.join("\n", errors));
+    public void log() {
+      Logger.getInstance().recordOutput("RevLibErrors", String.join(" \\\\ ", errors));
     }
   }
 }

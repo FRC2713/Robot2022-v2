@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.revrobotics.REVLibError;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -23,6 +24,8 @@ import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSim;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
 import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
+import frc.robot.util.RedHawkUtil;
+import frc.robot.util.RedHawkUtil.ErrHandler;
 import frc.robot.util.TrajectoryController;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import java.util.HashMap;
@@ -116,6 +119,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    ErrHandler.getInstance().log();
   }
 
   @Override
@@ -133,6 +137,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    RedHawkUtil.errorHandleSparkMAX(REVLibError.kCantFindFirmware, "TestErr/Test/Auto");
+    RedHawkUtil.errorHandleSparkMAX(REVLibError.kOk, "TestErr/Test/AutoSHOUDNTBELOGGED");
 
     HashMap<String, Command> eventMap = new HashMap<>();
 
@@ -174,6 +180,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    RedHawkUtil.errorHandleSparkMAX(REVLibError.kCANDisconnected, "TestErr/Test/Teleop");
+
     if (autoCommand != null) {
       motionMode = MotionMode.LOCKDOWN;
       autoCommand.cancel();
