@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
@@ -8,6 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import java.util.HashMap;
 import lombok.NonNull;
@@ -25,7 +27,16 @@ public class TrajectoryController {
     }
 
     public PathPlannerTrajectory getTrajectory() {
-      return PathPlanner.loadPath(filename, PathPlanner.getConstraintsFromPath(filename));
+      try {
+        PathPlannerTrajectory trajectory =
+            PathPlanner.loadPath(filename, PathPlanner.getConstraintsFromPath(filename));
+        return trajectory;
+      } catch (NullPointerException exception) {
+        return PathPlanner.loadPath(
+            filename,
+            new PathConstraints(
+                Constants.DriveConstants.maxSwerveVel, Constants.AutoConstants.swerveMacAccel));
+      }
     }
   }
 

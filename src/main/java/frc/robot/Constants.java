@@ -136,7 +136,6 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double swerveMaxVel = Units.feetToMeters(3);
     public static final double swerveMacAccel = Units.feetToMeters(0.5);
 
     public static final double aziMaxVel = Units.feetToMeters(0.5);
