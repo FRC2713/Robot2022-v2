@@ -62,6 +62,7 @@ public class TrajectoryController {
 
     System.err.println("Assigning a traj, is null? " + (newTrajectory == null));
     timer.reset();
+    timer.stop();
   }
 
   public boolean isFinished() {

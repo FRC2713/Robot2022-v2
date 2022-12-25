@@ -35,9 +35,8 @@ public class Robot extends LoggedRobot {
   public static final MotionHandler motionHandler = new MotionHandler();
 
   /**
-   * Sets up swerve modules for all four wheels, both for the simulator and the physical SparkMAX.
-   * Checks if a real swerve module or a simulated module. Takes in the IO being used (which is
-   * configured to be changeable), and the four swerve modules that this wonderful robot uses.
+   * Constructs the swerve subsystem, both for the simulator and the physical SparkMAX.
+   * Checks if the robot is real or simulated, and changes the IO being used for the subsystem and modules accordingly.
    */
   public static final BabySwerver swerveDrive =
       new BabySwerver(
@@ -96,11 +95,6 @@ public class Robot extends LoggedRobot {
 
   public static PathPlannerTrajectory part1, part2;
 
-  /**
-   * Robot initialization. Doesn't require extra variables, which is nice. Currently used mostly to
-   * store keyinputs, Including drive mode changes and gyro resets for the swerve to standard angle
-   * measures (in this case 90 and 270 degrees)
-   */
   @Override
   public void robotInit() {
     // setUseTiming(isReal());
@@ -156,7 +150,7 @@ public class Robot extends LoggedRobot {
   /**
    * For when the robot is disabled. Cancels autocommand and sets the motion mode to LOCKDOWN This
    * turns off movement and also makes the robot generally harder to move. Like some defense
-   * configuartion in your favorite video game
+   * configuration in your favorite video game
    */
   @Override
   public void disabledInit() {
@@ -173,8 +167,7 @@ public class Robot extends LoggedRobot {
   public void disabledPeriodic() {}
 
   /**
-   * Initialization for autonomous programming. Path planner loads the "taxitaxi" program. Also,
-   * sets the motion mode to trajectory
+   * Initialization for autonomous programming. Sets the motion mode to trajectory.
    */
   @Override
   public void autonomousInit() {
@@ -212,7 +205,7 @@ public class Robot extends LoggedRobot {
     Robot.motionMode = MotionMode.FULL_DRIVE;
   }
 
-  /** Periodic updates during the Teleop (manual control). Isn't used! */
+  /** Periodic updates during Teleop. Isn't used! */
   @Override
   public void teleopPeriodic() {}
 
