@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 // liam sais hi :)
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.SwerveIO.module.ModuleInfo;
@@ -28,7 +27,7 @@ public final class Constants {
     throw new AssertionError();
   }
 
-  public static final boolean tuningMode = true;
+  public static final boolean tuningMode = false;
   public static final int zero = 0; // in case you need a zero :)
 
   public static final class RobotMap {
@@ -103,7 +102,6 @@ public final class Constants {
         (1.0 / gearRatio) * Units.inchesToMeters(wheelDiameter) * Math.PI;
 
     public static final double maxSwerveVel = Units.feetToMeters(16.0 * 0.75);
-    // public static final double maxSwerveAzi = Math.PI;
     public static final double maxSwerveAzi = Math.PI;
     public static final double maxRotationalSpeedRadPerSec = Units.degreesToRadians(180);
 
@@ -136,8 +134,8 @@ public final class Constants {
     public static final double fullRobotLength = bumperlessRobotLength + bumperThickness * 2;
 
     public static final PIDFFGains kHeadingControllerGains =
-        PIDFFGains.builder("Heading Controller").kP(0.1).kD(0.001000).tolerance(3).build();
-    public static final double headingControllerDriverChangeRate = 10;
+        PIDFFGains.builder("Heading Controller").kP(5).kD(0.001000).tolerance(0).build();
+    public static final double headingControllerDriverChangeRate = 4;
 
     public static final ModuleInfo frontLeft =
         ModuleInfo.builder()
@@ -239,9 +237,5 @@ public final class Constants {
 
     public static final double aziMaxVel = Units.feetToMeters(0.5);
     public static final double aziMaxAccel = Units.feetToMeters(0.1);
-
-    // five ball
-    public static final double waitForHumanPlayerDuration = 0.3;
-    public static final double crawlTowardsHumanPlayerVolts = 0.6;
   }
 }

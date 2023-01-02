@@ -22,52 +22,62 @@ public class SwerveModule extends SubsystemBase {
   SwerveModuleState state;
   public final ModuleInfo information;
 
-  // OffsetAbsoluteAnalogEncoder azimuthEncoder;
+  /**
+   * Creates a new SwerveModule object.
+   *
+   * @param swerveModuleIO The IO layer. Change this to change which motor controllers you're using
+   *     (SwerveModuleIOSim vs SwerveModuleIOSparkMAX)
+   * @param name The name of the swerve module (how it shows up in logging tools)
+   */
   public SwerveModule(SwerveModuleIO swerveModuleIO, ModuleInfo information) {
     this.information = information;
     this.driveController = new PIDFFController(this.information.getDriveGains());
     this.azimuthController = new PIDFFController(this.information.getAzimuthGains());
+
     io = swerveModuleIO;
     this.name = this.information.getName();
     io.updateInputs(inputs);
-    // driver = new CANSparkMax(drivePort, MotorType.kBrushless);
-    // azimuth = new CANSparkMax(azimPort, MotorType.kBrushless);
-
-    // driver.setIdleMode(IdleMode.kBrake);
-    // azimuth.setIdleMode(IdleMode.kBrake);
-
-    // getDriveEncoder()
-    //     .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
-
-    // azimuthController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // azimuthEncoder = new OffsetAbsoluteAnalogEncoder(azimuthEncoderPort, offset);
 
     state = new SwerveModuleState(0, Rotation2d.fromDegrees(inputs.aziEncoderPositionDeg));
     azimuthController.enableContinuousInput(-180, 180);
-    // state = new SwerveModuleState(0, inputs.
   }
 
+  /**
+   * Returns the current objective state of the swerve drive.
+   *
+   * @return The desired SwerveModuleState object.
+   */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
         inputs.driveEncoderVelocityMetresPerSecond,
         Rotation2d.fromDegrees(inputs.aziEncoderPositionDeg));
   }
 
+  // Only used to characterize the drive
   public double getVoltageAppliedForCharacterization() {
     return inputs.driveOutputVolts;
   }
 
+  // Only used to characterize the drive
   public void applyVoltageForCharacterization(double voltage) {
     io.setDriveVoltage(voltage);
   }
 
+  /**
+   * Optimizes the given SwerveModuleState and make it the setpoint of the swerve module.
+   *
+   * @param desiredState The new setpoint of the swerve module.
+   */
   public void setDesiredState(SwerveModuleState desiredState) {
     state =
         SwerveModuleState.optimize(
             desiredState, Rotation2d.fromDegrees(inputs.aziEncoderPositionDeg));
   }
 
+  /**
+   * Recalculates the voltage outputs of the drive and azimuth voltages and sets them. Should run on
+   * every code loop, so put it in periodic() for best results.
+   */
   public void update() {
     final double driveOutput =
         driveController.calculate(
@@ -93,5 +103,10 @@ public class SwerveModule extends SubsystemBase {
         .recordOutput(
             "Swerve/" + name + "/Drive Error",
             state.speedMetersPerSecond - inputs.driveEncoderVelocityMetresPerSecond);
+
+    Logger.getInstance()
+        .recordOutput(
+            "Swerve/" + name + "/Azimuth Encoder Delta",
+            inputs.aziEncoderPositionDeg - inputs.aziAbsoluteEncoderAdjAngleDeg);
   }
 }

@@ -4,8 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.robot.Constants;
 import frc.robot.util.OffsetAbsoluteAnalogEncoder;
 import frc.robot.util.RedHawkUtil;
 
@@ -44,16 +44,23 @@ public class SwerveModuleIOSparkMAX implements SwerveModuleIO {
     RedHawkUtil.errorHandleSparkMAX(
         azimuth.setIdleMode(IdleMode.kBrake), "azimuth/" + this.information.getName().toString());
 
+    driver.restoreFactoryDefaults();
+    azimuth.restoreFactoryDefaults();
+
+    azimuth.setInverted(true);
+    driver.setInverted(true);
+
+    driver.setIdleMode(IdleMode.kBrake);
+    azimuth.setIdleMode(IdleMode.kBrake);
+
     getDriveEncoder()
-        .setPositionConversionFactor(2 * Math.PI * (Constants.DriveConstants.wheelDiameter / 2));
+        .setPositionConversionFactor((1.0 / 6.12) * Units.inchesToMeters(4.0) * Math.PI);
+    getDriveEncoder()
+        .setVelocityConversionFactor((1.0 / 6.12) * Units.inchesToMeters(4.0) * Math.PI / 60);
 
-    getAziEncoder().setPositionConversionFactor(7.0 / 150.0);
-    getAziEncoder().setVelocityConversionFactor(7.0 / 150.0);
+    getAziEncoder().setPositionConversionFactor(7.0 / 150.0 * 360.0);
+    getAziEncoder().setVelocityConversionFactor(7.0 / 150.0 * 360.0);
     getAziEncoder().setPosition(getAziAbsoluteEncoder().getAdjustedRotation2d().getDegrees());
-
-    azimuthEncoder =
-        new OffsetAbsoluteAnalogEncoder(
-            this.information.getAziEncoderCANId(), this.information.getOffset());
   }
 
   @Override

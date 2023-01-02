@@ -8,13 +8,10 @@ public class SwerveIOPigeon2 implements SwerveIO {
 
   private final Pigeon2 gyro;
 
-  // SwerveModuleState state;
-
   public SwerveIOPigeon2() {
     gyro = new Pigeon2(RobotMap.pigeonCANId);
     gyro.zeroGyroBiasNow();
     gyro.setYaw(0);
-    // state = new SwerveModuleState(0, azimuthEncoder.getAdjustedRotation2d());
   }
 
   @Override
@@ -22,8 +19,7 @@ public class SwerveIOPigeon2 implements SwerveIO {
     inputs.gyroCompassHeading = gyro.getAbsoluteCompassHeading();
     inputs.gyroPitchPosition = gyro.getPitch();
     inputs.gyroRollPosition = gyro.getRoll();
-    inputs.gyroYawPosition = gyro.getYaw();
-    // inputs.targetAngle = state.angle.getDegrees();
+    inputs.gyroYawPosition = gyro.getYaw() - 180; // gyro faces backwards on the robot
   }
 
   @Override
