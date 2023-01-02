@@ -5,9 +5,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import com.revrobotics.REVLibError;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,7 +20,6 @@ import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSim;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
 import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
-import frc.robot.util.RedHawkUtil;
 import frc.robot.util.RedHawkUtil.ErrHandler;
 import frc.robot.util.TrajectoryController;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
@@ -56,10 +52,11 @@ public class Robot extends LoggedRobot {
     // LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
     Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
     Logger.getInstance().start();
-  
+
     /**
-     * Constructs the swerve subsystem, both for the simulator and the physical SparkMAX.
-     * Checks if the robot is real or simulated, and changes the IO being used for the subsystem and modules accordingly.
+     * Constructs the swerve subsystem, both for the simulator and the physical SparkMAX. Checks if
+     * the robot is real or simulated, and changes the IO being used for the subsystem and modules
+     * accordingly.
      */
     Robot.swerveDrive =
         new BabySwerver(
@@ -142,13 +139,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {}
 
-  /**
-   * Initialization for autonomous programming. Sets the motion mode to trajectory.
-   */
+  /** Initialization for autonomous programming. Sets the motion mode to trajectory. */
   @Override
   public void autonomousInit() {
-    RedHawkUtil.errorHandleSparkMAX(REVLibError.kCantFindFirmware, "TestErr/Test/Auto");
-    RedHawkUtil.errorHandleSparkMAX(REVLibError.kOk, "TestErr/Test/AutoSHOUDNTBELOGGED");
 
     autoSelect.setDefaultOption(
         "autopart1",
@@ -176,14 +169,11 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void teleopInit() {
-    RedHawkUtil.errorHandleSparkMAX(REVLibError.kCANDisconnected, "TestErr/Test/Teleop");
-
     if (autoCommand != null) {
       motionMode = MotionMode.LOCKDOWN;
       autoCommand.cancel();
     }
     Robot.motionMode = MotionMode.FULL_DRIVE;
-    Logger.getInstance().recordOutput("RevLibError/AAAA", "test");
   }
 
   /** Periodic updates during Teleop. Isn't used! */
