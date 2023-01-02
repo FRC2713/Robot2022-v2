@@ -19,7 +19,7 @@ public class SwerveIOPigeon2 implements SwerveIO {
     inputs.gyroCompassHeading = gyro.getAbsoluteCompassHeading();
     inputs.gyroPitchPosition = gyro.getPitch();
     inputs.gyroRollPosition = gyro.getRoll();
-    inputs.gyroYawPosition = gyro.getYaw();
+    inputs.gyroYawPosition = gyro.getYaw() - 180; // gyro faces backwards on the robot
   }
 
   @Override
