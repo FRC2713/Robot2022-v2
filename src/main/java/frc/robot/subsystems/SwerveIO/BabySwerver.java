@@ -44,10 +44,10 @@ public class BabySwerver extends SubsystemBase {
       SwerveModuleIO frontRight,
       SwerveModuleIO backLeft,
       SwerveModuleIO backRight) {
-    this.frontLeft = new SwerveModule(frontLeft, "Front Left");
-    this.frontRight = new SwerveModule(frontRight, "Front Right");
-    this.backLeft = new SwerveModule(backLeft, "Back Left");
-    this.backRight = new SwerveModule(backRight, "Back Right");
+    this.frontLeft = new SwerveModule(frontLeft, Constants.DriveConstants.frontLeft);
+    this.frontRight = new SwerveModule(frontRight, Constants.DriveConstants.frontRight);
+    this.backLeft = new SwerveModule(backLeft, Constants.DriveConstants.backLeft);
+    this.backRight = new SwerveModule(backRight, Constants.DriveConstants.backRight);
     io = swerveIO;
     io.updateInputs(inputs);
 

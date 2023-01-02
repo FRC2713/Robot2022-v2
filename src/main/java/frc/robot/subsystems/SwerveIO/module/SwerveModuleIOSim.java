@@ -13,7 +13,11 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
   double theAziVolts = 0;
   double theDriveVolts = 0;
 
-  public SwerveModuleIOSim(int drivePort, int azimPort, int azimuthEncoderPort, double offset) {}
+  private final ModuleInfo information;
+
+  public SwerveModuleIOSim(ModuleInfo information) {
+    this.information = information;
+  }
 
   @Override
   public void updateInputs(SwerveModuleInputs inputs) {

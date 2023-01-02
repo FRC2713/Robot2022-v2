@@ -35,7 +35,7 @@ public class TrajectoryController {
         return PathPlanner.loadPath(
             filename,
             new PathConstraints(
-                Constants.DriveConstants.maxSwerveVel, Constants.AutoConstants.swerveMacAccel));
+                Constants.DriveConstants.maxSwerveVel, Constants.DriveConstants.maxSwerveAccel));
       }
     }
   }

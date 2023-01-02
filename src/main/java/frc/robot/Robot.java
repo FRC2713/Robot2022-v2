@@ -20,6 +20,7 @@ import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSim;
 import frc.robot.subsystems.SwerveIO.module.SwerveModuleIOSparkMAX;
 import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
+import frc.robot.util.RedHawkUtil.ErrHandler;
 import frc.robot.util.TrajectoryController;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -34,57 +35,7 @@ public class Robot extends LoggedRobot {
 
   public static final MotionHandler motionHandler = new MotionHandler();
 
-  /**
-   * Constructs the swerve subsystem, both for the simulator and the physical SparkMAX.
-   * Checks if the robot is real or simulated, and changes the IO being used for the subsystem and modules accordingly.
-   */
-  public static final BabySwerver swerveDrive =
-      new BabySwerver(
-          Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.frontLeftDrive,
-                  Constants.RobotMap.frontLeftAzi,
-                  Constants.RobotMap.frontLeftAzimuthEncoder,
-                  Constants.RobotMap.frontLeftOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.frontLeftDrive,
-                  Constants.RobotMap.frontLeftAzi,
-                  Constants.RobotMap.frontLeftAzimuthEncoder,
-                  Constants.RobotMap.frontLeftOffset),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.frontRightDrive,
-                  Constants.RobotMap.frontRightAzi,
-                  Constants.RobotMap.frontRightAzimuthEncoder,
-                  Constants.RobotMap.frontRightOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.frontRightDrive,
-                  Constants.RobotMap.frontRightAzi,
-                  Constants.RobotMap.frontRightAzimuthEncoder,
-                  Constants.RobotMap.frontRightOffset),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.backLeftDrive,
-                  Constants.RobotMap.backLeftAzi,
-                  Constants.RobotMap.backLeftAzimuthEncoder,
-                  Constants.RobotMap.backLeftOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.backLeftDrive,
-                  Constants.RobotMap.backLeftAzi,
-                  Constants.RobotMap.backLeftAzimuthEncoder,
-                  Constants.RobotMap.backLeftOffset),
-          Robot.isReal()
-              ? new SwerveModuleIOSparkMAX(
-                  Constants.RobotMap.backRightDrive,
-                  Constants.RobotMap.backRightAzi,
-                  Constants.RobotMap.backRightAzimuthEncoder,
-                  Constants.RobotMap.backRightOffset)
-              : new SwerveModuleIOSim(
-                  Constants.RobotMap.backRightDrive,
-                  Constants.RobotMap.backRightAzi,
-                  Constants.RobotMap.backRightAzimuthEncoder,
-                  Constants.RobotMap.backRightOffset));
+  public static BabySwerver swerveDrive;
 
   public static final XboxController driver = new XboxController(Constants.zero);
 
@@ -101,6 +52,27 @@ public class Robot extends LoggedRobot {
     // LoggedNetworkTables.getInstance().addTable("/SmartDashboard");
     Logger.getInstance().addDataReceiver(new LogSocketServer(5800));
     Logger.getInstance().start();
+
+    /**
+     * Constructs the swerve subsystem, both for the simulator and the physical SparkMAX. Checks if
+     * the robot is real or simulated, and changes the IO being used for the subsystem and modules
+     * accordingly.
+     */
+    Robot.swerveDrive =
+        new BabySwerver(
+            Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontLeft)
+                : new SwerveModuleIOSim(Constants.DriveConstants.frontLeft),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontRight)
+                : new SwerveModuleIOSim(Constants.DriveConstants.frontRight),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.backLeft)
+                : new SwerveModuleIOSim(Constants.DriveConstants.backLeft),
+            Robot.isReal()
+                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.backRight)
+                : new SwerveModuleIOSim(Constants.DriveConstants.backRight));
 
     new JoystickButton(driver, XboxController.Button.kY.value)
         .whenPressed(
@@ -145,6 +117,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    ErrHandler.getInstance().log();
   }
 
   /**
@@ -166,9 +139,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {}
 
-  /**
-   * Initialization for autonomous programming. Sets the motion mode to trajectory.
-   */
+  /** Initialization for autonomous programming. Sets the motion mode to trajectory. */
   @Override
   public void autonomousInit() {
 

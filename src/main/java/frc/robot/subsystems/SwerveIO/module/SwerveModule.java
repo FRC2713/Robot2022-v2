@@ -3,21 +3,24 @@ package frc.robot.subsystems.SwerveIO.module;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.util.PIDFFController;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
 
   SwerveModuleIO io;
-  String name;
+  SwerveModules name;
+  // SwerveModuleInputs inputs = new SwerveModuleInputs();
   public final SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
 
-  SwerveModuleState state;
+  private final PIDFFController driveController;
+  private final PIDFFController azimuthController;
 
-  // PID controllers for the speed and position of the drive and azimuth motors, respectively
-  PIDFFController driveController = new PIDFFController(DriveConstants.kDefaultDrivingGains);
-  PIDFFController azimuthController = new PIDFFController(DriveConstants.kDefaultAzimuthGains);
+  // CANSparkMax driver;
+  // CANSparkMax azimuth;
+
+  SwerveModuleState state;
+  public final ModuleInfo information;
 
   /**
    * Creates a new SwerveModule object.
@@ -26,9 +29,13 @@ public class SwerveModule extends SubsystemBase {
    *     (SwerveModuleIOSim vs SwerveModuleIOSparkMAX)
    * @param name The name of the swerve module (how it shows up in logging tools)
    */
-  public SwerveModule(SwerveModuleIO swerveModuleIO, String name) {
+  public SwerveModule(SwerveModuleIO swerveModuleIO, ModuleInfo information) {
+    this.information = information;
+    this.driveController = new PIDFFController(this.information.getDriveGains());
+    this.azimuthController = new PIDFFController(this.information.getAzimuthGains());
+
     io = swerveModuleIO;
-    this.name = name;
+    this.name = this.information.getName();
     io.updateInputs(inputs);
 
     state = new SwerveModuleState(0, Rotation2d.fromDegrees(inputs.aziEncoderPositionDeg));
