@@ -4,18 +4,15 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.testAuto;
 import frc.robot.subsystems.SwerveIO.BabySwerver;
 import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
 import frc.robot.subsystems.SwerveIO.SwerveIOSim;
@@ -25,7 +22,6 @@ import frc.robot.util.MotionHandler;
 import frc.robot.util.MotionHandler.MotionMode;
 import frc.robot.util.TrajectoryController;
 import frc.robot.util.characterization.CharacterizationCommand.FeedForwardCharacterizationData;
-import java.util.HashMap;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.io.LogSocketServer;
@@ -38,6 +34,10 @@ public class Robot extends LoggedRobot {
 
   public static final MotionHandler motionHandler = new MotionHandler();
 
+  /**
+   * Constructs the swerve subsystem, both for the simulator and the physical SparkMAX.
+   * Checks if the robot is real or simulated, and changes the IO being used for the subsystem and modules accordingly.
+   */
   public static final BabySwerver swerveDrive =
       new BabySwerver(
           Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
@@ -93,7 +93,7 @@ public class Robot extends LoggedRobot {
   public static final FeedForwardCharacterizationData ffData =
       new FeedForwardCharacterizationData("Module Driving");
 
-  public static PathPlannerTrajectory taxi;
+  public static PathPlannerTrajectory part1, part2;
 
   @Override
   public void robotInit() {
@@ -116,16 +116,11 @@ public class Robot extends LoggedRobot {
                   motionMode = MotionMode.FULL_DRIVE;
                 }));
 
-    new JoystickButton(driver, XboxController.Button.kStart.value)
+    new JoystickButton(driver, XboxController.Button.kB.value)
         .whenPressed(
             new InstantCommand(
                 () -> {
-                  if (motionMode == MotionMode.FULL_DRIVE) {
-                    motionMode = MotionMode.HEADING_CONTROLLER;
-                  }
-                  if (motionMode == MotionMode.HEADING_CONTROLLER) {
-                    motionMode = MotionMode.FULL_DRIVE;
-                  }
+                  motionMode = MotionMode.HEADING_CONTROLLER;
                 }));
 
     new JoystickButton(driver, XboxController.Button.kLeftBumper.value)
@@ -143,11 +138,20 @@ public class Robot extends LoggedRobot {
                 }));
   }
 
+  /**
+   * Robot periodic, it runs periodically. All it does now is run the command scheduler. Worth
+   * keeping around.
+   */
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
   }
 
+  /**
+   * For when the robot is disabled. Cancels autocommand and sets the motion mode to LOCKDOWN This
+   * turns off movement and also makes the robot generally harder to move. Like some defense
+   * configuration in your favorite video game
+   */
   @Override
   public void disabledInit() {
     if (autoCommand != null) {
@@ -158,40 +162,24 @@ public class Robot extends LoggedRobot {
     Robot.motionMode = MotionMode.LOCKDOWN;
   }
 
+  /** Periodic stuff that occurs while disabled. Empty currently. */
   @Override
   public void disabledPeriodic() {}
 
+  /**
+   * Initialization for autonomous programming. Sets the motion mode to trajectory.
+   */
   @Override
   public void autonomousInit() {
 
-    HashMap<String, Command> eventMap = new HashMap<>();
+    autoSelect.setDefaultOption(
+        "autopart1",
+        new InstantCommand(() -> TrajectoryController.getInstance().changePath(part1)));
 
-    taxi = PathPlanner.loadPath("taxitaxi", PathPlanner.getConstraintsFromPath("taxitaxi"));
+    autoCommand = new testAuto();
 
-    autoCommand =
-        new SequentialCommandGroup(
-            new InstantCommand(
-                () -> {
-                  swerveDrive.resetGyro(taxi.getInitialHolonomicPose().getRotation());
-                  swerveDrive.resetOdometry(taxi.getInitialHolonomicPose());
-                }),
-            new PPSwerveControllerCommand(
-                taxi,
-                () -> swerveDrive.getPose(),
-                Constants.DriveConstants.kinematics,
-                new PIDController(0.9, 0, 0),
-                new PIDController(0.9, 0, 0),
-                new PIDController(1.0, 0, 0),
-                (states) -> {
-                  swerveDrive.setModuleStates(states);
-                },
-                eventMap,
-                swerveDrive));
-
-    autoSelect.addOption(
-        "taxitaxi", new InstantCommand(() -> TrajectoryController.getInstance().loadPath(taxi)));
-
-    autoCommand = autoSelect.getSelected();
+    swerveDrive.resetOdometry(
+        TrajectoryController.AutoPath.PART_1.getTrajectory().getInitialHolonomicPose());
 
     if (autoCommand != null) {
       motionMode = MotionMode.TRAJECTORY;
@@ -199,9 +187,15 @@ public class Robot extends LoggedRobot {
     }
   }
 
+  /** Autonomous stuff that is called regularly. Isn't used right now! */
   @Override
   public void autonomousPeriodic() {}
 
+  /**
+   * Initialization for the Teleop mode. Cancels autocommands and sets motion to lockdown, then
+   * reverts it to FULLDRIVE This is so our robot can be ready to go crazy on the field (see you at
+   * world 2023 I'm putting a lot of hope into that)
+   */
   @Override
   public void teleopInit() {
     if (autoCommand != null) {
@@ -211,17 +205,24 @@ public class Robot extends LoggedRobot {
     Robot.motionMode = MotionMode.FULL_DRIVE;
   }
 
+  /** Periodic updates during Teleop. Isn't used! */
   @Override
   public void teleopPeriodic() {}
 
+  /**
+   * Testing initialization code goes here. All it does right now is cancel all commands in the
+   * command scheduler. Neat.
+   */
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
   }
 
+  /** Periodic updates during testing modes. Not used */
   @Override
   public void testPeriodic() {}
 
+  /** Contains vital code. Do not delete or code may break. */
   public String goFast() {
     return "nyyooooom";
   }

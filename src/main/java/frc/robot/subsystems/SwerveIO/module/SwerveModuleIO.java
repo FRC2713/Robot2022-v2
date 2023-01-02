@@ -12,6 +12,7 @@ public interface SwerveModuleIO {
     public double aziOutputVolts = 0.0;
     public double aziCurrentDrawAmps = 0.0;
     public double aziEncoderPositionDeg = 0.0;
+    public double aziEncoderSimplifiedPositionDeg = 0.0;
     public double aziEncoderVelocityDegPerSecond = 0.0;
     public double aziTempCelcius;
 
@@ -22,9 +23,24 @@ public interface SwerveModuleIO {
     public double driveTempCelcius = 0.0;
   }
 
+  /**
+   * Updates SwerveModule input values with given SwerveModuleInputs instance
+   *
+   * @param inputs SwerveModuleInputs instance
+   */
   public void updateInputs(SwerveModuleInputs inputs);
 
+  /**
+   * Sets the azimuth of the current SwerveModule to the given volts
+   *
+   * @param aziVolts volts to set the azimuth to
+   */
   public void setAzimuthVoltage(double aziVolts);
 
+  /**
+   * Sets the drive of the current SwerveModule to the given volts
+   *
+   * @param driveVolts volts to set the drive to
+   */
   public void setDriveVoltage(double driveVolts);
 }
