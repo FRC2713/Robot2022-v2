@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.util.TrajectoryController;
 
-public class testAuto extends SequentialCommandGroup {
+public class TestAuto extends SequentialCommandGroup {
 
-  public testAuto() {
+  public TestAuto() {
     addCommands(
         new InstantCommand(
             () ->

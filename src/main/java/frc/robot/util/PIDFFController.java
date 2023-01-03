@@ -31,11 +31,8 @@ public class PIDFFController extends PIDController {
         setD(gains.kD.get());
         setTolerance(gains.tolerance.get());
         feedforward = gains.createWpilibFeedforward();
-        // System.out.println("")
       }
     }
-
-    // Logger.getInstance().recordOutput(key, value);
 
     return super.calculate(measurement) + feedforward.calculate(getSetpoint());
   }
