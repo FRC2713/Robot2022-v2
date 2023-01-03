@@ -10,14 +10,10 @@ public class SwerveModule extends SubsystemBase {
 
   SwerveModuleIO io;
   SwerveModules name;
-  // SwerveModuleInputs inputs = new SwerveModuleInputs();
   public final SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
 
   private final PIDFFController driveController;
   private final PIDFFController azimuthController;
-
-  // CANSparkMax driver;
-  // CANSparkMax azimuth;
 
   SwerveModuleState state;
   public final ModuleInfo information;

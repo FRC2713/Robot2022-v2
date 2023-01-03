@@ -4,15 +4,13 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.testAuto;
+import frc.robot.commands.TestAuto;
 import frc.robot.subsystems.SwerveIO.BabySwerver;
 import frc.robot.subsystems.SwerveIO.SwerveIOPigeon2;
 import frc.robot.subsystems.SwerveIO.SwerveIOSim;
@@ -30,21 +28,12 @@ import org.littletonrobotics.junction.io.LogSocketServer;
 public class Robot extends LoggedRobot {
 
   public Command autoCommand;
-
   public static MotionMode motionMode = MotionMode.FULL_DRIVE;
-
   public static final MotionHandler motionHandler = new MotionHandler();
-
   public static BabySwerver swerveDrive;
-
   public static final XboxController driver = new XboxController(Constants.zero);
-
-  private SendableChooser<Command> autoSelect = new SendableChooser<>();
-
   public static final FeedForwardCharacterizationData ffData =
       new FeedForwardCharacterizationData("Module Driving");
-
-  public static PathPlannerTrajectory part1, part2;
 
   @Override
   public void robotInit() {
@@ -59,20 +48,19 @@ public class Robot extends LoggedRobot {
      * accordingly.
      */
     Robot.swerveDrive =
-        new BabySwerver(
-            Robot.isReal() ? new SwerveIOPigeon2() : new SwerveIOSim(),
-            Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontLeft)
-                : new SwerveModuleIOSim(Constants.DriveConstants.frontLeft),
-            Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontRight)
-                : new SwerveModuleIOSim(Constants.DriveConstants.frontRight),
-            Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.backLeft)
-                : new SwerveModuleIOSim(Constants.DriveConstants.backLeft),
-            Robot.isReal()
-                ? new SwerveModuleIOSparkMAX(Constants.DriveConstants.backRight)
-                : new SwerveModuleIOSim(Constants.DriveConstants.backRight));
+        Robot.isReal()
+            ? new BabySwerver(
+                new SwerveIOSim(),
+                new SwerveModuleIOSim(Constants.DriveConstants.frontLeft),
+                new SwerveModuleIOSim(Constants.DriveConstants.frontRight),
+                new SwerveModuleIOSim(Constants.DriveConstants.backLeft),
+                new SwerveModuleIOSim(Constants.DriveConstants.backRight))
+            : new BabySwerver(
+                new SwerveIOPigeon2(),
+                new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontLeft),
+                new SwerveModuleIOSparkMAX(Constants.DriveConstants.frontRight),
+                new SwerveModuleIOSparkMAX(Constants.DriveConstants.backLeft),
+                new SwerveModuleIOSparkMAX(Constants.DriveConstants.backRight));
 
     new JoystickButton(driver, XboxController.Button.kY.value)
         .whenPressed(
@@ -142,12 +130,7 @@ public class Robot extends LoggedRobot {
   /** Initialization for autonomous programming. Sets the motion mode to trajectory. */
   @Override
   public void autonomousInit() {
-
-    autoSelect.setDefaultOption(
-        "autopart1",
-        new InstantCommand(() -> TrajectoryController.getInstance().changePath(part1)));
-
-    autoCommand = new testAuto();
+    autoCommand = new TestAuto();
 
     swerveDrive.resetOdometry(
         TrajectoryController.AutoPath.PART_1.getTrajectory().getInitialHolonomicPose());

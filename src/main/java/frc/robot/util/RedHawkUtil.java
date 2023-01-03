@@ -20,16 +20,6 @@ public final class RedHawkUtil {
   public static void errorHandleSparkMAX(@NonNull REVLibError status, @NonNull String name) {
     if (status != REVLibError.kOk) {
       StackTraceElement[] rawStackTrace = Thread.currentThread().getStackTrace();
-      // StringBuilder strBuilder = new StringBuilder();
-      // for (int i = 0; i < rawStackTrace.length; i++) {
-      //   strBuilder.append(
-      //       rawStackTrace[i].getFileName() + ":" + rawStackTrace[i].getLineNumber() + " ");
-      // }
-      // String stackTrace = strBuilder.toString();
-      // Logger.getInstance()
-      //     .recordOutput("RevLibError/" + name, status.name() + " StackTrace: " + stackTrace);
-      // SmartDashboard.putBoolean("RevLibError/" + name, false);
-      // SmartDashboard.putBoolean("RevLibError", false);
       ErrHandler.getInstance()
           .addError(
               status.name()

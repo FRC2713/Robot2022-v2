@@ -38,7 +38,6 @@ public final class Constants {
     public static final int pigeonCANId = 20;
 
     // MOTORS
-
     // FrontLeft
     public static final int frontLeftDrive = 1;
     public static final int frontLeftAzi = 8;
@@ -62,32 +61,6 @@ public final class Constants {
     public static final int backRightAzi = 7;
     public static final int backRightAzimuthEncoder = 3;
     public static final double backRightOffset = 0.775;
-
-    // placeholder
-
-    public static final int flywheelLeftPort = 5;
-    public static final int flywheelRightPort = 10;
-    public static final int flywheelTopLeft = 13;
-    public static final int flywheelTopRight = 55;
-
-    public static final int intakeMotorRollers = 7;
-    public static final int intakeMotorFourBar = 6;
-    public static final int intakeMotorFourBar2 = 8;
-
-    public static final int lowerSnek = 50;
-    public static final int upperSnek = 9;
-
-    public static final int climberMotorRight = 11;
-    public static final int climberMotorLeft = 12;
-
-    // DIO
-
-    public static final int snekLowerSwitch = 3;
-    public static final int snekUpperSwitch = 1;
-
-    // PWM
-
-    public static final int stripPort = 0;
   }
 
   public static final class DriveConstants {
